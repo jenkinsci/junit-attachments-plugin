@@ -1,0 +1,96 @@
+2009-08-03 15:38:29.423::INFO:  jetty-6.1.11
+2009-08-03 15:38:29.430::INFO:  NO JSP Support for /, did not find org.apache.jasper.servlet.JspServlet
+2009-08-03 15:38:29.435::INFO:  Started SocketConnector@0.0.0.0:58385
+Aug 3, 2009 3:38:29 PM hudson.ClassicPluginStrategy createPluginWrapper
+INFO: Loading plugin: /tmp/hudson3600281504758793947test/plugins/maven-plugin.hpi
+Aug 3, 2009 3:38:29 PM hudson.ClassicPluginStrategy explode
+INFO: Extracting /tmp/hudson3600281504758793947test/plugins/maven-plugin.hpi
+Aug 3, 2009 3:38:29 PM hudson.ClassicPluginStrategy createPluginWrapper
+INFO: Loading plugin: /tmp/hudson3600281504758793947test/plugins/subversion.hpi
+Aug 3, 2009 3:38:29 PM hudson.ClassicPluginStrategy explode
+INFO: Extracting /tmp/hudson3600281504758793947test/plugins/subversion.hpi
+Aug 3, 2009 3:38:29 PM hudson.ClassicPluginStrategy createPluginWrapper
+INFO: Loading plugin: /tmp/hudson3600281504758793947test/plugins/ssh-slaves.hpi
+Aug 3, 2009 3:38:29 PM hudson.ClassicPluginStrategy explode
+INFO: Extracting /tmp/hudson3600281504758793947test/plugins/ssh-slaves.hpi
+Aug 3, 2009 3:38:29 PM hudson.model.Hudson load
+INFO: Loading in 8 parallel threads
+Aug 3, 2009 3:38:29 PM hudson.model.Hudson load
+INFO: Took 85 ms to load
+Aug 3, 2009 3:38:29 PM hudson.TcpSlaveAgentListener <init>
+INFO: JNLP slave agent listener started on TCP port 60747
+=== Starting PluginManagerTest.testUpload
+Aug 3, 2009 3:38:31 PM hudson.PluginWrapper stop
+INFO: Stopping maven-plugin
+Aug 3, 2009 3:38:31 PM hudson.PluginWrapper stop
+INFO: Stopping subversion
+Aug 3, 2009 3:38:31 PM hudson.PluginWrapper stop
+INFO: Stopping ssh-slaves
+2009-08-03 15:38:31.833::INFO:  jetty-6.1.11
+2009-08-03 15:38:31.839::INFO:  NO JSP Support for /, did not find org.apache.jasper.servlet.JspServlet
+2009-08-03 15:38:31.846::INFO:  Started SocketConnector@0.0.0.0:53290
+Aug 3, 2009 3:38:31 PM hudson.ClassicPluginStrategy createPluginWrapper
+INFO: Loading plugin: /tmp/hudson1614697164771073304test/plugins/tasks.hpi
+Aug 3, 2009 3:38:31 PM hudson.ClassicPluginStrategy explode
+INFO: Extracting /tmp/hudson1614697164771073304test/plugins/tasks.hpi
+Aug 3, 2009 3:38:31 PM hudson.ClassicPluginStrategy createPluginWrapper
+INFO: Loading plugin: /tmp/hudson1614697164771073304test/plugins/maven-plugin.hpi
+Aug 3, 2009 3:38:31 PM hudson.ClassicPluginStrategy explode
+INFO: Extracting /tmp/hudson1614697164771073304test/plugins/maven-plugin.hpi
+Aug 3, 2009 3:38:32 PM hudson.ClassicPluginStrategy createPluginWrapper
+INFO: Loading plugin: /tmp/hudson1614697164771073304test/plugins/subversion.hpi
+Aug 3, 2009 3:38:32 PM hudson.ClassicPluginStrategy explode
+INFO: Extracting /tmp/hudson1614697164771073304test/plugins/subversion.hpi
+Aug 3, 2009 3:38:32 PM hudson.ClassicPluginStrategy createPluginWrapper
+INFO: Loading plugin: /tmp/hudson1614697164771073304test/plugins/ssh-slaves.hpi
+Aug 3, 2009 3:38:32 PM hudson.ClassicPluginStrategy explode
+INFO: Extracting /tmp/hudson1614697164771073304test/plugins/ssh-slaves.hpi
+Aug 3, 2009 3:38:32 PM hudson.model.Hudson load
+INFO: Loading in 8 parallel threads
+Aug 3, 2009 3:38:32 PM hudson.model.Hudson load
+INFO: Took 92 ms to load
+Aug 3, 2009 3:38:32 PM hudson.TcpSlaveAgentListener <init>
+INFO: JNLP slave agent listener started on TCP port 48076
+=== Starting PluginManagerTest.testWithRecipe
+Aug 3, 2009 3:38:32 PM hudson.PluginWrapper stop
+INFO: Stopping tasks
+Aug 3, 2009 3:38:32 PM hudson.PluginWrapper stop
+INFO: Stopping maven-plugin
+Aug 3, 2009 3:38:32 PM hudson.PluginWrapper stop
+INFO: Stopping subversion
+Aug 3, 2009 3:38:32 PM hudson.PluginWrapper stop
+INFO: Stopping ssh-slaves
+2009-08-03 15:38:32.894::INFO:  jetty-6.1.11
+2009-08-03 15:38:32.899::INFO:  NO JSP Support for /, did not find org.apache.jasper.servlet.JspServlet
+2009-08-03 15:38:32.904::INFO:  Started SocketConnector@0.0.0.0:39195
+Aug 3, 2009 3:38:32 PM hudson.ClassicPluginStrategy createPluginWrapper
+INFO: Loading plugin: /tmp/hudson7405053868297921755test/plugins/tasks.hpi
+Aug 3, 2009 3:38:32 PM hudson.ClassicPluginStrategy explode
+INFO: Extracting /tmp/hudson7405053868297921755test/plugins/tasks.hpi
+Aug 3, 2009 3:38:32 PM hudson.ClassicPluginStrategy createPluginWrapper
+INFO: Loading plugin: /tmp/hudson7405053868297921755test/plugins/maven-plugin.hpi
+Aug 3, 2009 3:38:32 PM hudson.ClassicPluginStrategy explode
+INFO: Extracting /tmp/hudson7405053868297921755test/plugins/maven-plugin.hpi
+Aug 3, 2009 3:38:33 PM hudson.ClassicPluginStrategy createPluginWrapper
+INFO: Loading plugin: /tmp/hudson7405053868297921755test/plugins/subversion.hpi
+Aug 3, 2009 3:38:33 PM hudson.ClassicPluginStrategy explode
+INFO: Extracting /tmp/hudson7405053868297921755test/plugins/subversion.hpi
+Aug 3, 2009 3:38:33 PM hudson.ClassicPluginStrategy createPluginWrapper
+INFO: Loading plugin: /tmp/hudson7405053868297921755test/plugins/ssh-slaves.hpi
+Aug 3, 2009 3:38:33 PM hudson.ClassicPluginStrategy explode
+INFO: Extracting /tmp/hudson7405053868297921755test/plugins/ssh-slaves.hpi
+Aug 3, 2009 3:38:33 PM hudson.model.Hudson load
+INFO: Loading in 8 parallel threads
+Aug 3, 2009 3:38:33 PM hudson.model.Hudson load
+INFO: Took 90 ms to load
+Aug 3, 2009 3:38:33 PM hudson.TcpSlaveAgentListener <init>
+INFO: JNLP slave agent listener started on TCP port 54654
+=== Starting PluginManagerTest.testOptionalMavenDependency
+Aug 3, 2009 3:38:33 PM hudson.PluginWrapper stop
+INFO: Stopping tasks
+Aug 3, 2009 3:38:33 PM hudson.PluginWrapper stop
+INFO: Stopping maven-plugin
+Aug 3, 2009 3:38:33 PM hudson.PluginWrapper stop
+INFO: Stopping subversion
+Aug 3, 2009 3:38:33 PM hudson.PluginWrapper stop
+INFO: Stopping ssh-slaves

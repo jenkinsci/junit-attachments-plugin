@@ -1,0 +1,157 @@
+2009-08-03 15:41:38.366::INFO:  jetty-6.1.11
+2009-08-03 15:41:38.371::INFO:  NO JSP Support for /, did not find org.apache.jasper.servlet.JspServlet
+2009-08-03 15:41:38.374::INFO:  Started SocketConnector@0.0.0.0:34085
+Aug 3, 2009 3:41:38 PM hudson.ClassicPluginStrategy createPluginWrapper
+INFO: Loading plugin: /tmp/hudson7238171768006183265test/plugins/maven-plugin.hpi
+Aug 3, 2009 3:41:38 PM hudson.ClassicPluginStrategy explode
+INFO: Extracting /tmp/hudson7238171768006183265test/plugins/maven-plugin.hpi
+Aug 3, 2009 3:41:38 PM hudson.ClassicPluginStrategy createPluginWrapper
+INFO: Loading plugin: /tmp/hudson7238171768006183265test/plugins/subversion.hpi
+Aug 3, 2009 3:41:38 PM hudson.ClassicPluginStrategy explode
+INFO: Extracting /tmp/hudson7238171768006183265test/plugins/subversion.hpi
+Aug 3, 2009 3:41:39 PM hudson.ClassicPluginStrategy createPluginWrapper
+INFO: Loading plugin: /tmp/hudson7238171768006183265test/plugins/ssh-slaves.hpi
+Aug 3, 2009 3:41:39 PM hudson.ClassicPluginStrategy explode
+INFO: Extracting /tmp/hudson7238171768006183265test/plugins/ssh-slaves.hpi
+Aug 3, 2009 3:41:39 PM hudson.model.Hudson load
+INFO: Loading in 8 parallel threads
+Aug 3, 2009 3:41:39 PM hudson.model.Hudson load
+INFO: Took 73 ms to load
+Aug 3, 2009 3:41:39 PM hudson.TcpSlaveAgentListener <init>
+INFO: JNLP slave agent listener started on TCP port 51709
+=== Starting DefaultCrumbIssuerTest.testClientIPFromHeader
+Aug 3, 2009 3:41:39 PM org.apache.commons.jexl.util.introspection.Introspector clearCache
+INFO: Introspector : detected classloader change. Dumping cache.
+Aug 3, 2009 3:41:43 PM hudson.PluginWrapper stop
+INFO: Stopping maven-plugin
+Aug 3, 2009 3:41:43 PM hudson.PluginWrapper stop
+INFO: Stopping subversion
+Aug 3, 2009 3:41:43 PM hudson.PluginWrapper stop
+INFO: Stopping ssh-slaves
+2009-08-03 15:41:44.836::INFO:  jetty-6.1.11
+2009-08-03 15:41:44.841::INFO:  NO JSP Support for /, did not find org.apache.jasper.servlet.JspServlet
+2009-08-03 15:41:44.847::INFO:  Started SocketConnector@0.0.0.0:54430
+Aug 3, 2009 3:41:44 PM hudson.ClassicPluginStrategy createPluginWrapper
+INFO: Loading plugin: /tmp/hudson5897074461699867059test/plugins/maven-plugin.hpi
+Aug 3, 2009 3:41:44 PM hudson.ClassicPluginStrategy explode
+INFO: Extracting /tmp/hudson5897074461699867059test/plugins/maven-plugin.hpi
+Aug 3, 2009 3:41:44 PM hudson.ClassicPluginStrategy createPluginWrapper
+INFO: Loading plugin: /tmp/hudson5897074461699867059test/plugins/subversion.hpi
+Aug 3, 2009 3:41:44 PM hudson.ClassicPluginStrategy explode
+INFO: Extracting /tmp/hudson5897074461699867059test/plugins/subversion.hpi
+Aug 3, 2009 3:41:44 PM hudson.ClassicPluginStrategy createPluginWrapper
+INFO: Loading plugin: /tmp/hudson5897074461699867059test/plugins/ssh-slaves.hpi
+Aug 3, 2009 3:41:44 PM hudson.ClassicPluginStrategy explode
+INFO: Extracting /tmp/hudson5897074461699867059test/plugins/ssh-slaves.hpi
+Aug 3, 2009 3:41:44 PM hudson.model.Hudson load
+INFO: Loading in 8 parallel threads
+Aug 3, 2009 3:41:44 PM hudson.model.Hudson load
+INFO: Took 85 ms to load
+Aug 3, 2009 3:41:44 PM hudson.TcpSlaveAgentListener <init>
+INFO: JNLP slave agent listener started on TCP port 42090
+=== Starting DefaultCrumbIssuerTest.testHeaderChange
+Aug 3, 2009 3:41:45 PM org.apache.commons.jexl.util.introspection.Introspector clearCache
+INFO: Introspector : detected classloader change. Dumping cache.
+Aug 3, 2009 3:41:48 PM hudson.security.csrf.CrumbFilter doFilter
+WARNING: Found invalid crumb a46001afc3bad911cce8bda4dc1af443.  Will check remaining parameters for a valid one...
+Aug 3, 2009 3:41:48 PM hudson.security.csrf.CrumbFilter doFilter
+WARNING: No valid crumb was included in request for /configSubmit.  Returning 403.
+Aug 3, 2009 3:41:48 PM com.gargoylesoftware.htmlunit.WebClient printContentIfNecessary
+INFO: statusCode=[403] contentType=[text/html]
+Aug 3, 2009 3:41:48 PM com.gargoylesoftware.htmlunit.WebClient printContentIfNecessary
+INFO: <html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"/>
+<title>Error 403 No valid crumb was included in the request</title>
+</head>
+<body><h2>HTTP ERROR: 403</h2><pre>No valid crumb was included in the request</pre>
+<p>RequestURI=/configSubmit</p><p><i><small><a href="http://jetty.mortbay.org/">Powered by Jetty://</a></small></i></p><br/>                                                
+<br/>                                                
+<br/>                                                
+<br/>                                                
+<br/>                                                
+<br/>                                                
+<br/>                                                
+<br/>                                                
+<br/>                                                
+<br/>                                                
+<br/>                                                
+<br/>                                                
+<br/>                                                
+<br/>                                                
+<br/>                                                
+<br/>                                                
+<br/>                                                
+<br/>                                                
+<br/>                                                
+<br/>                                                
+
+</body>
+</html>
+
+Aug 3, 2009 3:41:48 PM hudson.PluginWrapper stop
+INFO: Stopping maven-plugin
+Aug 3, 2009 3:41:48 PM hudson.PluginWrapper stop
+INFO: Stopping subversion
+Aug 3, 2009 3:41:48 PM hudson.PluginWrapper stop
+INFO: Stopping ssh-slaves
+2009-08-03 15:41:49.572::INFO:  jetty-6.1.11
+2009-08-03 15:41:49.576::INFO:  NO JSP Support for /, did not find org.apache.jasper.servlet.JspServlet
+2009-08-03 15:41:49.581::INFO:  Started SocketConnector@0.0.0.0:48242
+Aug 3, 2009 3:41:49 PM hudson.ClassicPluginStrategy createPluginWrapper
+INFO: Loading plugin: /tmp/hudson8400719053919107508test/plugins/maven-plugin.hpi
+Aug 3, 2009 3:41:49 PM hudson.ClassicPluginStrategy explode
+INFO: Extracting /tmp/hudson8400719053919107508test/plugins/maven-plugin.hpi
+Aug 3, 2009 3:41:49 PM hudson.ClassicPluginStrategy createPluginWrapper
+INFO: Loading plugin: /tmp/hudson8400719053919107508test/plugins/subversion.hpi
+Aug 3, 2009 3:41:49 PM hudson.ClassicPluginStrategy explode
+INFO: Extracting /tmp/hudson8400719053919107508test/plugins/subversion.hpi
+Aug 3, 2009 3:41:49 PM hudson.ClassicPluginStrategy createPluginWrapper
+INFO: Loading plugin: /tmp/hudson8400719053919107508test/plugins/ssh-slaves.hpi
+Aug 3, 2009 3:41:49 PM hudson.ClassicPluginStrategy explode
+INFO: Extracting /tmp/hudson8400719053919107508test/plugins/ssh-slaves.hpi
+Aug 3, 2009 3:41:49 PM hudson.model.Hudson load
+INFO: Loading in 8 parallel threads
+Aug 3, 2009 3:41:49 PM hudson.model.Hudson load
+INFO: Took 70 ms to load
+Aug 3, 2009 3:41:49 PM hudson.TcpSlaveAgentListener <init>
+INFO: JNLP slave agent listener started on TCP port 43808
+=== Starting DefaultCrumbIssuerTest.testProxyIPChanged
+Aug 3, 2009 3:41:50 PM org.apache.commons.jexl.util.introspection.Introspector clearCache
+INFO: Introspector : detected classloader change. Dumping cache.
+Aug 3, 2009 3:41:54 PM hudson.PluginWrapper stop
+INFO: Stopping maven-plugin
+Aug 3, 2009 3:41:54 PM hudson.PluginWrapper stop
+INFO: Stopping subversion
+Aug 3, 2009 3:41:54 PM hudson.PluginWrapper stop
+INFO: Stopping ssh-slaves
+2009-08-03 15:41:54.04::INFO:  jetty-6.1.11
+2009-08-03 15:41:54.09::INFO:  NO JSP Support for /, did not find org.apache.jasper.servlet.JspServlet
+2009-08-03 15:41:54.015::INFO:  Started SocketConnector@0.0.0.0:33550
+Aug 3, 2009 3:41:54 PM hudson.ClassicPluginStrategy createPluginWrapper
+INFO: Loading plugin: /tmp/hudson7479687569670192059test/plugins/maven-plugin.hpi
+Aug 3, 2009 3:41:54 PM hudson.ClassicPluginStrategy explode
+INFO: Extracting /tmp/hudson7479687569670192059test/plugins/maven-plugin.hpi
+Aug 3, 2009 3:41:55 PM hudson.ClassicPluginStrategy createPluginWrapper
+INFO: Loading plugin: /tmp/hudson7479687569670192059test/plugins/subversion.hpi
+Aug 3, 2009 3:41:55 PM hudson.ClassicPluginStrategy explode
+INFO: Extracting /tmp/hudson7479687569670192059test/plugins/subversion.hpi
+Aug 3, 2009 3:41:55 PM hudson.ClassicPluginStrategy createPluginWrapper
+INFO: Loading plugin: /tmp/hudson7479687569670192059test/plugins/ssh-slaves.hpi
+Aug 3, 2009 3:41:55 PM hudson.ClassicPluginStrategy explode
+INFO: Extracting /tmp/hudson7479687569670192059test/plugins/ssh-slaves.hpi
+Aug 3, 2009 3:41:55 PM hudson.model.Hudson load
+INFO: Loading in 8 parallel threads
+Aug 3, 2009 3:41:55 PM hudson.model.Hudson load
+INFO: Took 87 ms to load
+Aug 3, 2009 3:41:55 PM hudson.TcpSlaveAgentListener <init>
+INFO: JNLP slave agent listener started on TCP port 57353
+=== Starting DefaultCrumbIssuerTest.testProxyIPChain
+Aug 3, 2009 3:41:55 PM org.apache.commons.jexl.util.introspection.Introspector clearCache
+INFO: Introspector : detected classloader change. Dumping cache.
+Aug 3, 2009 3:41:59 PM hudson.PluginWrapper stop
+INFO: Stopping maven-plugin
+Aug 3, 2009 3:41:59 PM hudson.PluginWrapper stop
+INFO: Stopping subversion
+Aug 3, 2009 3:41:59 PM hudson.PluginWrapper stop
+INFO: Stopping ssh-slaves

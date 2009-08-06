@@ -1,0 +1,90 @@
+2009-08-03 15:44:51.108::INFO:  jetty-6.1.11
+2009-08-03 15:44:51.112::INFO:  NO JSP Support for /, did not find org.apache.jasper.servlet.JspServlet
+2009-08-03 15:44:51.117::INFO:  Started SocketConnector@0.0.0.0:47365
+Aug 3, 2009 3:44:51 PM hudson.ClassicPluginStrategy createPluginWrapper
+INFO: Loading plugin: /tmp/hudson6188378947294090783test/plugins/maven-plugin.hpi
+Aug 3, 2009 3:44:51 PM hudson.ClassicPluginStrategy explode
+INFO: Extracting /tmp/hudson6188378947294090783test/plugins/maven-plugin.hpi
+Aug 3, 2009 3:44:51 PM hudson.ClassicPluginStrategy createPluginWrapper
+INFO: Loading plugin: /tmp/hudson6188378947294090783test/plugins/subversion.hpi
+Aug 3, 2009 3:44:51 PM hudson.ClassicPluginStrategy explode
+INFO: Extracting /tmp/hudson6188378947294090783test/plugins/subversion.hpi
+Aug 3, 2009 3:44:51 PM hudson.ClassicPluginStrategy createPluginWrapper
+INFO: Loading plugin: /tmp/hudson6188378947294090783test/plugins/ssh-slaves.hpi
+Aug 3, 2009 3:44:51 PM hudson.ClassicPluginStrategy explode
+INFO: Extracting /tmp/hudson6188378947294090783test/plugins/ssh-slaves.hpi
+Aug 3, 2009 3:44:51 PM hudson.model.Hudson load
+INFO: Loading in 8 parallel threads
+Aug 3, 2009 3:44:51 PM hudson.model.Hudson load
+INFO: Took 72 ms to load
+Aug 3, 2009 3:44:51 PM hudson.TcpSlaveAgentListener <init>
+INFO: JNLP slave agent listener started on TCP port 47527
+=== Starting ListScmBrowsersTest.testSelectBoxesUnique
+Aug 3, 2009 3:44:53 PM org.apache.commons.jexl.util.introspection.Introspector clearCache
+INFO: Introspector : detected classloader change. Dumping cache.
+Aug 3, 2009 3:44:55 PM hudson.PluginWrapper stop
+INFO: Stopping maven-plugin
+Aug 3, 2009 3:44:55 PM hudson.PluginWrapper stop
+INFO: Stopping subversion
+Aug 3, 2009 3:44:55 PM hudson.PluginWrapper stop
+INFO: Stopping ssh-slaves
+2009-08-03 15:44:56.313::INFO:  jetty-6.1.11
+2009-08-03 15:44:56.319::INFO:  NO JSP Support for /, did not find org.apache.jasper.servlet.JspServlet
+2009-08-03 15:44:56.325::INFO:  Started SocketConnector@0.0.0.0:39217
+Aug 3, 2009 3:44:56 PM hudson.ClassicPluginStrategy createPluginWrapper
+INFO: Loading plugin: /tmp/hudson5987616004376807438test/plugins/maven-plugin.hpi
+Aug 3, 2009 3:44:56 PM hudson.ClassicPluginStrategy explode
+INFO: Extracting /tmp/hudson5987616004376807438test/plugins/maven-plugin.hpi
+Aug 3, 2009 3:44:56 PM hudson.ClassicPluginStrategy createPluginWrapper
+INFO: Loading plugin: /tmp/hudson5987616004376807438test/plugins/subversion.hpi
+Aug 3, 2009 3:44:56 PM hudson.ClassicPluginStrategy explode
+INFO: Extracting /tmp/hudson5987616004376807438test/plugins/subversion.hpi
+Aug 3, 2009 3:44:56 PM hudson.ClassicPluginStrategy createPluginWrapper
+INFO: Loading plugin: /tmp/hudson5987616004376807438test/plugins/ssh-slaves.hpi
+Aug 3, 2009 3:44:56 PM hudson.ClassicPluginStrategy explode
+INFO: Extracting /tmp/hudson5987616004376807438test/plugins/ssh-slaves.hpi
+Aug 3, 2009 3:44:56 PM hudson.model.Hudson load
+INFO: Loading in 8 parallel threads
+Aug 3, 2009 3:44:56 PM hudson.model.Hudson load
+INFO: Took 75 ms to load
+Aug 3, 2009 3:44:56 PM hudson.TcpSlaveAgentListener <init>
+INFO: JNLP slave agent listener started on TCP port 46687
+=== Starting ListScmBrowsersTest.testSelectBoxesUnique2
+Aug 3, 2009 3:44:57 PM org.apache.commons.jexl.util.introspection.Introspector clearCache
+INFO: Introspector : detected classloader change. Dumping cache.
+Aug 3, 2009 3:45:00 PM hudson.PluginWrapper stop
+INFO: Stopping maven-plugin
+Aug 3, 2009 3:45:00 PM hudson.PluginWrapper stop
+INFO: Stopping subversion
+Aug 3, 2009 3:45:00 PM hudson.PluginWrapper stop
+INFO: Stopping ssh-slaves
+2009-08-03 15:45:00.598::INFO:  jetty-6.1.11
+2009-08-03 15:45:00.602::INFO:  NO JSP Support for /, did not find org.apache.jasper.servlet.JspServlet
+2009-08-03 15:45:00.608::INFO:  Started SocketConnector@0.0.0.0:40397
+Aug 3, 2009 3:45:00 PM hudson.ClassicPluginStrategy createPluginWrapper
+INFO: Loading plugin: /tmp/hudson771306509512891103test/plugins/maven-plugin.hpi
+Aug 3, 2009 3:45:00 PM hudson.ClassicPluginStrategy explode
+INFO: Extracting /tmp/hudson771306509512891103test/plugins/maven-plugin.hpi
+Aug 3, 2009 3:45:00 PM hudson.ClassicPluginStrategy createPluginWrapper
+INFO: Loading plugin: /tmp/hudson771306509512891103test/plugins/subversion.hpi
+Aug 3, 2009 3:45:00 PM hudson.ClassicPluginStrategy explode
+INFO: Extracting /tmp/hudson771306509512891103test/plugins/subversion.hpi
+Aug 3, 2009 3:45:00 PM hudson.ClassicPluginStrategy createPluginWrapper
+INFO: Loading plugin: /tmp/hudson771306509512891103test/plugins/ssh-slaves.hpi
+Aug 3, 2009 3:45:00 PM hudson.ClassicPluginStrategy explode
+INFO: Extracting /tmp/hudson771306509512891103test/plugins/ssh-slaves.hpi
+Aug 3, 2009 3:45:01 PM hudson.model.Hudson load
+INFO: Loading in 8 parallel threads
+Aug 3, 2009 3:45:01 PM hudson.model.Hudson load
+INFO: Took 78 ms to load
+Aug 3, 2009 3:45:01 PM hudson.TcpSlaveAgentListener <init>
+INFO: JNLP slave agent listener started on TCP port 35537
+=== Starting ListScmBrowsersTest.testSelectBoxesUnique3
+Aug 3, 2009 3:45:02 PM org.apache.commons.jexl.util.introspection.Introspector clearCache
+INFO: Introspector : detected classloader change. Dumping cache.
+Aug 3, 2009 3:45:05 PM hudson.PluginWrapper stop
+INFO: Stopping maven-plugin
+Aug 3, 2009 3:45:05 PM hudson.PluginWrapper stop
+INFO: Stopping subversion
+Aug 3, 2009 3:45:05 PM hudson.PluginWrapper stop
+INFO: Stopping ssh-slaves

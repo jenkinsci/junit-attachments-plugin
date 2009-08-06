@@ -1,0 +1,31 @@
+2009-08-03 15:38:40.670::INFO:  jetty-6.1.11
+2009-08-03 15:38:40.674::INFO:  NO JSP Support for /, did not find org.apache.jasper.servlet.JspServlet
+2009-08-03 15:38:40.679::INFO:  Started SocketConnector@0.0.0.0:56471
+Aug 3, 2009 3:38:40 PM hudson.ClassicPluginStrategy createPluginWrapper
+INFO: Loading plugin: /tmp/hudson2760701613245310610test/plugins/maven-plugin.hpi
+Aug 3, 2009 3:38:40 PM hudson.ClassicPluginStrategy explode
+INFO: Extracting /tmp/hudson2760701613245310610test/plugins/maven-plugin.hpi
+Aug 3, 2009 3:38:41 PM hudson.ClassicPluginStrategy createPluginWrapper
+INFO: Loading plugin: /tmp/hudson2760701613245310610test/plugins/subversion.hpi
+Aug 3, 2009 3:38:41 PM hudson.ClassicPluginStrategy explode
+INFO: Extracting /tmp/hudson2760701613245310610test/plugins/subversion.hpi
+Aug 3, 2009 3:38:41 PM hudson.ClassicPluginStrategy createPluginWrapper
+INFO: Loading plugin: /tmp/hudson2760701613245310610test/plugins/ssh-slaves.hpi
+Aug 3, 2009 3:38:41 PM hudson.ClassicPluginStrategy explode
+INFO: Extracting /tmp/hudson2760701613245310610test/plugins/ssh-slaves.hpi
+Aug 3, 2009 3:38:41 PM hudson.model.Hudson load
+INFO: Loading in 8 parallel threads
+Aug 3, 2009 3:38:41 PM hudson.model.Hudson load
+INFO: Took 184 ms to load
+Aug 3, 2009 3:38:41 PM hudson.TcpSlaveAgentListener <init>
+INFO: JNLP slave agent listener started on TCP port 60358
+=== Starting JnlpAccessWithSecuredHudsonTest.test
+Aug 3, 2009 3:38:41 PM org.apache.commons.jexl.util.introspection.Introspector clearCache
+INFO: Introspector : detected classloader change. Dumping cache.
+http://localhost:56471/jnlpJars/remoting.jar
+Aug 3, 2009 3:38:43 PM hudson.PluginWrapper stop
+INFO: Stopping maven-plugin
+Aug 3, 2009 3:38:43 PM hudson.PluginWrapper stop
+INFO: Stopping subversion
+Aug 3, 2009 3:38:43 PM hudson.PluginWrapper stop
+INFO: Stopping ssh-slaves

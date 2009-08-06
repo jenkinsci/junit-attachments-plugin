@@ -1,0 +1,277 @@
+2009-08-03 15:37:05.323::INFO:  jetty-6.1.11
+2009-08-03 15:37:05.340::INFO:  NO JSP Support for /, did not find org.apache.jasper.servlet.JspServlet
+2009-08-03 15:37:05.355::INFO:  Started SocketConnector@0.0.0.0:56436
+Aug 3, 2009 3:37:05 PM hudson.ClassicPluginStrategy createPluginWrapper
+INFO: Loading plugin: /tmp/hudson3165155930760781595test/plugins/maven-plugin.hpi
+Aug 3, 2009 3:37:05 PM hudson.ClassicPluginStrategy explode
+INFO: Extracting /tmp/hudson3165155930760781595test/plugins/maven-plugin.hpi
+Aug 3, 2009 3:37:05 PM hudson.ClassicPluginStrategy createPluginWrapper
+INFO: Loading plugin: /tmp/hudson3165155930760781595test/plugins/subversion.hpi
+Aug 3, 2009 3:37:05 PM hudson.ClassicPluginStrategy explode
+INFO: Extracting /tmp/hudson3165155930760781595test/plugins/subversion.hpi
+Aug 3, 2009 3:37:05 PM hudson.ClassicPluginStrategy createPluginWrapper
+INFO: Loading plugin: /tmp/hudson3165155930760781595test/plugins/ssh-slaves.hpi
+Aug 3, 2009 3:37:05 PM hudson.ClassicPluginStrategy explode
+INFO: Extracting /tmp/hudson3165155930760781595test/plugins/ssh-slaves.hpi
+Aug 3, 2009 3:37:05 PM hudson.model.Hudson load
+INFO: Loading in 8 parallel threads
+Aug 3, 2009 3:37:05 PM hudson.model.Hudson load
+INFO: Took 75 ms to load
+Aug 3, 2009 3:37:05 PM hudson.TcpSlaveAgentListener <init>
+INFO: JNLP slave agent listener started on TCP port 46335
+=== Starting QueueTest.testPersistence
+<?xml version='1.0' encoding='UTF-8'?>
+<list>
+  <hudson.model.Queue_-WaitingItem>
+    <actions>
+      <hudson.model.CauseAction>
+        <causes>
+          <hudson.model.Cause_-LegacyCodeCause>
+            <stackTrace>
+              <trace>hudson.model.Cause$LegacyCodeCause.&lt;init&gt;(Cause.java:48)</trace>
+              <trace>hudson.model.AbstractProject.scheduleBuild(AbstractProject.java:553)</trace>
+              <trace>hudson.model.QueueTest.testPersistence(QueueTest.java:63)</trace>
+              <trace>sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)</trace>
+              <trace>sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:39)</trace>
+              <trace>sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)</trace>
+              <trace>java.lang.reflect.Method.invoke(Method.java:597)</trace>
+              <trace>junit.framework.TestCase.runTest(TestCase.java:154)</trace>
+              <trace>org.jvnet.hudson.test.HudsonTestCase.runTest(HudsonTestCase.java:266)</trace>
+              <trace>junit.framework.TestCase.runBare(TestCase.java:127)</trace>
+              <trace>junit.framework.TestResult$1.protect(TestResult.java:106)</trace>
+              <trace>junit.framework.TestResult.runProtected(TestResult.java:124)</trace>
+              <trace>junit.framework.TestResult.run(TestResult.java:109)</trace>
+              <trace>junit.framework.TestCase.run(TestCase.java:118)</trace>
+              <trace>junit.framework.TestSuite.runTest(TestSuite.java:208)</trace>
+              <trace>junit.framework.TestSuite.run(TestSuite.java:203)</trace>
+              <trace>sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)</trace>
+              <trace>sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:39)</trace>
+              <trace>sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)</trace>
+              <trace>java.lang.reflect.Method.invoke(Method.java:597)</trace>
+              <trace>org.apache.maven.surefire.junit.JUnitTestSet.execute(JUnitTestSet.java:213)</trace>
+              <trace>org.apache.maven.surefire.suite.AbstractDirectoryTestSuite.executeTestSet(AbstractDirectoryTestSuite.java:140)</trace>
+              <trace>org.apache.maven.surefire.suite.AbstractDirectoryTestSuite.execute(AbstractDirectoryTestSuite.java:127)</trace>
+              <trace>org.apache.maven.surefire.Surefire.run(Surefire.java:177)</trace>
+              <trace>sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)</trace>
+              <trace>sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:39)</trace>
+              <trace>sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)</trace>
+              <trace>java.lang.reflect.Method.invoke(Method.java:597)</trace>
+              <trace>org.apache.maven.surefire.booter.SurefireBooter.runSuitesInProcess(SurefireBooter.java:338)</trace>
+              <trace>org.apache.maven.surefire.booter.SurefireBooter.main(SurefireBooter.java:997)</trace>
+            </stackTrace>
+          </hudson.model.Cause_-LegacyCodeCause>
+        </causes>
+      </hudson.model.CauseAction>
+    </actions>
+    <id>4</id>
+    <task class="hudson.model.FreeStyleProject">test</task>
+    <timestamp>
+      <time>1249306630918</time>
+      <timezone>Europe/Brussels</timezone>
+    </timestamp>
+  </hudson.model.Queue_-WaitingItem>
+</list>
+Aug 3, 2009 3:37:05 PM hudson.PluginWrapper stop
+INFO: Stopping maven-plugin
+Aug 3, 2009 3:37:05 PM hudson.PluginWrapper stop
+INFO: Stopping subversion
+Aug 3, 2009 3:37:05 PM hudson.PluginWrapper stop
+INFO: Stopping ssh-slaves
+2009-08-03 15:37:06.132::INFO:  jetty-6.1.11
+2009-08-03 15:37:06.136::INFO:  NO JSP Support for /, did not find org.apache.jasper.servlet.JspServlet
+2009-08-03 15:37:06.140::INFO:  Started SocketConnector@0.0.0.0:43354
+Aug 3, 2009 3:37:06 PM hudson.ClassicPluginStrategy createPluginWrapper
+INFO: Loading plugin: /tmp/hudson1361060481679516681test/plugins/maven-plugin.hpi
+Aug 3, 2009 3:37:06 PM hudson.ClassicPluginStrategy explode
+INFO: Extracting /tmp/hudson1361060481679516681test/plugins/maven-plugin.hpi
+Aug 3, 2009 3:37:06 PM hudson.ClassicPluginStrategy createPluginWrapper
+INFO: Loading plugin: /tmp/hudson1361060481679516681test/plugins/subversion.hpi
+Aug 3, 2009 3:37:06 PM hudson.ClassicPluginStrategy explode
+INFO: Extracting /tmp/hudson1361060481679516681test/plugins/subversion.hpi
+Aug 3, 2009 3:37:06 PM hudson.ClassicPluginStrategy createPluginWrapper
+INFO: Loading plugin: /tmp/hudson1361060481679516681test/plugins/ssh-slaves.hpi
+Aug 3, 2009 3:37:06 PM hudson.ClassicPluginStrategy explode
+INFO: Extracting /tmp/hudson1361060481679516681test/plugins/ssh-slaves.hpi
+Aug 3, 2009 3:37:06 PM hudson.model.Hudson load
+INFO: Loading in 8 parallel threads
+Aug 3, 2009 3:37:06 PM hudson.model.Hudson load
+INFO: Took 75 ms to load
+Aug 3, 2009 3:37:06 PM hudson.TcpSlaveAgentListener <init>
+INFO: JNLP slave agent listener started on TCP port 51615
+=== Starting QueueTest.testPersistence2
+<?xml version='1.0' encoding='UTF-8'?>
+<list>
+  <hudson.model.Queue_-WaitingItem>
+    <actions>
+      <hudson.model.CauseAction>
+        <causes>
+          <hudson.model.Cause_-LegacyCodeCause>
+            <stackTrace>
+              <trace>hudson.model.Cause$LegacyCodeCause.&lt;init&gt;(Cause.java:48)</trace>
+              <trace>hudson.model.AbstractProject.scheduleBuild(AbstractProject.java:553)</trace>
+              <trace>hudson.model.QueueTest.testPersistence2(QueueTest.java:91)</trace>
+              <trace>sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)</trace>
+              <trace>sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:39)</trace>
+              <trace>sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)</trace>
+              <trace>java.lang.reflect.Method.invoke(Method.java:597)</trace>
+              <trace>junit.framework.TestCase.runTest(TestCase.java:154)</trace>
+              <trace>org.jvnet.hudson.test.HudsonTestCase.runTest(HudsonTestCase.java:266)</trace>
+              <trace>junit.framework.TestCase.runBare(TestCase.java:127)</trace>
+              <trace>junit.framework.TestResult$1.protect(TestResult.java:106)</trace>
+              <trace>junit.framework.TestResult.runProtected(TestResult.java:124)</trace>
+              <trace>junit.framework.TestResult.run(TestResult.java:109)</trace>
+              <trace>junit.framework.TestCase.run(TestCase.java:118)</trace>
+              <trace>junit.framework.TestSuite.runTest(TestSuite.java:208)</trace>
+              <trace>junit.framework.TestSuite.run(TestSuite.java:203)</trace>
+              <trace>sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)</trace>
+              <trace>sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:39)</trace>
+              <trace>sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)</trace>
+              <trace>java.lang.reflect.Method.invoke(Method.java:597)</trace>
+              <trace>org.apache.maven.surefire.junit.JUnitTestSet.execute(JUnitTestSet.java:213)</trace>
+              <trace>org.apache.maven.surefire.suite.AbstractDirectoryTestSuite.executeTestSet(AbstractDirectoryTestSuite.java:140)</trace>
+              <trace>org.apache.maven.surefire.suite.AbstractDirectoryTestSuite.execute(AbstractDirectoryTestSuite.java:127)</trace>
+              <trace>org.apache.maven.surefire.Surefire.run(Surefire.java:177)</trace>
+              <trace>sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)</trace>
+              <trace>sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:39)</trace>
+              <trace>sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)</trace>
+              <trace>java.lang.reflect.Method.invoke(Method.java:597)</trace>
+              <trace>org.apache.maven.surefire.booter.SurefireBooter.runSuitesInProcess(SurefireBooter.java:338)</trace>
+              <trace>org.apache.maven.surefire.booter.SurefireBooter.main(SurefireBooter.java:997)</trace>
+            </stackTrace>
+          </hudson.model.Cause_-LegacyCodeCause>
+        </causes>
+      </hudson.model.CauseAction>
+    </actions>
+    <id>5</id>
+    <task class="hudson.model.FreeStyleProject">test</task>
+    <timestamp>
+      <time>1249306631676</time>
+      <timezone>Europe/Brussels</timezone>
+    </timestamp>
+  </hudson.model.Queue_-WaitingItem>
+</list>
+Aug 3, 2009 3:37:06 PM hudson.model.Queue load
+WARNING: Failed to load the queue file /tmp/hudson1361060481679516681test/queue.txt
+hudson.util.IOException2: Unable to read /tmp/hudson1361060481679516681test/queue.xml
+	at hudson.XmlFile.read(XmlFile.java:130)
+	at hudson.model.Queue.load(Queue.java:235)
+	at hudson.model.QueueTest.testPersistence2(QueueTest.java:102)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:39)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)
+	at java.lang.reflect.Method.invoke(Method.java:597)
+	at junit.framework.TestCase.runTest(TestCase.java:154)
+	at org.jvnet.hudson.test.HudsonTestCase.runTest(HudsonTestCase.java:266)
+	at junit.framework.TestCase.runBare(TestCase.java:127)
+	at junit.framework.TestResult$1.protect(TestResult.java:106)
+	at junit.framework.TestResult.runProtected(TestResult.java:124)
+	at junit.framework.TestResult.run(TestResult.java:109)
+	at junit.framework.TestCase.run(TestCase.java:118)
+	at junit.framework.TestSuite.runTest(TestSuite.java:208)
+	at junit.framework.TestSuite.run(TestSuite.java:203)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:39)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)
+	at java.lang.reflect.Method.invoke(Method.java:597)
+	at org.apache.maven.surefire.junit.JUnitTestSet.execute(JUnitTestSet.java:213)
+	at org.apache.maven.surefire.suite.AbstractDirectoryTestSuite.executeTestSet(AbstractDirectoryTestSuite.java:140)
+	at org.apache.maven.surefire.suite.AbstractDirectoryTestSuite.execute(AbstractDirectoryTestSuite.java:127)
+	at org.apache.maven.surefire.Surefire.run(Surefire.java:177)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:39)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)
+	at java.lang.reflect.Method.invoke(Method.java:597)
+	at org.apache.maven.surefire.booter.SurefireBooter.runSuitesInProcess(SurefireBooter.java:338)
+	at org.apache.maven.surefire.booter.SurefireBooter.main(SurefireBooter.java:997)
+Caused by: com.thoughtworks.xstream.converters.ConversionException: No such job exists: test : No such job exists: test
+---- Debugging information ----
+message             : No such job exists: test
+cause-exception     : java.util.NoSuchElementException
+cause-message       : No such job exists: test
+class               : java.util.ArrayList
+required-type       : hudson.model.FreeStyleProject
+path                : /list/hudson.model.Queue$WaitingItem/task
+line number         : 45
+-------------------------------
+	at com.thoughtworks.xstream.core.TreeUnmarshaller.convert(TreeUnmarshaller.java:89)
+	at com.thoughtworks.xstream.core.AbstractReferenceUnmarshaller.convert(AbstractReferenceUnmarshaller.java:63)
+	at com.thoughtworks.xstream.core.TreeUnmarshaller.convertAnother(TreeUnmarshaller.java:76)
+	at com.thoughtworks.xstream.core.TreeUnmarshaller.convertAnother(TreeUnmarshaller.java:60)
+	at hudson.util.RobustReflectionConverter.unmarshallField(RobustReflectionConverter.java:262)
+	at hudson.util.RobustReflectionConverter.doUnmarshal(RobustReflectionConverter.java:222)
+	at hudson.util.RobustReflectionConverter.unmarshal(RobustReflectionConverter.java:173)
+	at com.thoughtworks.xstream.core.TreeUnmarshaller.convert(TreeUnmarshaller.java:82)
+	at com.thoughtworks.xstream.core.AbstractReferenceUnmarshaller.convert(AbstractReferenceUnmarshaller.java:63)
+	at com.thoughtworks.xstream.core.TreeUnmarshaller.convertAnother(TreeUnmarshaller.java:76)
+	at com.thoughtworks.xstream.core.TreeUnmarshaller.convertAnother(TreeUnmarshaller.java:60)
+	at com.thoughtworks.xstream.converters.collections.AbstractCollectionConverter.readItem(AbstractCollectionConverter.java:71)
+	at hudson.util.RobustCollectionConverter.populateCollection(RobustCollectionConverter.java:79)
+	at com.thoughtworks.xstream.converters.collections.CollectionConverter.unmarshal(CollectionConverter.java:61)
+	at hudson.util.RobustCollectionConverter.unmarshal(RobustCollectionConverter.java:71)
+	at com.thoughtworks.xstream.core.TreeUnmarshaller.convert(TreeUnmarshaller.java:82)
+	at com.thoughtworks.xstream.core.AbstractReferenceUnmarshaller.convert(AbstractReferenceUnmarshaller.java:63)
+	at com.thoughtworks.xstream.core.TreeUnmarshaller.convertAnother(TreeUnmarshaller.java:76)
+	at com.thoughtworks.xstream.core.TreeUnmarshaller.convertAnother(TreeUnmarshaller.java:60)
+	at com.thoughtworks.xstream.core.TreeUnmarshaller.start(TreeUnmarshaller.java:137)
+	at com.thoughtworks.xstream.core.AbstractTreeMarshallingStrategy.unmarshal(AbstractTreeMarshallingStrategy.java:33)
+	at com.thoughtworks.xstream.XStream.unmarshal(XStream.java:923)
+	at hudson.util.XStream2.unmarshal(XStream2.java:65)
+	at com.thoughtworks.xstream.XStream.unmarshal(XStream.java:909)
+	at com.thoughtworks.xstream.XStream.fromXML(XStream.java:853)
+	at hudson.XmlFile.read(XmlFile.java:126)
+	... 29 more
+Caused by: java.util.NoSuchElementException: No such job exists: test
+	at hudson.model.Queue$2.fromString(Queue.java:1395)
+	at com.thoughtworks.xstream.converters.SingleValueConverterWrapper.fromString(SingleValueConverterWrapper.java:41)
+	at com.thoughtworks.xstream.converters.SingleValueConverterWrapper.unmarshal(SingleValueConverterWrapper.java:49)
+	at com.thoughtworks.xstream.core.TreeUnmarshaller.convert(TreeUnmarshaller.java:82)
+	... 54 more
+Aug 3, 2009 3:37:06 PM hudson.PluginWrapper stop
+INFO: Stopping maven-plugin
+Aug 3, 2009 3:37:06 PM hudson.PluginWrapper stop
+INFO: Stopping subversion
+Aug 3, 2009 3:37:06 PM hudson.PluginWrapper stop
+INFO: Stopping ssh-slaves
+2009-08-03 15:37:06.930::INFO:  jetty-6.1.11
+2009-08-03 15:37:06.948::INFO:  NO JSP Support for /, did not find org.apache.jasper.servlet.JspServlet
+2009-08-03 15:37:06.953::INFO:  Started SocketConnector@0.0.0.0:35295
+Aug 3, 2009 3:37:06 PM hudson.ClassicPluginStrategy createPluginWrapper
+INFO: Loading plugin: /tmp/hudson5621607806200692592test/plugins/maven-plugin.hpi
+Aug 3, 2009 3:37:06 PM hudson.ClassicPluginStrategy explode
+INFO: Extracting /tmp/hudson5621607806200692592test/plugins/maven-plugin.hpi
+Aug 3, 2009 3:37:07 PM hudson.ClassicPluginStrategy createPluginWrapper
+INFO: Loading plugin: /tmp/hudson5621607806200692592test/plugins/subversion.hpi
+Aug 3, 2009 3:37:07 PM hudson.ClassicPluginStrategy explode
+INFO: Extracting /tmp/hudson5621607806200692592test/plugins/subversion.hpi
+Aug 3, 2009 3:37:07 PM hudson.ClassicPluginStrategy createPluginWrapper
+INFO: Loading plugin: /tmp/hudson5621607806200692592test/plugins/ssh-slaves.hpi
+Aug 3, 2009 3:37:07 PM hudson.ClassicPluginStrategy explode
+INFO: Extracting /tmp/hudson5621607806200692592test/plugins/ssh-slaves.hpi
+Aug 3, 2009 3:37:07 PM hudson.model.Hudson load
+INFO: Loading in 8 parallel threads
+Aug 3, 2009 3:37:07 PM hudson.model.Hudson load
+INFO: Took 72 ms to load
+Aug 3, 2009 3:37:07 PM hudson.TcpSlaveAgentListener <init>
+INFO: JNLP slave agent listener started on TCP port 47571
+=== Starting QueueTest.testFileItemPersistence
+2009-08-03 15:37:07.509::INFO:  jetty-6.1.11
+2009-08-03 15:37:07.510::INFO:  Started SocketConnector@0.0.0.0:55962
+<org.apache.commons.fileupload.disk.DiskFileItem serialization="custom">
+  <org.apache.commons.fileupload.disk.DiskFileItem>
+    <default>
+      <isFormField>false</isFormField>
+      <size>-1</size>
+      <sizeThreshold>10240</sizeThreshold>
+      <cachedContent></cachedContent>
+      <contentType>application/octet-stream</contentType>
+      <fieldName>test</fieldName>
+      <fileName></fileName>
+    </default>
+  </org.apache.commons.fileupload.disk.DiskFileItem>
+</org.apache.commons.fileupload.disk.DiskFileItem>
+Aug 3, 2009 3:37:07 PM hudson.PluginWrapper stop
+INFO: Stopping maven-plugin
+Aug 3, 2009 3:37:07 PM hudson.PluginWrapper stop
+INFO: Stopping subversion
+Aug 3, 2009 3:37:07 PM hudson.PluginWrapper stop
+INFO: Stopping ssh-slaves

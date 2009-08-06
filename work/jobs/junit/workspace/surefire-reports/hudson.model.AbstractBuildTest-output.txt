@@ -1,0 +1,30 @@
+2009-08-03 15:38:33.969::INFO:  jetty-6.1.11
+2009-08-03 15:38:33.974::INFO:  NO JSP Support for /, did not find org.apache.jasper.servlet.JspServlet
+2009-08-03 15:38:33.979::INFO:  Started SocketConnector@0.0.0.0:34542
+Aug 3, 2009 3:38:34 PM hudson.ClassicPluginStrategy createPluginWrapper
+INFO: Loading plugin: /tmp/hudson7613958162578237478test/plugins/maven-plugin.hpi
+Aug 3, 2009 3:38:34 PM hudson.ClassicPluginStrategy explode
+INFO: Extracting /tmp/hudson7613958162578237478test/plugins/maven-plugin.hpi
+Aug 3, 2009 3:38:34 PM hudson.ClassicPluginStrategy createPluginWrapper
+INFO: Loading plugin: /tmp/hudson7613958162578237478test/plugins/subversion.hpi
+Aug 3, 2009 3:38:34 PM hudson.ClassicPluginStrategy explode
+INFO: Extracting /tmp/hudson7613958162578237478test/plugins/subversion.hpi
+Aug 3, 2009 3:38:34 PM hudson.ClassicPluginStrategy createPluginWrapper
+INFO: Loading plugin: /tmp/hudson7613958162578237478test/plugins/ssh-slaves.hpi
+Aug 3, 2009 3:38:34 PM hudson.ClassicPluginStrategy explode
+INFO: Extracting /tmp/hudson7613958162578237478test/plugins/ssh-slaves.hpi
+Aug 3, 2009 3:38:34 PM hudson.model.Hudson load
+INFO: Loading in 8 parallel threads
+Aug 3, 2009 3:38:34 PM hudson.model.Hudson load
+INFO: Took 77 ms to load
+Aug 3, 2009 3:38:34 PM hudson.TcpSlaveAgentListener <init>
+INFO: JNLP slave agent listener started on TCP port 50608
+=== Starting AbstractBuildTest.testVariablesResolved
+Aug 3, 2009 3:38:35 PM hudson.model.Run run
+INFO: test0 #1 main build action completed: SUCCESS
+Aug 3, 2009 3:38:35 PM hudson.PluginWrapper stop
+INFO: Stopping maven-plugin
+Aug 3, 2009 3:38:35 PM hudson.PluginWrapper stop
+INFO: Stopping subversion
+Aug 3, 2009 3:38:35 PM hudson.PluginWrapper stop
+INFO: Stopping ssh-slaves

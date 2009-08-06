@@ -1,0 +1,160 @@
+2009-08-03 15:38:47.747::INFO:  jetty-6.1.11
+2009-08-03 15:38:47.753::INFO:  NO JSP Support for /, did not find org.apache.jasper.servlet.JspServlet
+2009-08-03 15:38:47.760::INFO:  Started SocketConnector@0.0.0.0:39526
+Aug 3, 2009 3:38:47 PM hudson.ClassicPluginStrategy createPluginWrapper
+INFO: Loading plugin: /tmp/hudson6486140803411511827test/plugins/maven-plugin.hpi
+Aug 3, 2009 3:38:47 PM hudson.ClassicPluginStrategy explode
+INFO: Extracting /tmp/hudson6486140803411511827test/plugins/maven-plugin.hpi
+Aug 3, 2009 3:38:47 PM hudson.ClassicPluginStrategy createPluginWrapper
+INFO: Loading plugin: /tmp/hudson6486140803411511827test/plugins/subversion.hpi
+Aug 3, 2009 3:38:47 PM hudson.ClassicPluginStrategy explode
+INFO: Extracting /tmp/hudson6486140803411511827test/plugins/subversion.hpi
+Aug 3, 2009 3:38:47 PM hudson.ClassicPluginStrategy createPluginWrapper
+INFO: Loading plugin: /tmp/hudson6486140803411511827test/plugins/ssh-slaves.hpi
+Aug 3, 2009 3:38:47 PM hudson.ClassicPluginStrategy explode
+INFO: Extracting /tmp/hudson6486140803411511827test/plugins/ssh-slaves.hpi
+Aug 3, 2009 3:38:47 PM hudson.model.Hudson load
+INFO: Loading in 8 parallel threads
+Aug 3, 2009 3:38:47 PM hudson.model.Hudson load
+INFO: Took 80 ms to load
+Aug 3, 2009 3:38:47 PM hudson.TcpSlaveAgentListener <init>
+INFO: JNLP slave agent listener started on TCP port 50640
+=== Starting FormFieldValidatorTest.testNegative
+2009-08-03 15:38:51.448:/:WARN:  Error while serving http://localhost:39526/job/test0/descriptorByName/hudson.util.FormFieldValidatorTest$BrokenFormValidatorBuilder/checkXyz
+java.lang.reflect.InvocationTargetException
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:39)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)
+	at java.lang.reflect.Method.invoke(Method.java:597)
+	at org.kohsuke.stapler.Function$InstanceFunction.invoke(Function.java:176)
+	at org.kohsuke.stapler.Function.bindAndInvoke(Function.java:92)
+	at org.kohsuke.stapler.Function.bindAndInvokeAndServeResponse(Function.java:53)
+	at org.kohsuke.stapler.MetaClass$1.doDispatch(MetaClass.java:73)
+	at org.kohsuke.stapler.NameBasedDispatcher.dispatch(NameBasedDispatcher.java:30)
+	at org.kohsuke.stapler.Stapler.invoke(Stapler.java:486)
+	at org.kohsuke.stapler.MetaClass$6.doDispatch(MetaClass.java:179)
+	at org.kohsuke.stapler.NameBasedDispatcher.dispatch(NameBasedDispatcher.java:30)
+	at org.kohsuke.stapler.Stapler.invoke(Stapler.java:486)
+	at org.kohsuke.stapler.MetaClass$6.doDispatch(MetaClass.java:179)
+	at org.kohsuke.stapler.NameBasedDispatcher.dispatch(NameBasedDispatcher.java:30)
+	at org.kohsuke.stapler.Stapler.invoke(Stapler.java:486)
+	at org.kohsuke.stapler.Stapler.invoke(Stapler.java:404)
+	at org.kohsuke.stapler.Stapler.service(Stapler.java:117)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:820)
+	at org.mortbay.jetty.servlet.ServletHolder.handle(ServletHolder.java:487)
+	at org.mortbay.jetty.servlet.ServletHandler$CachedChain.doFilter(ServletHandler.java:1097)
+	at hudson.util.PluginServletFilter$1.doFilter(PluginServletFilter.java:94)
+	at hudson.util.PluginServletFilter.doFilter(PluginServletFilter.java:86)
+	at org.mortbay.jetty.servlet.ServletHandler$CachedChain.doFilter(ServletHandler.java:1088)
+	at hudson.security.csrf.CrumbFilter.doFilter(CrumbFilter.java:87)
+	at org.mortbay.jetty.servlet.ServletHandler$CachedChain.doFilter(ServletHandler.java:1088)
+	at hudson.security.ChainedServletFilter$1.doFilter(ChainedServletFilter.java:84)
+	at hudson.security.ChainedServletFilter.doFilter(ChainedServletFilter.java:76)
+	at hudson.security.HudsonFilter.doFilter(HudsonFilter.java:155)
+	at org.mortbay.jetty.servlet.ServletHandler$CachedChain.doFilter(ServletHandler.java:1088)
+	at org.mortbay.jetty.servlet.ServletHandler.handle(ServletHandler.java:360)
+	at org.mortbay.jetty.security.SecurityHandler.handle(SecurityHandler.java:216)
+	at org.mortbay.jetty.servlet.SessionHandler.handle(SessionHandler.java:181)
+	at org.mortbay.jetty.handler.ContextHandler.handle(ContextHandler.java:729)
+	at org.mortbay.jetty.webapp.WebAppContext.handle(WebAppContext.java:405)
+	at org.mortbay.jetty.handler.HandlerWrapper.handle(HandlerWrapper.java:152)
+	at org.mortbay.jetty.Server.handle(Server.java:324)
+	at org.mortbay.jetty.HttpConnection.handleRequest(HttpConnection.java:505)
+	at org.mortbay.jetty.HttpConnection$RequestHandler.headerComplete(HttpConnection.java:829)
+	at org.mortbay.jetty.HttpParser.parseNext(HttpParser.java:513)
+	at org.mortbay.jetty.HttpParser.parseAvailable(HttpParser.java:211)
+	at org.mortbay.jetty.HttpConnection.handle(HttpConnection.java:380)
+	at org.mortbay.jetty.bio.SocketConnector$Connection.run(SocketConnector.java:228)
+	at org.mortbay.thread.QueuedThreadPool$PoolThread.run(QueuedThreadPool.java:488)
+Caused by: java.lang.Error: doCheckXyz is broken
+	at hudson.util.FormFieldValidatorTest$BrokenFormValidatorBuilder$DescriptorImpl.doCheckXyz(FormFieldValidatorTest.java:53)
+	... 44 more
+2009-08-03 15:38:51.453::WARN:  /job/test0/descriptorByName/hudson.util.FormFieldValidatorTest$BrokenFormValidatorBuilder/checkXyz
+java.lang.Error: doCheckXyz is broken
+	at hudson.util.FormFieldValidatorTest$BrokenFormValidatorBuilder$DescriptorImpl.doCheckXyz(FormFieldValidatorTest.java:53)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:39)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)
+	at java.lang.reflect.Method.invoke(Method.java:597)
+	at org.kohsuke.stapler.Function$InstanceFunction.invoke(Function.java:176)
+	at org.kohsuke.stapler.Function.bindAndInvoke(Function.java:92)
+	at org.kohsuke.stapler.Function.bindAndInvokeAndServeResponse(Function.java:53)
+	at org.kohsuke.stapler.MetaClass$1.doDispatch(MetaClass.java:73)
+	at org.kohsuke.stapler.NameBasedDispatcher.dispatch(NameBasedDispatcher.java:30)
+	at org.kohsuke.stapler.Stapler.invoke(Stapler.java:486)
+	at org.kohsuke.stapler.MetaClass$6.doDispatch(MetaClass.java:179)
+	at org.kohsuke.stapler.NameBasedDispatcher.dispatch(NameBasedDispatcher.java:30)
+	at org.kohsuke.stapler.Stapler.invoke(Stapler.java:486)
+	at org.kohsuke.stapler.MetaClass$6.doDispatch(MetaClass.java:179)
+	at org.kohsuke.stapler.NameBasedDispatcher.dispatch(NameBasedDispatcher.java:30)
+	at org.kohsuke.stapler.Stapler.invoke(Stapler.java:486)
+	at org.kohsuke.stapler.Stapler.invoke(Stapler.java:404)
+	at org.kohsuke.stapler.Stapler.service(Stapler.java:117)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:820)
+	at org.mortbay.jetty.servlet.ServletHolder.handle(ServletHolder.java:487)
+	at org.mortbay.jetty.servlet.ServletHandler$CachedChain.doFilter(ServletHandler.java:1097)
+	at hudson.util.PluginServletFilter$1.doFilter(PluginServletFilter.java:94)
+	at hudson.util.PluginServletFilter.doFilter(PluginServletFilter.java:86)
+	at org.mortbay.jetty.servlet.ServletHandler$CachedChain.doFilter(ServletHandler.java:1088)
+	at hudson.security.csrf.CrumbFilter.doFilter(CrumbFilter.java:87)
+	at org.mortbay.jetty.servlet.ServletHandler$CachedChain.doFilter(ServletHandler.java:1088)
+	at hudson.security.ChainedServletFilter$1.doFilter(ChainedServletFilter.java:84)
+	at hudson.security.ChainedServletFilter.doFilter(ChainedServletFilter.java:76)
+	at hudson.security.HudsonFilter.doFilter(HudsonFilter.java:155)
+	at org.mortbay.jetty.servlet.ServletHandler$CachedChain.doFilter(ServletHandler.java:1088)
+	at org.mortbay.jetty.servlet.ServletHandler.handle(ServletHandler.java:360)
+	at org.mortbay.jetty.security.SecurityHandler.handle(SecurityHandler.java:216)
+	at org.mortbay.jetty.servlet.SessionHandler.handle(SessionHandler.java:181)
+	at org.mortbay.jetty.handler.ContextHandler.handle(ContextHandler.java:729)
+	at org.mortbay.jetty.webapp.WebAppContext.handle(WebAppContext.java:405)
+	at org.mortbay.jetty.handler.HandlerWrapper.handle(HandlerWrapper.java:152)
+	at org.mortbay.jetty.Server.handle(Server.java:324)
+	at org.mortbay.jetty.HttpConnection.handleRequest(HttpConnection.java:505)
+	at org.mortbay.jetty.HttpConnection$RequestHandler.headerComplete(HttpConnection.java:829)
+	at org.mortbay.jetty.HttpParser.parseNext(HttpParser.java:513)
+	at org.mortbay.jetty.HttpParser.parseAvailable(HttpParser.java:211)
+	at org.mortbay.jetty.HttpConnection.handle(HttpConnection.java:380)
+	at org.mortbay.jetty.bio.SocketConnector$Connection.run(SocketConnector.java:228)
+	at org.mortbay.thread.QueuedThreadPool$PoolThread.run(QueuedThreadPool.java:488)
+Aug 3, 2009 3:38:52 PM hudson.PluginWrapper stop
+INFO: Stopping maven-plugin
+Aug 3, 2009 3:38:52 PM hudson.PluginWrapper stop
+INFO: Stopping subversion
+Aug 3, 2009 3:38:52 PM hudson.PluginWrapper stop
+INFO: Stopping ssh-slaves
+2009-08-03 15:38:52.939::INFO:  jetty-6.1.11
+2009-08-03 15:38:52.944::INFO:  NO JSP Support for /, did not find org.apache.jasper.servlet.JspServlet
+2009-08-03 15:38:52.956::INFO:  Started SocketConnector@0.0.0.0:41416
+Aug 3, 2009 3:38:52 PM hudson.ClassicPluginStrategy createPluginWrapper
+INFO: Loading plugin: /tmp/hudson1141513615310487790test/plugins/tasks.hpi
+Aug 3, 2009 3:38:52 PM hudson.ClassicPluginStrategy explode
+INFO: Extracting /tmp/hudson1141513615310487790test/plugins/tasks.hpi
+Aug 3, 2009 3:38:52 PM hudson.ClassicPluginStrategy createPluginWrapper
+INFO: Loading plugin: /tmp/hudson1141513615310487790test/plugins/maven-plugin.hpi
+Aug 3, 2009 3:38:52 PM hudson.ClassicPluginStrategy explode
+INFO: Extracting /tmp/hudson1141513615310487790test/plugins/maven-plugin.hpi
+Aug 3, 2009 3:38:52 PM hudson.ClassicPluginStrategy createPluginWrapper
+INFO: Loading plugin: /tmp/hudson1141513615310487790test/plugins/subversion.hpi
+Aug 3, 2009 3:38:52 PM hudson.ClassicPluginStrategy explode
+INFO: Extracting /tmp/hudson1141513615310487790test/plugins/subversion.hpi
+Aug 3, 2009 3:38:52 PM hudson.ClassicPluginStrategy createPluginWrapper
+INFO: Loading plugin: /tmp/hudson1141513615310487790test/plugins/ssh-slaves.hpi
+Aug 3, 2009 3:38:52 PM hudson.ClassicPluginStrategy explode
+INFO: Extracting /tmp/hudson1141513615310487790test/plugins/ssh-slaves.hpi
+Aug 3, 2009 3:38:52 PM hudson.model.Hudson load
+INFO: Loading in 8 parallel threads
+Aug 3, 2009 3:38:52 PM hudson.model.Hudson load
+INFO: Took 117 ms to load
+Aug 3, 2009 3:38:52 PM hudson.TcpSlaveAgentListener <init>
+INFO: JNLP slave agent listener started on TCP port 45659
+=== Starting FormFieldValidatorTest.test2771
+Aug 3, 2009 3:38:54 PM org.apache.commons.jexl.util.introspection.Introspector clearCache
+INFO: Introspector : detected classloader change. Dumping cache.
+Aug 3, 2009 3:38:58 PM hudson.PluginWrapper stop
+INFO: Stopping tasks
+Aug 3, 2009 3:38:58 PM hudson.PluginWrapper stop
+INFO: Stopping maven-plugin
+Aug 3, 2009 3:38:58 PM hudson.PluginWrapper stop
+INFO: Stopping subversion
+Aug 3, 2009 3:38:58 PM hudson.PluginWrapper stop
+INFO: Stopping ssh-slaves

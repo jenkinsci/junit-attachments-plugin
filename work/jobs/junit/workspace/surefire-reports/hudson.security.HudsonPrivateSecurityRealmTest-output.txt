@@ -1,0 +1,197 @@
+2009-08-03 15:36:30.244::INFO:  jetty-6.1.11
+2009-08-03 15:36:30.254::INFO:  NO JSP Support for /, did not find org.apache.jasper.servlet.JspServlet
+2009-08-03 15:36:30.279::INFO:  Started SocketConnector@0.0.0.0:49281
+Aug 3, 2009 3:36:30 PM hudson.ClassicPluginStrategy createPluginWrapper
+INFO: Loading plugin: /tmp/hudson6014388889163928617test/plugins/maven-plugin.hpi
+Aug 3, 2009 3:36:30 PM hudson.ClassicPluginStrategy explode
+INFO: Extracting /tmp/hudson6014388889163928617test/plugins/maven-plugin.hpi
+Aug 3, 2009 3:36:30 PM hudson.ClassicPluginStrategy createPluginWrapper
+INFO: Loading plugin: /tmp/hudson6014388889163928617test/plugins/subversion.hpi
+Aug 3, 2009 3:36:30 PM hudson.ClassicPluginStrategy explode
+INFO: Extracting /tmp/hudson6014388889163928617test/plugins/subversion.hpi
+Aug 3, 2009 3:36:30 PM hudson.ClassicPluginStrategy createPluginWrapper
+INFO: Loading plugin: /tmp/hudson6014388889163928617test/plugins/ssh-slaves.hpi
+Aug 3, 2009 3:36:30 PM hudson.ClassicPluginStrategy explode
+INFO: Extracting /tmp/hudson6014388889163928617test/plugins/ssh-slaves.hpi
+Aug 3, 2009 3:36:30 PM hudson.model.Hudson load
+INFO: Loading in 8 parallel threads
+Aug 3, 2009 3:36:32 PM hudson.model.Hudson load
+INFO: Took 1765 ms to load
+Aug 3, 2009 3:36:32 PM hudson.TcpSlaveAgentListener <init>
+INFO: JNLP slave agent listener started on TCP port 40075
+=== Starting HudsonPrivateSecurityRealmTest.testDataCompatibilityWith1_282
+Aug 3, 2009 3:36:33 PM org.apache.commons.jexl.util.introspection.Introspector clearCache
+INFO: Introspector : detected classloader change. Dumping cache.
+Aug 3, 2009 3:36:36 PM hudson.security.AuthenticationProcessingFilter2 onUnsuccessfulAuthentication
+INFO: Login attempt failed
+org.acegisecurity.BadCredentialsException: Bad credentials
+	at org.acegisecurity.providers.dao.AbstractUserDetailsAuthenticationProvider.authenticate(AbstractUserDetailsAuthenticationProvider.java:122)
+	at org.acegisecurity.providers.ProviderManager.doAuthentication(ProviderManager.java:195)
+	at org.acegisecurity.AbstractAuthenticationManager.authenticate(AbstractAuthenticationManager.java:45)
+	at org.acegisecurity.ui.webapp.AuthenticationProcessingFilter.attemptAuthentication(AuthenticationProcessingFilter.java:71)
+	at org.acegisecurity.ui.AbstractProcessingFilter.doFilter(AbstractProcessingFilter.java:252)
+	at hudson.security.ChainedServletFilter$1.doFilter(ChainedServletFilter.java:87)
+	at org.acegisecurity.ui.basicauth.BasicProcessingFilter.doFilter(BasicProcessingFilter.java:173)
+	at hudson.security.ChainedServletFilter$1.doFilter(ChainedServletFilter.java:87)
+	at org.acegisecurity.context.HttpSessionContextIntegrationFilter.doFilter(HttpSessionContextIntegrationFilter.java:249)
+	at hudson.security.HttpSessionContextIntegrationFilter2.doFilter(HttpSessionContextIntegrationFilter2.java:66)
+	at hudson.security.ChainedServletFilter$1.doFilter(ChainedServletFilter.java:87)
+	at hudson.security.ChainedServletFilter.doFilter(ChainedServletFilter.java:76)
+	at hudson.security.HudsonFilter.doFilter(HudsonFilter.java:155)
+	at org.mortbay.jetty.servlet.ServletHandler$CachedChain.doFilter(ServletHandler.java:1088)
+	at org.mortbay.jetty.servlet.ServletHandler.handle(ServletHandler.java:360)
+	at org.mortbay.jetty.security.SecurityHandler.handle(SecurityHandler.java:216)
+	at org.mortbay.jetty.servlet.SessionHandler.handle(SessionHandler.java:181)
+	at org.mortbay.jetty.handler.ContextHandler.handle(ContextHandler.java:729)
+	at org.mortbay.jetty.webapp.WebAppContext.handle(WebAppContext.java:405)
+	at org.mortbay.jetty.handler.HandlerWrapper.handle(HandlerWrapper.java:152)
+	at org.mortbay.jetty.Server.handle(Server.java:324)
+	at org.mortbay.jetty.HttpConnection.handleRequest(HttpConnection.java:505)
+	at org.mortbay.jetty.HttpConnection$RequestHandler.content(HttpConnection.java:843)
+	at org.mortbay.jetty.HttpParser.parseNext(HttpParser.java:647)
+	at org.mortbay.jetty.HttpParser.parseAvailable(HttpParser.java:211)
+	at org.mortbay.jetty.HttpConnection.handle(HttpConnection.java:380)
+	at org.mortbay.jetty.bio.SocketConnector$Connection.run(SocketConnector.java:228)
+	at org.mortbay.thread.QueuedThreadPool$PoolThread.run(QueuedThreadPool.java:488)
+Aug 3, 2009 3:36:36 PM com.gargoylesoftware.htmlunit.WebClient printContentIfNecessary
+INFO: statusCode=[401] contentType=[text/html]
+Aug 3, 2009 3:36:36 PM com.gargoylesoftware.htmlunit.WebClient printContentIfNecessary
+INFO: <html><head>
+    
+
+    <title>Hudson</title><link type="text/css" rel="stylesheet" href="/static/8e2da53b/css/style.css"></link><link type="text/css" rel="stylesheet" href="/static/8e2da53b/css/color.css"></link><link type="image/vnd.microsoft.icon" rel="shortcut icon" href="/static/8e2da53b/favicon.ico"></link><script>var isRunAsTest=true; var rootURL="";</script><script src="/static/8e2da53b/scripts/prototype.js" type="text/javascript"></script><script src="/static/8e2da53b/scripts/behavior.js" type="text/javascript"></script><script src="/static/8e2da53b/scripts/sortable.js" type="text/javascript"></script><script src="/static/8e2da53b/scripts/yui/yahoo/yahoo-min.js"></script><script src="/static/8e2da53b/scripts/yui/dom/dom-min.js"></script><script src="/static/8e2da53b/scripts/yui/event/event-min.js"></script><script src="/static/8e2da53b/scripts/yui/animation/animation-min.js"></script><script src="/static/8e2da53b/scripts/yui/dragdrop/dragdrop-min.js"></script><script src="/static/8e2da53b/scripts/yui/container/container-min.js"></script><script src="/static/8e2da53b/scripts/yui/connection/connection-min.js"></script><script src="/static/8e2da53b/scripts/yui/autocomplete/autocomplete-min.js"></script><script src="/static/8e2da53b/scripts/yui/menu/menu-min.js"></script><script src="/static/8e2da53b/scripts/yui/element/element-beta-min.js"></script><script src="/static/8e2da53b/scripts/yui/button/button-min.js"></script><script src="/static/8e2da53b/scripts/hudson-behavior.js" type="text/javascript"></script><script>
+        crumb.init(".crumb", "test");
+    </script><link type="text/css" rel="stylesheet" href="/static/8e2da53b/scripts/yui/container/assets/container.css"></link><link type="text/css" rel="stylesheet" href="/static/8e2da53b/scripts/yui/assets/skins/sam/skin.css"></link><link type="text/css" rel="stylesheet" href="/static/8e2da53b/scripts/yui/container/assets/skins/sam/container.css"></link><link type="text/css" rel="stylesheet" href="/static/8e2da53b/scripts/yui/button/assets/skins/sam/button.css"></link><link type="text/css" rel="stylesheet" href="/static/8e2da53b/scripts/yui/menu/assets/skins/sam/menu.css"></link><link type="application/opensearchdescription+xml" rel="search" title="Hudson" href="/opensearch.xml"></link><meta content="INDEX,NOFOLLOW" name="ROBOTS"></meta><link type="application/rss+xml" rel="alternate" title="Hudson:All (all builds)" href="rssAll"></link><link type="application/rss+xml" rel="alternate" title="Hudson:All (all builds) (RSS 2.0)" href="rssAll?flavor=rss20"></link><link type="application/rss+xml" rel="alternate" title="Hudson:All (failed builds)" href="rssFailed"></link><link type="application/rss+xml" rel="alternate" title="Hudson:All (failed builds) (RSS 2.0)" href="rssFailed?flavor=rss20"></link></head><body class="yui-skin-sam"><a class="skiplink" href="#skip2content">Skip to content</a><table border="0" width="100%" cellpadding="0" cellspacing="0" id="header"><tr><td id="top-panel" colspan="2"><table border="0" width="100%" cellpadding="0" cellspacing="0"><tr><td style="font-weight:bold; font-size: 2em;"><a href="/"><img src="/static/8e2da53b/images/title.png" alt="title"></img></a></td><td style="vertical-align: middle; text-align: right; padding-right: 1em;"><form style="position:relative;" class="no-json" action="/search/" method="get" name="search"><div id="search-box-minWidth"></div><div id="search-box-sizer"></div><div id="searchform"><input class="has-default-text defaulted" value="search" id="search-box" name="q"></input> <a href="http://hudson.gotdns.com/wiki/display/HUDSON/Search+Box"><img src="/static/8e2da53b/images/16x16/help.png" alt="help for search"></img></a><div id="search-box-completion"></div><script>createSearchBox("/search/");</script></div></form></td><td id="login-field"><span> <a style="color:inherit" href="/login?from=/ "><b>log in</b></a>
+    |
+    <a href="/signup"><b>sign up</b></a></span></td></tr></table></td></tr><tr id="top-nav"><td id="left-top-nav"><a href="/">Hudson</a></td><td id="right-top-nav"><span class="smallfont"><a href="?auto_refresh=true">ENABLE AUTO REFRESH</a></span></td></tr></table><table style="background-image: url(/static/8e2da53b/images/hudson.png);                background-repeat: no-repeat; background-position: bottom left;" border="0" width="100%" id="main-table" height="70%"><tr><td width="20%" id="side-panel"><div style="margin-left: 20px; margin-right: 20px; border-top: 1px solid #bbb"></div><div id="navigation"><div id="tasks"><div class="task"><a href="/newJob"><img src="/static/8e2da53b/images/24x24/new-package.gif" style="margin: 2px;" width="24" alt="" height="24"></img></a> <a href="/newJob">New Job</a></div><div class="task"><a href="/manage"><img src="/static/8e2da53b/images/24x24/setting.gif" style="margin: 2px;" width="24" alt="" height="24"></img></a> <a href="/manage">Manage Hudson</a></div><div class="task"><a href="/builds"><img src="/static/8e2da53b/images/24x24/notepad.gif" style="margin: 2px;" width="24" alt="" height="24"></img></a> <a href="/builds">Build History</a></div></div><table class="pane" id="buildQueue"><tr><td class="pane-header" colspan="2">Build Queue</td></tr><tr><td class="pane" colspan="2">No builds in the queue.</td></tr></table><script defer="defer">
+      refreshPart('buildQueue',"./ajaxBuildQueue");
+    </script><table class="pane" id="executors"><tr><td class="pane-header" colspan="3"><a href='/computer/'>Build Executor Status</a></td></tr><tr><th class="pane" align="right">#</th><th width="80%" class="pane">Status</th><th width="24" class="pane"> </th></tr><tr><td style="vertical-align: top" class="pane" align="right">1</td><td class="pane">Idle</td><td class="pane"></td></tr><tr><td style="vertical-align: top" class="pane" align="right">2</td><td class="pane">Idle</td><td class="pane"></td></tr></table><script defer="defer">
+        refreshPart('executors',"./ajaxExecutors");
+      </script></div></td><td width="80%" id="main-panel" height="100%"><a name="skip2content"></a><div style="margin: 2em; text-align:center; color:red; font-weight:bold">
+        Invalid login information. Please try again.
+        <br></br><a href="login?from=">Try again</a></div></td></tr></table><table width="100%"><tr><td id="footer"><a href="http://hudson.dev.java.net/">
+          Hudson ver. 1.318-SNAPSHOT (private-08/03/2009 03:24-tom)</a></td></tr></table></body></html>
+Aug 3, 2009 3:36:38 PM com.gargoylesoftware.htmlunit.JavaScriptBackgroundJob run
+SEVERE: Caught exception in Window.setTimeout().
+======= EXCEPTION START ========
+Exception class=[org.mozilla.javascript.WrappedException]
+com.gargoylesoftware.htmlunit.ScriptException: Wrapped java.lang.NullPointerException (http://localhost:49281/static/8e2da53b/scripts/yui/dom/dom-min.js#7)
+	at com.gargoylesoftware.htmlunit.javascript.JavaScriptEngine$HtmlUnitContextAction.run(JavaScriptEngine.java:528)
+	at org.mozilla.javascript.Context.call(Context.java:502)
+	at org.mozilla.javascript.ContextFactory.call(ContextFactory.java:511)
+	at com.gargoylesoftware.htmlunit.javascript.JavaScriptEngine.callFunction(JavaScriptEngine.java:437)
+	at com.gargoylesoftware.htmlunit.html.HtmlPage.executeJavaScriptFunctionIfPossible(HtmlPage.java:909)
+	at com.gargoylesoftware.htmlunit.JavaScriptBackgroundJob.run(JavaScriptBackgroundJob.java:105)
+	at java.lang.Thread.run(Thread.java:619)
+	at com.gargoylesoftware.htmlunit.ThreadManager$1.run(ThreadManager.java:127)
+Caused by: org.mozilla.javascript.WrappedException: Wrapped java.lang.NullPointerException (http://localhost:49281/static/8e2da53b/scripts/yui/dom/dom-min.js#7)
+	at org.mozilla.javascript.Context.throwAsScriptRuntimeEx(Context.java:1657)
+	at org.mozilla.javascript.MemberBox.invoke(MemberBox.java:176)
+	at org.mozilla.javascript.FunctionObject.call(FunctionObject.java:478)
+	at script.(http://localhost:49281/static/8e2da53b/scripts/yui/dom/dom-min.js:7)
+	at script.(http://localhost:49281/static/8e2da53b/scripts/yui/dom/dom-min.js:7)
+	at script.(http://localhost:49281/static/8e2da53b/scripts/yui/dom/dom-min.js:7)
+	at script.(http://localhost:49281/static/8e2da53b/scripts/yui/container/container-min.js:8)
+	at script.B(http://localhost:49281/static/8e2da53b/scripts/yui/container/container-min.js:12)
+	at script.(http://localhost:49281/static/8e2da53b/scripts/yui/event/event-min.js:7)
+	at org.mozilla.javascript.Interpreter.interpret(Interpreter.java:2518)
+	at org.mozilla.javascript.InterpretedFunction.call(InterpretedFunction.java:164)
+	at org.mozilla.javascript.ContextFactory.doTopCall(ContextFactory.java:401)
+	at com.gargoylesoftware.htmlunit.javascript.HtmlUnitContextFactory.doTopCall(HtmlUnitContextFactory.java:169)
+	at org.mozilla.javascript.ScriptRuntime.doTopCall(ScriptRuntime.java:3004)
+	at org.mozilla.javascript.InterpretedFunction.call(InterpretedFunction.java:162)
+	at com.gargoylesoftware.htmlunit.javascript.JavaScriptEngine.callFunction(JavaScriptEngine.java:465)
+	at com.gargoylesoftware.htmlunit.javascript.JavaScriptEngine$6.doRun(JavaScriptEngine.java:430)
+	at com.gargoylesoftware.htmlunit.javascript.JavaScriptEngine$HtmlUnitContextAction.run(JavaScriptEngine.java:522)
+	... 7 more
+Caused by: java.lang.NullPointerException
+	at com.gargoylesoftware.htmlunit.javascript.host.HTMLDocument.jsxFunction_getElementById(HTMLDocument.java:766)
+	at sun.reflect.GeneratedMethodAccessor37.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)
+	at java.lang.reflect.Method.invoke(Method.java:597)
+	at org.mozilla.javascript.MemberBox.invoke(MemberBox.java:161)
+	... 23 more
+WrappedException: org.mozilla.javascript.WrappedException: Wrapped java.lang.NullPointerException (http://localhost:49281/static/8e2da53b/scripts/yui/dom/dom-min.js#7)
+	at org.mozilla.javascript.Context.throwAsScriptRuntimeEx(Context.java:1657)
+	at org.mozilla.javascript.MemberBox.invoke(MemberBox.java:176)
+	at org.mozilla.javascript.FunctionObject.call(FunctionObject.java:478)
+	at script.(http://localhost:49281/static/8e2da53b/scripts/yui/dom/dom-min.js:7)
+	at script.(http://localhost:49281/static/8e2da53b/scripts/yui/dom/dom-min.js:7)
+	at script.(http://localhost:49281/static/8e2da53b/scripts/yui/dom/dom-min.js:7)
+	at script.(http://localhost:49281/static/8e2da53b/scripts/yui/container/container-min.js:8)
+	at script.B(http://localhost:49281/static/8e2da53b/scripts/yui/container/container-min.js:12)
+	at script.(http://localhost:49281/static/8e2da53b/scripts/yui/event/event-min.js:7)
+	at org.mozilla.javascript.Interpreter.interpret(Interpreter.java:2518)
+	at org.mozilla.javascript.InterpretedFunction.call(InterpretedFunction.java:164)
+	at org.mozilla.javascript.ContextFactory.doTopCall(ContextFactory.java:401)
+	at com.gargoylesoftware.htmlunit.javascript.HtmlUnitContextFactory.doTopCall(HtmlUnitContextFactory.java:169)
+	at org.mozilla.javascript.ScriptRuntime.doTopCall(ScriptRuntime.java:3004)
+	at org.mozilla.javascript.InterpretedFunction.call(InterpretedFunction.java:162)
+	at com.gargoylesoftware.htmlunit.javascript.JavaScriptEngine.callFunction(JavaScriptEngine.java:465)
+	at com.gargoylesoftware.htmlunit.javascript.JavaScriptEngine$6.doRun(JavaScriptEngine.java:430)
+	at com.gargoylesoftware.htmlunit.javascript.JavaScriptEngine$HtmlUnitContextAction.run(JavaScriptEngine.java:522)
+	at org.mozilla.javascript.Context.call(Context.java:502)
+	at org.mozilla.javascript.ContextFactory.call(ContextFactory.java:511)
+	at com.gargoylesoftware.htmlunit.javascript.JavaScriptEngine.callFunction(JavaScriptEngine.java:437)
+	at com.gargoylesoftware.htmlunit.html.HtmlPage.executeJavaScriptFunctionIfPossible(HtmlPage.java:909)
+	at com.gargoylesoftware.htmlunit.JavaScriptBackgroundJob.run(JavaScriptBackgroundJob.java:105)
+	at java.lang.Thread.run(Thread.java:619)
+	at com.gargoylesoftware.htmlunit.ThreadManager$1.run(ThreadManager.java:127)
+Caused by: java.lang.NullPointerException
+	at com.gargoylesoftware.htmlunit.javascript.host.HTMLDocument.jsxFunction_getElementById(HTMLDocument.java:766)
+	at sun.reflect.GeneratedMethodAccessor37.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)
+	at java.lang.reflect.Method.invoke(Method.java:597)
+	at org.mozilla.javascript.MemberBox.invoke(MemberBox.java:161)
+	... 23 more
+Inside wrapped exception:
+java.lang.NullPointerException
+	at com.gargoylesoftware.htmlunit.javascript.host.HTMLDocument.jsxFunction_getElementById(HTMLDocument.java:766)
+	at sun.reflect.GeneratedMethodAccessor37.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)
+	at java.lang.reflect.Method.invoke(Method.java:597)
+	at org.mozilla.javascript.MemberBox.invoke(MemberBox.java:161)
+	at org.mozilla.javascript.FunctionObject.call(FunctionObject.java:478)
+	at script.(http://localhost:49281/static/8e2da53b/scripts/yui/dom/dom-min.js:7)
+	at script.(http://localhost:49281/static/8e2da53b/scripts/yui/dom/dom-min.js:7)
+	at script.(http://localhost:49281/static/8e2da53b/scripts/yui/dom/dom-min.js:7)
+	at script.(http://localhost:49281/static/8e2da53b/scripts/yui/container/container-min.js:8)
+	at script.B(http://localhost:49281/static/8e2da53b/scripts/yui/container/container-min.js:12)
+	at script.(http://localhost:49281/static/8e2da53b/scripts/yui/event/event-min.js:7)
+	at org.mozilla.javascript.Interpreter.interpret(Interpreter.java:2518)
+	at org.mozilla.javascript.InterpretedFunction.call(InterpretedFunction.java:164)
+	at org.mozilla.javascript.ContextFactory.doTopCall(ContextFactory.java:401)
+	at com.gargoylesoftware.htmlunit.javascript.HtmlUnitContextFactory.doTopCall(HtmlUnitContextFactory.java:169)
+	at org.mozilla.javascript.ScriptRuntime.doTopCall(ScriptRuntime.java:3004)
+	at org.mozilla.javascript.InterpretedFunction.call(InterpretedFunction.java:162)
+	at com.gargoylesoftware.htmlunit.javascript.JavaScriptEngine.callFunction(JavaScriptEngine.java:465)
+	at com.gargoylesoftware.htmlunit.javascript.JavaScriptEngine$6.doRun(JavaScriptEngine.java:430)
+	at com.gargoylesoftware.htmlunit.javascript.JavaScriptEngine$HtmlUnitContextAction.run(JavaScriptEngine.java:522)
+	at org.mozilla.javascript.Context.call(Context.java:502)
+	at org.mozilla.javascript.ContextFactory.call(ContextFactory.java:511)
+	at com.gargoylesoftware.htmlunit.javascript.JavaScriptEngine.callFunction(JavaScriptEngine.java:437)
+	at com.gargoylesoftware.htmlunit.html.HtmlPage.executeJavaScriptFunctionIfPossible(HtmlPage.java:909)
+	at com.gargoylesoftware.htmlunit.JavaScriptBackgroundJob.run(JavaScriptBackgroundJob.java:105)
+	at java.lang.Thread.run(Thread.java:619)
+	at com.gargoylesoftware.htmlunit.ThreadManager$1.run(ThreadManager.java:127)
+== CALLING JAVASCRIPT ==
+
+  function () {
+      var N = window;
+      if (L) {
+          if (L === true) {
+              N = M;
+          } else {
+              N = L;
+          }
+      }
+      K.call(N, "DOMReady", [], M);
+  }
+
+======= EXCEPTION END ========
+Aug 3, 2009 3:36:38 PM hudson.PluginWrapper stop
+INFO: Stopping maven-plugin
+Aug 3, 2009 3:36:38 PM hudson.PluginWrapper stop
+INFO: Stopping subversion
+Aug 3, 2009 3:36:38 PM hudson.PluginWrapper stop
+INFO: Stopping ssh-slaves

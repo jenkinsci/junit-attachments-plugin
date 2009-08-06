@@ -1,0 +1,19 @@
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define"
+	xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
+
+	<tr><td>
+	<H2>Attachments</H2>
+	<table class="pane" id="attachments">
+		<tr>
+			<td class="pane-header">${%Files}</td>
+		</tr>
+			<j:forEach var="attachment" items="${it.attachments}">
+				<tr>
+					<td class="pane">
+						<a href="attachments/${attachment}">${attachment}</a>
+					</td>
+				</tr>
+			</j:forEach>
+	</table>
+	</td></tr>
+</j:jelly>
