@@ -18,6 +18,7 @@ import hudson.tasks.junit.TestResultAction;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -93,21 +94,21 @@ public class AttachmentPublisher extends TestDataPublisher {
 		}
 
 		@Override
-		public TestAction getTestAction(TestObject testObject) {
+		public List<TestAction> getTestAction(TestObject testObject) {
 			ClassResult cr;
 			if (testObject instanceof ClassResult) {
 				cr = (ClassResult) testObject;
 			} else if (testObject instanceof CaseResult) {
 				cr = (ClassResult) testObject.getParent();
 			} else {
-				return null;
+				return Collections.emptyList();
 			}
 
 			String className = cr.getParent().getName() + "." + cr.getName();
 			List<String> attachments = this.attachments.get(className);
 			if (attachments != null) {
-				return new AttachmentTestAction(cr, getAttachmentPath(
-						testObject.getOwner()).child(className), attachments);
+				return Collections.<TestAction>singletonList(new AttachmentTestAction(cr, getAttachmentPath(
+						testObject.getOwner()).child(className), attachments));
 			}
 
 			return null;
