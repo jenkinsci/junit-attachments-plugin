@@ -6,7 +6,7 @@ import hudson.Launcher;
 import hudson.model.AbstractBuild;
 import hudson.model.BuildListener;
 import hudson.model.Descriptor;
-import hudson.model.Hudson;
+import hudson.tasks.junit.CaseResult;
 import hudson.tasks.junit.ClassResult;
 import hudson.tasks.junit.SuiteResult;
 import hudson.tasks.junit.TestAction;
@@ -28,11 +28,14 @@ import org.kohsuke.stapler.DataBoundConstructor;
 public class AttachmentPublisher extends TestDataPublisher {
 
 	@DataBoundConstructor
-	public AttachmentPublisher() {}
-	
+	public AttachmentPublisher() {
+	}
+
 	public static FilePath getAttachmentPath(AbstractBuild<?, ?> build) {
-//		return new FilePath(Hudson.MasterComputer.localChannel, build.getRootDir().getAbsolutePath()).child("junit-attachments");
-		return new FilePath(new File(build.getRootDir().getAbsolutePath())).child("junit-attachments");
+		// return new FilePath(Hudson.MasterComputer.localChannel,
+		// build.getRootDir().getAbsolutePath()).child("junit-attachments");
+		return new FilePath(new File(build.getRootDir().getAbsolutePath()))
+				.child("junit-attachments");
 	}
 
 	@Override
@@ -41,25 +44,24 @@ public class AttachmentPublisher extends TestDataPublisher {
 			InterruptedException {
 
 		// build a map of className -> result xml file
-		final Map<String, File> reports = new HashMap<String, File>();
+		final Map<String, String> reports = new HashMap<String, String>();
 		for (SuiteResult suiteResult : testResult.getSuites()) {
-			File f = suiteResult.getFile();
+			String f = suiteResult.getFile();
 			if (f != null) {
 				for (String className : suiteResult.getClassNames()) {
-					reports.put(className, f.getAbsoluteFile());
+					reports.put(className, f);
 				}
 			}
 		}
 
 		final FilePath attachmentsStorage = getAttachmentPath(build);
-		
-		Map<String,List<String>> attachments =new HashMap<String, List<String>>();
-		
-		for (Map.Entry<String, File> report : reports
-				.entrySet()) {
+
+		Map<String, List<String>> attachments = new HashMap<String, List<String>>();
+
+		for (Map.Entry<String, String> report : reports.entrySet()) {
 			String className = report.getKey();
-			FilePath testDir = new FilePath(launcher.getChannel(), 
-					report.getValue().getAbsolutePath()).getParent().child(className);
+			FilePath testDir = build.getWorkspace().child(report.getValue())
+					.getParent().child(className);
 			FilePath target = attachmentsStorage.child(className);
 			if (testDir.exists()) {
 				target.mkdirs();
@@ -68,11 +70,12 @@ public class AttachmentPublisher extends TestDataPublisher {
 				d.setBasedir(testDir.getRemote());
 				d.scan();
 				if (d.getIncludedFiles().length != 0) {
-					attachments.put(className, Arrays.asList(d.getIncludedFiles()));
+					attachments.put(className, Arrays.asList(d
+							.getIncludedFiles()));
 				}
 			}
 		}
-		
+
 		if (attachments.isEmpty()) {
 			return null;
 		}
@@ -91,19 +94,26 @@ public class AttachmentPublisher extends TestDataPublisher {
 
 		@Override
 		public TestAction getTestAction(TestObject testObject) {
+			ClassResult cr;
 			if (testObject instanceof ClassResult) {
-				ClassResult cr = (ClassResult) testObject;
-				String className = cr.getParent().getName() + "." + cr.getName();
-				List<String> attachments = this.attachments.get(className);
-				if (attachments != null) {
-					return new AttachmentTestAction(cr, getAttachmentPath(testObject.getOwner()).child(className), attachments);
-				}
+				cr = (ClassResult) testObject;
+			} else if (testObject instanceof CaseResult) {
+				cr = (ClassResult) testObject.getParent();
+			} else {
+				return null;
 			}
-			
+
+			String className = cr.getParent().getName() + "." + cr.getName();
+			List<String> attachments = this.attachments.get(className);
+			if (attachments != null) {
+				return new AttachmentTestAction(cr, getAttachmentPath(
+						testObject.getOwner()).child(className), attachments);
+			}
+
 			return null;
 		}
 	}
-	
+
 	@Extension
 	public static class DescriptorImpl extends Descriptor<TestDataPublisher> {
 
@@ -111,7 +121,7 @@ public class AttachmentPublisher extends TestDataPublisher {
 		public String getDisplayName() {
 			return "Publish test attachments";
 		}
-		
+
 	}
 
 }

@@ -2,7 +2,7 @@
 	xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
 
 	<tr><td>
-	<H2>Attachments</H2>
+	<H3>Attachments</H3>
 	<table class="pane" id="attachments">
 		<tr>
 			<td class="pane-header">${%Files}</td>
