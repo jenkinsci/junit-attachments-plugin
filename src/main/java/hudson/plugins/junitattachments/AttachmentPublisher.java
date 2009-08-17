@@ -109,9 +109,10 @@ public class AttachmentPublisher extends TestDataPublisher {
 			if (attachments != null) {
 				return Collections.<TestAction>singletonList(new AttachmentTestAction(cr, getAttachmentPath(
 						testObject.getOwner()).child(className), attachments));
+			} else {
+			    return Collections.emptyList();
 			}
 
-			return null;
 		}
 	}
 
