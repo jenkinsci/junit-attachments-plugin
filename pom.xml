@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.jvnet.hudson.plugins</groupId>
     <artifactId>plugin</artifactId>
-    <version>1.318</version>
+    <version>1.320</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
 
@@ -27,25 +27,6 @@
   </build>
 
     <dependencies>
-        <dependency>
-            <groupId>org.jvnet.hudson.main</groupId>
-            <artifactId>hudson-war</artifactId>
-            <type>war</type>
-            <version>1.318-SNAPSHOT</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.jvnet.hudson.main</groupId>
-            <artifactId>hudson-core</artifactId>
-            <version>1.318-SNAPSHOT</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.jvnet.hudson.main</groupId>
-            <artifactId>hudson-test-harness</artifactId>
-            <version>1.318-SNAPSHOT</version>
-            <scope>test</scope>
-        </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>

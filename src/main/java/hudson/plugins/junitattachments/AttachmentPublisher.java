@@ -66,11 +66,10 @@ public class AttachmentPublisher extends TestDataPublisher {
 			FilePath target = attachmentsStorage.child(className);
 			if (testDir.exists()) {
 				target.mkdirs();
-				testDir.copyRecursiveTo(target);
-				DirectoryScanner d = new DirectoryScanner();
-				d.setBasedir(testDir.getRemote());
-				d.scan();
-				if (d.getIncludedFiles().length != 0) {
+				if (testDir.copyRecursiveTo(target) > 0) {
+					DirectoryScanner d = new DirectoryScanner();
+					d.setBasedir(target.getRemote());
+					d.scan();
 					attachments.put(className, Arrays.asList(d
 							.getIncludedFiles()));
 				}
@@ -107,10 +106,12 @@ public class AttachmentPublisher extends TestDataPublisher {
 			String className = cr.getParent().getName() + "." + cr.getName();
 			List<String> attachments = this.attachments.get(className);
 			if (attachments != null) {
-				return Collections.<TestAction>singletonList(new AttachmentTestAction(cr, getAttachmentPath(
-						testObject.getOwner()).child(className), attachments));
+				return Collections
+						.<TestAction> singletonList(new AttachmentTestAction(
+								cr, getAttachmentPath(testObject.getOwner())
+										.child(className), attachments));
 			} else {
-			    return Collections.emptyList();
+				return Collections.emptyList();
 			}
 
 		}
