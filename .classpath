@@ -3,6 +3,8 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/hudson-core"/>
 	<classpathentry including="**/*.java" kind="src" path="src/main/java"/>
 	<classpathentry including="**/*.java" kind="src" path="target/generated-sources/localizer"/>
+	<classpathentry kind="src" path="src/test/java"/>
+	<classpathentry kind="src" path="src/test/resources"/>
 	<classpathentry kind="var" path="M2_REPO/javax/activation/activation/1.1/activation-1.1.jar" sourcepath="M2_REPO/javax/activation/activation/1.1/activation-1.1-sources.jar"/>
 	<classpathentry kind="var" path="M2_REPO/javax/servlet/jstl/1.1.0/jstl-1.1.0.jar"/>
 	<classpathentry kind="var" path="M2_REPO/javax/mail/mail/1.4/mail-1.4.jar" sourcepath="M2_REPO/javax/mail/mail/1.4/mail-1.4-sources.jar"/>
@@ -79,7 +81,6 @@
 	<classpathentry kind="var" path="M2_REPO/org/jvnet/hudson/main/maven-interceptor/1.318/maven-interceptor-1.318.jar" sourcepath="M2_REPO/org/jvnet/hudson/main/maven-interceptor/1.318/maven-interceptor-1.318-sources.jar"/>
 	<classpathentry kind="var" path="M2_REPO/org/apache/maven/maven-model/2.0.9/maven-model-2.0.9.jar" sourcepath="M2_REPO/org/apache/maven/maven-model/2.0.9/maven-model-2.0.9-sources.jar"/>
 	<classpathentry kind="var" path="M2_REPO/org/apache/maven/maven-monitor/2.0.9/maven-monitor-2.0.9.jar" sourcepath="M2_REPO/org/apache/maven/maven-monitor/2.0.9/maven-monitor-2.0.9-sources.jar"/>
-	<classpathentry kind="var" path="M2_REPO/org/jvnet/hudson/main/maven-plugin/1.318/maven-plugin-1.318.jar" sourcepath="M2_REPO/org/jvnet/hudson/main/maven-plugin/1.318/maven-plugin-1.318-sources.jar"/>
 	<classpathentry kind="var" path="M2_REPO/org/apache/maven/maven-plugin-api/2.0.9/maven-plugin-api-2.0.9.jar" sourcepath="M2_REPO/org/apache/maven/maven-plugin-api/2.0.9/maven-plugin-api-2.0.9-sources.jar"/>
 	<classpathentry kind="var" path="M2_REPO/org/apache/maven/maven-plugin-descriptor/2.0.9/maven-plugin-descriptor-2.0.9.jar" sourcepath="M2_REPO/org/apache/maven/maven-plugin-descriptor/2.0.9/maven-plugin-descriptor-2.0.9-sources.jar"/>
 	<classpathentry kind="var" path="M2_REPO/org/apache/maven/maven-plugin-parameter-documenter/2.0.9/maven-plugin-parameter-documenter-2.0.9.jar" sourcepath="M2_REPO/org/apache/maven/maven-plugin-parameter-documenter/2.0.9/maven-plugin-parameter-documenter-2.0.9-sources.jar"/>
