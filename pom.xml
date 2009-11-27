@@ -9,7 +9,7 @@
   </parent>
 
   <artifactId>junit-attachments</artifactId>
-  <version>1.0-SNAPSHOT</version>
+  <version>1.0</version>
   <packaging>hpi</packaging>
   <name>JUnit Attachments Plugin</name>
   <url>http://wiki.hudson-ci.org/display/HUDSON/JUnit+Attachments+Plugin</url>  
@@ -25,4 +25,10 @@
             <scope>test</scope>
         </dependency>
 	</dependencies>
-  </project>
+  
+  <scm>
+    <connection>scm:svn:https://guest@svn.dev.java.net/svn/hudson/tags/junit-attachments-1.0</connection>
+    <developerConnection>scm:svn:https://svn.dev.java.net/svn/hudson/tags/junit-attachments-1.0</developerConnection>
+    <url>https://hudson.dev.java.net/source/browse/hudson/hudson/plugins/junit-attachments/tags/junit-attachments-1.0</url>
+  </scm>
+</project>
