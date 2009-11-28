@@ -1,28 +1,39 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  
-  <parent>
-    <groupId>org.jvnet.hudson.plugins</groupId>
-    <artifactId>plugin</artifactId>
-    <version>1.320</version>
-    <relativePath>../pom.xml</relativePath>
-  </parent>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
 
-  <artifactId>junit-attachments</artifactId>
-  <version>1.1-SNAPSHOT</version>
-  <packaging>hpi</packaging>
-  <name>JUnit Attachments Plugin</name>
-  <url>http://wiki.hudson-ci.org/display/HUDSON/JUnit+Attachments+Plugin</url>  
-  <build>
-  <finalName>${project.artifactId}</finalName>
-  </build>
+	<parent>
+		<groupId>org.jvnet.hudson.plugins</groupId>
+		<artifactId>plugin</artifactId>
+		<version>1.320</version>
+		<relativePath>../pom.xml</relativePath>
+	</parent>
 
-    <dependencies>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.3.1</version>
-            <scope>test</scope>
-        </dependency>
+	<artifactId>junit-attachments</artifactId>
+	<version>1.1-SNAPSHOT</version>
+	<packaging>hpi</packaging>
+	<name>JUnit Attachments Plugin</name>
+	<url>http://wiki.hudson-ci.org/display/HUDSON/JUnit+Attachments+Plugin</url>
+	<build>
+		<finalName>${project.artifactId}</finalName>
+	</build>
+
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.3.1</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
+
+	<developers>
+		<developer>
+			<id>huybrechts</id>
+			<name>Tom Huybrechts</name>
+		</developer>
+	</developers>
+
+
+
 </project>
