@@ -4,12 +4,12 @@ import hudson.FilePath;
 import hudson.model.DirectoryBrowserSupport;
 import hudson.model.Hudson;
 import hudson.tasks.junit.TestAction;
-import hudson.tasks.junit.TestObject;
+import hudson.tasks.test.TestObject;
 
 import java.util.List;
 
 public class AttachmentTestAction extends TestAction {
-	
+
 	private final FilePath storage;
 	private final List<String> attachments;
 	private final TestObject testObject;
@@ -31,7 +31,7 @@ public class AttachmentTestAction extends TestAction {
 	public String getUrlName() {
 		return "attachments";
 	}
-	
+
 	public DirectoryBrowserSupport doDynamic() {
 		return new DirectoryBrowserSupport(this, storage, "Attachments", "package.gif", true);
 	}
