@@ -2,6 +2,8 @@ package hudson.plugins.junitattachments;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.Collections;
+import java.util.List;
 
 import hudson.FilePath;
 import hudson.Launcher;
@@ -49,9 +51,13 @@ public class AttachmentPublisherTest extends HudsonTestCase {
 
         assertNotNull(ata);
 
-        assertEquals(1, ata.getAttachments().size());
-        
-        assertEquals("file", ata.getAttachments().get(0));
+        final List<String> attachments = ata.getAttachments();
+        Collections.sort(attachments);
+
+        assertEquals(2, attachments.size());
+
+        assertEquals("file", attachments.get(0));
+        assertEquals("test.foo.bar.DefaultIntegrationTest-output.txt", attachments.get(1));
     }
 
     public static final class TouchBuilder extends Builder implements
