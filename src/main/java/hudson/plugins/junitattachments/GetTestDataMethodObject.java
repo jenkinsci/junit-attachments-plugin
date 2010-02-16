@@ -35,34 +35,24 @@ public class GetTestDataMethodObject {
     /** the build to inspect. */
     private final AbstractBuild<?, ?> build;
 
-    /** the launcher of the build. */
-    private final Launcher launcher;
-
-    /** the listener which triggered the invocation. */
-    private final BuildListener listener;
-
     /** the test results associated with the build. */
     private final TestResult testResult;
 
+    /**  map of class name and list of attachments. */
     private final Map<String, List<String>> attachments;
 
+    /**  map of class name and list of test files. */
     private final Map<String, String> reports;
 
     /**
      * @param build
      *            see {@link GetTestDataMethodObject#build}
-     * @param launcher
-     *            see {@link GetTestDataMethodObject#launcher}
-     * @param listener
-     *            see {@link GetTestDataMethodObject#listener}
      * @param testResult
      *            see {@link GetTestDataMethodObject#testResult}
      */
-    public GetTestDataMethodObject(AbstractBuild<?, ?> build, Launcher launcher, BuildListener listener,
-            TestResult testResult) {
+    public GetTestDataMethodObject(AbstractBuild<?, ?> build, @SuppressWarnings("unused") Launcher launcher,
+            @SuppressWarnings("unused") BuildListener listener, TestResult testResult) {
         this.build = build;
-        this.launcher = launcher;
-        this.listener = listener;
         this.testResult = testResult;
         attachments = new HashMap<String, List<String>>();
         reports = new HashMap<String, String>();
@@ -82,7 +72,7 @@ public class GetTestDataMethodObject {
         // build a map of className -> result xml file
         final FilePath attachmentsStorage = AttachmentPublisher.getAttachmentPath(build);
         getReports();
-        LOG.info("reports: " + reports);
+        LOG.fine("reports: " + reports);
         for (Map.Entry<String, String> report : reports.entrySet()) {
             final String className = report.getKey();
             final FilePath target = attachmentsStorage.child(className);
@@ -124,7 +114,7 @@ public class GetTestDataMethodObject {
             throws IOException, InterruptedException {
         final FilePath stdInAndOut = build.getWorkspace().child(report.getValue()).getParent().child(
                 className + "-output.txt");
-        LOG.info("stdInAndOut: " + stdInAndOut.absolutize());
+        LOG.fine("stdInAndOut: " + stdInAndOut.absolutize());
         if (stdInAndOut.exists()) {
             target.mkdirs();
             final FilePath stdInAndOutTarget = new FilePath(target, stdInAndOut.getName());
