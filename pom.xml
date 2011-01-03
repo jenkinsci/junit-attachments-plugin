@@ -1,5 +1,4 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
@@ -10,7 +9,7 @@
     </parent>
 
     <artifactId>junit-attachments</artifactId>
-    <version>1.1-SNAPSHOT</version>
+    <version>1.1</version>
     <packaging>hpi</packaging>
     <name>JUnit Attachments Plugin</name>
     <url>http://wiki.hudson-ci.org/display/HUDSON/JUnit+Attachments+Plugin</url>
@@ -43,4 +42,10 @@
             <name>Tom Huybrechts</name>
         </developer>
     </developers>
+
+  <scm>
+    <connection>scm:svn:https://guest@svn.java.net/svn/hudson~svn/tags/junit-attachments-1.1</connection>
+    <developerConnection>scm:svn:https://svn.java.net/svn/hudson~svn/tags/junit-attachments-1.1</developerConnection>
+    <url>http://java.net/projects/hudson/sources/svn/show/tags/junit-attachments-1.1</url>
+  </scm>
 </project>
