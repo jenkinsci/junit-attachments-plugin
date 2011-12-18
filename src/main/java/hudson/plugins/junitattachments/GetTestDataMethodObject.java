@@ -140,19 +140,14 @@ public class GetTestDataMethodObject {
                 int idx = line.indexOf('|');
                 if (idx>=0) line = line.substring(0,idx);
 
-                try {
-                    JSONObject o = JSONObject.fromObject(line);
-                    String fileName = o.optString("file");
-                    if (fileName!=null) {
-                        FilePath src = build.getWorkspace().child(fileName);   // even though we use child(), this should be absolute
-                        if (src.exists()) {
-                            captureAttachment(className,src);
-                        } else {
-                            listener.getLogger().println("Attachment "+fileName+" was referenced from the test '"+className+"' but it doesn't exist. Skipping.");
-                        }
+                String fileName = line;
+                if (fileName!=null) {
+                    FilePath src = build.getWorkspace().child(fileName);   // even though we use child(), this should be absolute
+                    if (src.exists()) {
+                        captureAttachment(className,src);
+                    } else {
+                        listener.getLogger().println("Attachment "+fileName+" was referenced from the test '"+className+"' but it doesn't exist. Skipping.");
                     }
-                } catch (JSONException e) {
-                    e.printStackTrace(listener.error("Failed to parse test attachment JSON data: "+line));
                 }
             }
         }
