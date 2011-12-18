@@ -41,9 +41,6 @@ public class GetTestDataMethodObject {
     /**  map of class name and list of attachments. */
     private final Map<String, List<String>> attachments;
 
-    /**  map of class name and list of test files. */
-    private final Map<String, String> reports;
-
     /**
      * @param build
      *            see {@link GetTestDataMethodObject#build}
@@ -55,7 +52,6 @@ public class GetTestDataMethodObject {
         this.build = build;
         this.testResult = testResult;
         attachments = new HashMap<String, List<String>>();
-        reports = new HashMap<String, String>();
     }
 
     /**
@@ -71,7 +67,7 @@ public class GetTestDataMethodObject {
     public Map<String, List<String>> getAttachments() throws IllegalStateException, IOException, InterruptedException {
         // build a map of className -> result xml file
         final FilePath attachmentsStorage = AttachmentPublisher.getAttachmentPath(build);
-        getReports();
+        Map<String, String> reports = getReports();
         LOG.fine("reports: " + reports);
         for (Map.Entry<String, String> report : reports.entrySet()) {
             final String className = report.getKey();
@@ -98,9 +94,10 @@ public class GetTestDataMethodObject {
     }
 
     /**
-     * Creates a map of the all classNames and the corresponding result file.
+     * Creates a map of the all classNames to their corresponding result file.
      */
-    private void getReports() {
+    private Map<String,String> getReports() {
+        Map<String,String> reports = new HashMap<String, String>();
         for (SuiteResult suiteResult : testResult.getSuites()) {
             String f = suiteResult.getFile();
             if (f != null) {
@@ -109,6 +106,7 @@ public class GetTestDataMethodObject {
                 }
             }
         }
+        return reports;
     }
 
     private void attachStdInAndOut(String className, FilePath reportFile, FilePath target)
