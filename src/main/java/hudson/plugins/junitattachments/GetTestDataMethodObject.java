@@ -75,23 +75,24 @@ public class GetTestDataMethodObject {
         LOG.fine("reports: " + reports);
         for (Map.Entry<String, String> report : reports.entrySet()) {
             final String className = report.getKey();
+            final FilePath reportFile = build.getWorkspace().child(report.getValue());
             final FilePath target = attachmentsStorage.child(className);
-            attachFilesForReport(report, className, target);
-            attachStdInAndOut(report, className, target);
+            attachFilesForReport(className, reportFile, target);
+            attachStdInAndOut(className, reportFile, target);
         }
         return attachments;
     }
 
-    private void attachFilesForReport(Map.Entry<String, String> report, final String className, final FilePath target)
+    private void attachFilesForReport(final String className, final FilePath reportFile, final FilePath target)
             throws IOException, InterruptedException {
-        final FilePath testDir = build.getWorkspace().child(report.getValue()).getParent().child(className);
+        final FilePath testDir = reportFile.getParent().child(className);
         if (testDir.exists()) {
             target.mkdirs();
             if (testDir.copyRecursiveTo(target) > 0) {
                 DirectoryScanner d = new DirectoryScanner();
                 d.setBasedir(target.getRemote());
                 d.scan();
-                attachments.put(className, Arrays.asList(d.getIncludedFiles()));
+                attachments.put(className, new ArrayList<String>(Arrays.asList(d.getIncludedFiles())));
             }
         }
     }
@@ -110,22 +111,20 @@ public class GetTestDataMethodObject {
         }
     }
 
-    private void attachStdInAndOut(Map.Entry<String, String> report, String className, FilePath target)
+    private void attachStdInAndOut(String className, FilePath reportFile, FilePath target)
             throws IOException, InterruptedException {
-        final FilePath stdInAndOut = build.getWorkspace().child(report.getValue()).getParent().child(
+        final FilePath stdInAndOut = reportFile.getParent().child(
                 className + "-output.txt");
         LOG.fine("stdInAndOut: " + stdInAndOut.absolutize());
         if (stdInAndOut.exists()) {
             target.mkdirs();
             final FilePath stdInAndOutTarget = new FilePath(target, stdInAndOut.getName());
             stdInAndOut.copyTo(stdInAndOutTarget);
-            if (attachments.containsKey(className)) {
-                final List<String> list = new ArrayList<String>(attachments.get(className));
-                list.add(stdInAndOutTarget.getName());
-                attachments.put(className, list);
-            } else {
-                attachments.put(className, Arrays.asList(stdInAndOutTarget.getName()));
-            }
+
+            List<String> list = attachments.get(className);
+            if (list==null)
+                attachments.put(className,list=new ArrayList<String>());
+            list.add(stdInAndOutTarget.getName());
         }
     }
 
