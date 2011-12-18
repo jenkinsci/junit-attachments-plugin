@@ -71,7 +71,11 @@ public class AttachmentPublisher extends TestDataPublisher {
                 return Collections.emptyList();
             }
 
-            String className = cr.getParent().getName() + "." + cr.getName();
+            String className = cr.getParent().getName();
+            if (className.equals("(root)")) className="";   // working around the name mangling for the root package
+            if (className.length()>0)   className+='.';
+            className += cr.getName();
+            
             List<String> attachments = this.attachments.get(className);
             if (attachments != null) {
                 return Collections
