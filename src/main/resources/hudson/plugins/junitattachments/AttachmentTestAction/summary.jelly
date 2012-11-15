@@ -2,7 +2,7 @@
 	xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
 
 	<tr><td>
-	<H3>Attachments</H3>
+	<h3>${%Attachments}</h3>
 	<table class="pane" id="attachments">
 		<tr>
 			<td class="pane-header">${%Files}</td>
@@ -10,10 +10,20 @@
 			<j:forEach var="attachment" items="${it.attachments}">
 				<tr>
 					<td class="pane">
-						<a href="attachments/${attachment}">${attachment}</a>
+						<a class="${it.isImageFile(attachment) ? 'gallery' : ''}"
+						   title="${attachment}"
+						   href="attachments/${attachment}">${attachment}</a>
 					</td>
 				</tr>
 			</j:forEach>
 	</table>
 	</td></tr>
+
+    <st:adjunct includes="hudson.plugins.jquery.colorbox" />
+    <script type="text/javascript">
+        Q(document).ready(function() {
+            Q("a.gallery").colorbox({rel: "gallery", maxWidth: "95%", maxHeight: "95%", speed: 150});
+        });
+    </script>
+
 </j:jelly>

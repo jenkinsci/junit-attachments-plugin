@@ -56,5 +56,8 @@ public class AttachmentTestAction extends TestAction {
 		return testObject;
 	}
 
+	public static boolean isImageFile(String filename) {
+		return filename.matches("(?i).+\\.(gif|jpe?g|png)$");
+	}
 
 }
