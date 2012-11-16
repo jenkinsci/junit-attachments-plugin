@@ -4,6 +4,7 @@ import hudson.FilePath;
 import hudson.model.DirectoryBrowserSupport;
 import hudson.model.Hudson;
 import hudson.tasks.junit.TestAction;
+import hudson.tasks.junit.CaseResult;
 import hudson.tasks.test.TestObject;
 
 import java.util.List;
