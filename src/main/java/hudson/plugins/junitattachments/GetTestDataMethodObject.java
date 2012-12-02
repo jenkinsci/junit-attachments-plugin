@@ -6,11 +6,14 @@ package hudson.plugins.junitattachments;
 
 import hudson.FilePath;
 import hudson.Launcher;
+import hudson.Util;
 import hudson.model.AbstractBuild;
 import hudson.model.TaskListener;
 import hudson.tasks.junit.CaseResult;
 import hudson.tasks.junit.SuiteResult;
 import hudson.tasks.junit.TestResult;
+import hudson.tasks.test.TestObject;
+
 import net.sf.json.JSONException;
 import net.sf.json.JSONObject;
 import org.apache.tools.ant.DirectoryScanner;
@@ -45,7 +48,7 @@ public class GetTestDataMethodObject {
      * Map from class names to a list of attachment path names on the master.
      * The path names are relative to the {@linkplain #getAttachmentStorageFor(String) class-specific attachment storage}
      */
-    private final Map<String, List<String>> attachments = new HashMap<String, List<String>>();
+    private final Map<String, Map<String, List<String>>> attachments = new HashMap<String, Map<String, List<String>>>();
     private final FilePath attachmentsStorage;
     private final TaskListener listener;
 
@@ -73,25 +76,18 @@ public class GetTestDataMethodObject {
      * @throws InterruptedException
      *
      */
-    public Map<String, List<String>> getAttachments() throws IllegalStateException, IOException, InterruptedException {
+    public Map<String, Map<String, List<String>>> getAttachments() throws IllegalStateException, IOException, InterruptedException {
         // build a map of className -> result xml file
         Map<String, String> reports = getReports();
         LOG.fine("reports: " + reports);
         for (Map.Entry<String, String> report : reports.entrySet()) {
             final String className = report.getKey();
             final FilePath reportFile = build.getWorkspace().child(report.getValue());
-            final FilePath target = getAttachmentStorageFor(className);
+            final FilePath target = AttachmentPublisher.getAttachmentPath(attachmentsStorage, className);
             attachFilesForReport(className, reportFile, target);
             attachStdInAndOut(className, reportFile);
         }
         return attachments;
-    }
-
-    /**
-     * Attachments are stored per class name directory.
-     */
-    private FilePath getAttachmentStorageFor(String className) {
-        return attachmentsStorage.child(className);
     }
 
     private void attachFilesForReport(final String className, final FilePath reportFile, final FilePath target)
@@ -103,7 +99,11 @@ public class GetTestDataMethodObject {
                 DirectoryScanner d = new DirectoryScanner();
                 d.setBasedir(target.getRemote());
                 d.scan();
-                attachments.put(className, new ArrayList<String>(Arrays.asList(d.getIncludedFiles())));
+
+                // Associate any included files with the test class, rather than an individual test case
+                Map<String, List<String>> tests = new HashMap<String, List<String>>();
+                tests.put("", new ArrayList<String>(Arrays.asList(d.getIncludedFiles())));
+                attachments.put(className, tests);
             }
         }
     }
@@ -121,9 +121,26 @@ public class GetTestDataMethodObject {
                 }
             }
 
+            // Due to the way that CaseResult.getStd(out|err) works, we need to compare each test
+            // cases's output with the test suite's output to determine if its output is unique
+            String suiteStdout = Util.fixNull(suiteResult.getStdout());
+            String suiteStderr = Util.fixNull(suiteResult.getStderr());
+
             for (CaseResult cr : suiteResult.getCases()) {
-                findAttachmentsInOutput(cr.getClassName(), cr.getStdout() + cr.getStderr());
+                String stdout = Util.fixNull(cr.getStdout());
+                String caseStdout = suiteStdout.equals(stdout) ? null : stdout;
+
+                String stderr = Util.fixNull(cr.getStderr());
+                String caseStderr = suiteStderr.equals(stderr) ? null : stderr;
+
+                // Add a newline so that we detect attachments if stdout has no trailing newline
+                // and stderr is null (as otherwise we'd try and parse "[[ATTACHMENT|foo]]null")
+                findAttachmentsInOutput(cr.getClassName(), cr.getName(), caseStdout + "\n" + caseStderr);
             }
+
+            // Capture stdout and stderr for the testsuite as a whole, if they exist
+            findAttachmentsInOutput(suiteResult.getName(), null, suiteStdout);
+            findAttachmentsInOutput(suiteResult.getName(), null, suiteStderr);
         }
         return reports;
     }
@@ -132,8 +149,13 @@ public class GetTestDataMethodObject {
      * Finds the attachment from stdout/stderr, which is a line that starts with
      * [[ATTACHMENT|fileName|...reserved...]]
      */
-    private void findAttachmentsInOutput(String className, String output) throws IOException, InterruptedException {
+    private void findAttachmentsInOutput(String className, String testName, String output) throws IOException, InterruptedException {
+        if (Util.fixEmpty(output) == null) {
+            return;
+        }
+
         for (String line : output.split("[\r\n]+")) {
+            line = line.trim(); // Be more tolerant about where ATTACHMENT lines start/end
             if (line.startsWith(PREFIX) && line.endsWith(SUFFIX)) {
                 // compute the file name
                 line = line.substring(PREFIX.length(),line.length()-SUFFIX.length());
@@ -144,7 +166,7 @@ public class GetTestDataMethodObject {
                 if (fileName!=null) {
                     FilePath src = build.getWorkspace().child(fileName);   // even though we use child(), this should be absolute
                     if (src.exists()) {
-                        captureAttachment(className,src);
+                        captureAttachment(className, testName, src);
                     } else {
                         listener.getLogger().println("Attachment "+fileName+" was referenced from the test '"+className+"' but it doesn't exist. Skipping.");
                     }
@@ -173,18 +195,45 @@ public class GetTestDataMethodObject {
      *      File on the build workspace to be copied back to the master and captured.
      */
     private void captureAttachment(String className, FilePath src) throws IOException, InterruptedException {
-        FilePath target = getAttachmentStorageFor(className);
-        target.mkdirs();
-        FilePath dst = new FilePath(target, src.getName());
-        src.copyTo(dst);
-        addAttachment(className, dst);
+        captureAttachment(className, null, src);
     }
 
-    private void addAttachment(String className, FilePath copiedFileOnMaster) {
-        List<String> list = attachments.get(className);
-        if (list==null)
-            attachments.put(className,list=new ArrayList<String>());
-        list.add(copiedFileOnMaster.getName());
+    private void captureAttachment(String className, String testName, FilePath src) throws IOException, InterruptedException {
+        Map<String, List<String>> tests = attachments.get(className);
+        if (tests == null) {
+            tests = new HashMap<String, List<String>>();
+            attachments.put(className, tests);
+        }
+        List<String> testFiles = tests.get(Util.fixNull(testName));
+        if (testFiles == null) {
+            testFiles = new ArrayList<String>();
+            tests.put(Util.fixNull(testName), testFiles);
+        }
+
+        String filename = src.getName();
+        boolean fileAlreadyCopied = containsFilename(tests, filename);
+        if (!fileAlreadyCopied) {
+            // Only need to copy the file if it hasn't already been handled for this test class
+            FilePath target = AttachmentPublisher.getAttachmentPath(attachmentsStorage, className);
+            target.mkdirs();
+            FilePath dst = new FilePath(target, filename);
+            src.copyTo(dst);
+        }
+
+        // Add the file to the list of attachments for this test method, if it wasn't already
+        if (!testFiles.contains(filename)) {
+            testFiles.add(filename);
+        }
+    }
+
+    /** Determines whether the given mapping for a test class contains a certain filename. */
+    private static boolean containsFilename(Map<String, List<String>> map, String filename) {
+        for (List<String> list : map.values()) {
+            if (list.contains(filename)) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }
