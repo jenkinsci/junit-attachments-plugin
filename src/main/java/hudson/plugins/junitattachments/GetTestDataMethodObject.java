@@ -155,23 +155,23 @@ public class GetTestDataMethodObject {
 		Matcher matcher = ATTACHMENT_PATTERN.matcher(output);
 		while(matcher.find()) {
 			String line = matcher.group().trim(); // Be more tolerant about where ATTACHMENT lines start/end
-			if (line.startsWith(PREFIX) && line.endsWith(SUFFIX)) {
-				// compute the file name
-				line = line.substring(PREFIX.length(),line.length()-SUFFIX.length());
-				int idx = line.indexOf('|');
-				if (idx>=0) line = line.substring(0,idx);
+            if (line.startsWith(PREFIX) && line.endsWith(SUFFIX)) {
+                // compute the file name
+                line = line.substring(PREFIX.length(),line.length()-SUFFIX.length());
+                int idx = line.indexOf('|');
+                if (idx>=0) line = line.substring(0,idx);
 
-				String fileName = line;
-				if (fileName!=null) {
-					FilePath src = build.getWorkspace().child(fileName);   // even though we use child(), this should be absolute
-					if (src.exists()) {
-						captureAttachment(className, testName, src);
-					} else {
-						listener.getLogger().println("Attachment "+fileName+" was referenced from the test '"+className+"' but it doesn't exist. Skipping.");
-					}
-				}
-			}
-		}
+                String fileName = line;
+                if (fileName!=null) {
+                    FilePath src = build.getWorkspace().child(fileName);   // even though we use child(), this should be absolute
+                    if (src.exists()) {
+                        captureAttachment(className, testName, src);
+                    } else {
+                        listener.getLogger().println("Attachment "+fileName+" was referenced from the test '"+className+"' but it doesn't exist. Skipping.");
+                    }
+                }
+            }
+        }
     }
 
     private static final String PREFIX = "[[ATTACHMENT|";
