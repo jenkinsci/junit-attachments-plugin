@@ -12,10 +12,6 @@ import hudson.model.TaskListener;
 import hudson.tasks.junit.CaseResult;
 import hudson.tasks.junit.SuiteResult;
 import hudson.tasks.junit.TestResult;
-import hudson.tasks.test.TestObject;
-
-import net.sf.json.JSONException;
-import net.sf.json.JSONObject;
 import org.apache.tools.ant.DirectoryScanner;
 
 import java.io.IOException;
@@ -25,6 +21,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * This class is a helper for hudson.tasks.junit.TestDataPublisher.getTestData(AbstractBuild<?, ?>, Launcher,
@@ -154,8 +152,9 @@ public class GetTestDataMethodObject {
             return;
         }
 
-        for (String line : output.split("[\r\n]+")) {
-            line = line.trim(); // Be more tolerant about where ATTACHMENT lines start/end
+		Matcher matcher = ATTACHMENT_PATTERN.matcher(output);
+		while(matcher.find()) {
+			String line = matcher.group().trim(); // Be more tolerant about where ATTACHMENT lines start/end
             if (line.startsWith(PREFIX) && line.endsWith(SUFFIX)) {
                 // compute the file name
                 line = line.substring(PREFIX.length(),line.length()-SUFFIX.length());
@@ -177,6 +176,7 @@ public class GetTestDataMethodObject {
 
     private static final String PREFIX = "[[ATTACHMENT|";
     private static final String SUFFIX = "]]";
+	private static final Pattern ATTACHMENT_PATTERN = Pattern.compile("\\[\\[ATTACHMENT\\|.+\\]\\]");
 
     private void attachStdInAndOut(String className, FilePath reportFile)
             throws IOException, InterruptedException {

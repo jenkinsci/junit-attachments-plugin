@@ -84,6 +84,20 @@ public class AttachmentPublisherTest extends HudsonTestCase {
             assertAttachmentsExist(cases.get(i), new String[] { names[i] });
         }
     }
+    // Tests that the correct attachments are shown for individual test methods with additional output prefix by ant/maven
+    public void testAttachmentsShownForTestcases_SignupTest_WithRunnerPrefix() throws Exception {
+        TestResultAction action = getTestResultActionForBuild("workspace3.zip", Result.UNSTABLE);
+
+        ClassResult classResult = getClassResult(action, "SignupTest");
+        List<CaseResult> cases = classResult.getChildren();
+        assertEquals(3, cases.size());
+
+        // Each test case should have the respective one attachment
+        String[] names = { "signup-reset", "signup-login", "signup-username" };
+        for (int i = 0; i < cases.size(); i++) {
+            assertAttachmentsExist(cases.get(i), new String[] { names[i] });
+        }
+    }
 
     //-------------------------------------------------------------------------------------
 
