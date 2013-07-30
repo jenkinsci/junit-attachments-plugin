@@ -144,31 +144,31 @@ public class GetTestDataMethodObject {
     }
 
     /**
-     * Finds the attachment from stdout/stderr, which is a line that starts with
-     * [[ATTACHMENT|fileName|...reserved...]]
+     * Finds attachments from a test's stdout/stderr, i.e. instances of:
+     * <pre>[[ATTACHMENT|/path/to/attached-file.xyz|...reserved...]]</pre>
      */
     private void findAttachmentsInOutput(String className, String testName, String output) throws IOException, InterruptedException {
         if (Util.fixEmpty(output) == null) {
             return;
         }
 
-		Matcher matcher = ATTACHMENT_PATTERN.matcher(output);
-		while(matcher.find()) {
-			String line = matcher.group().trim(); // Be more tolerant about where ATTACHMENT lines start/end
-            if (line.startsWith(PREFIX) && line.endsWith(SUFFIX)) {
-                // compute the file name
-                line = line.substring(PREFIX.length(),line.length()-SUFFIX.length());
-                int idx = line.indexOf('|');
-                if (idx>=0) line = line.substring(0,idx);
+        Matcher matcher = ATTACHMENT_PATTERN.matcher(output);
+        while (matcher.find()) {
+            String line = matcher.group().trim(); // Be more tolerant about where ATTACHMENT lines start/end
+            // compute the file name
+            line = line.substring(PREFIX.length(), line.length() - SUFFIX.length());
+            int idx = line.indexOf('|');
+            if (idx >= 0) {
+                line = line.substring(0, idx);
+            }
 
-                String fileName = line;
-                if (fileName!=null) {
-                    FilePath src = build.getWorkspace().child(fileName);   // even though we use child(), this should be absolute
-                    if (src.exists()) {
-                        captureAttachment(className, testName, src);
-                    } else {
-                        listener.getLogger().println("Attachment "+fileName+" was referenced from the test '"+className+"' but it doesn't exist. Skipping.");
-                    }
+            String fileName = line;
+            if (fileName != null) {
+                FilePath src = build.getWorkspace().child(fileName); // even though we use child(), this should be absolute
+                if (src.exists()) {
+                    captureAttachment(className, testName, src);
+                } else {
+                    listener.getLogger().println("Attachment "+fileName+" was referenced from the test '"+className+"' but it doesn't exist. Skipping.");
                 }
             }
         }
@@ -176,7 +176,7 @@ public class GetTestDataMethodObject {
 
     private static final String PREFIX = "[[ATTACHMENT|";
     private static final String SUFFIX = "]]";
-	private static final Pattern ATTACHMENT_PATTERN = Pattern.compile("\\[\\[ATTACHMENT\\|.+\\]\\]");
+    private static final Pattern ATTACHMENT_PATTERN = Pattern.compile("\\[\\[ATTACHMENT\\|.+\\]\\]");
 
     private void attachStdInAndOut(String className, FilePath reportFile)
             throws IOException, InterruptedException {
