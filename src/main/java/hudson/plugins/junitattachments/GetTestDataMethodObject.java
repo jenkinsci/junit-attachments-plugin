@@ -92,6 +92,7 @@ public class GetTestDataMethodObject {
             throws IOException, InterruptedException {
         final FilePath testDir = reportFile.getParent().child(className);
         if (testDir.exists()) {
+            LOG.fine("testDir Exits: " + className);
             target.mkdirs();
             if (testDir.copyRecursiveTo(target) > 0) {
                 DirectoryScanner d = new DirectoryScanner();
@@ -103,6 +104,8 @@ public class GetTestDataMethodObject {
                 tests.put("", new ArrayList<String>(Arrays.asList(d.getIncludedFiles())));
                 attachments.put(className, tests);
             }
+        } else{
+            LOG.fine("testDir Exits: " + className);
         }
     }
 
@@ -154,15 +157,7 @@ public class GetTestDataMethodObject {
 
         Matcher matcher = ATTACHMENT_PATTERN.matcher(output);
         while (matcher.find()) {
-            String line = matcher.group().trim(); // Be more tolerant about where ATTACHMENT lines start/end
-            // compute the file name
-            line = line.substring(PREFIX.length(), line.length() - SUFFIX.length());
-            int idx = line.indexOf('|');
-            if (idx >= 0) {
-                line = line.substring(0, idx);
-            }
-
-            String fileName = line;
+            String fileName = matcher.group(1);
             if (fileName != null) {
                 FilePath src = build.getWorkspace().child(fileName); // even though we use child(), this should be absolute
                 if (src.exists()) {
@@ -174,17 +169,19 @@ public class GetTestDataMethodObject {
         }
     }
 
-    private static final String PREFIX = "[[ATTACHMENT|";
-    private static final String SUFFIX = "]]";
-    private static final Pattern ATTACHMENT_PATTERN = Pattern.compile("\\[\\[ATTACHMENT\\|.+\\]\\]");
+    private static final Pattern ATTACHMENT_PATTERN = Pattern.compile("\\[\\[ATTACHMENT\\|([^\\|\\]]+)(\\|([^\\]]+)){0,1}\\]\\]");
 
     private void attachStdInAndOut(String className, FilePath reportFile)
             throws IOException, InterruptedException {
         final FilePath stdInAndOut = reportFile.getParent().child(
                 className + "-output.txt");
-        LOG.fine("stdInAndOut: " + stdInAndOut.absolutize());
         if (stdInAndOut.exists()) {
+            LOG.fine("found stdInAndOut: " + stdInAndOut.absolutize());
             captureAttachment(className, stdInAndOut);
+        }
+        else
+        {
+            LOG.fine("not found stdInAndOut: " + stdInAndOut.absolutize());
         }
     }
 
