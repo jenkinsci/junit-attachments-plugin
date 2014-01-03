@@ -32,6 +32,9 @@ import java.util.regex.Pattern;
  * @author Kohsuke Kawaguchi
  */
 public class GetTestDataMethodObject {
+	
+	private static final Pattern ATTACHMENT_PATTERN = Pattern.compile("\\[\\[ATTACHMENT\\|([^\\|\\]]+)(\\|([^\\]]+)){0,1}\\]\\]");
+	private static final Pattern FILE_PATTERN = Pattern.compile("(.*/){0,1}([^\\.]+)\\.([^\\.]+)\\..*");
 
     /** Our logger. */
     private static final Logger LOG = Logger.getLogger(GetTestDataMethodObject.class.getName());
@@ -101,11 +104,22 @@ public class GetTestDataMethodObject {
 
                 // Associate any included files with the test class, rather than an individual test case
                 Map<String, List<String>> tests = new HashMap<String, List<String>>();
-                tests.put("", new ArrayList<String>(Arrays.asList(d.getIncludedFiles())));
+                List<String> files = Arrays.asList(d.getIncludedFiles());
+                tests.put("", new ArrayList<String>(files));
+                for (String file : files) {
+                	Matcher fileMatcher = FILE_PATTERN.matcher(file);
+                	if (fileMatcher.matches()) {
+                        LOG.finest("file matches: " + file);
+                    	if (!tests.containsKey(fileMatcher.group(3))) {
+                    		tests.put(fileMatcher.group(3), new ArrayList<String>());
+                    	}
+                    	tests.get(fileMatcher.group(3)).add(file);
+                	}
+                }
                 attachments.put(className, tests);
             }
         } else{
-            LOG.fine("testDir Exits: " + className);
+            LOG.fine("testDir does not exist: " + className);
         }
     }
 
@@ -169,7 +183,6 @@ public class GetTestDataMethodObject {
         }
     }
 
-    private static final Pattern ATTACHMENT_PATTERN = Pattern.compile("\\[\\[ATTACHMENT\\|([^\\|\\]]+)(\\|([^\\]]+)){0,1}\\]\\]");
 
     private void attachStdInAndOut(String className, FilePath reportFile)
             throws IOException, InterruptedException {
