@@ -10,9 +10,14 @@
 			<j:forEach var="attachment" items="${it.attachments}">
 				<tr>
 					<td class="pane">
-						<a class="${it.isImageFile(attachment) ? 'gallery' : ''}"
-						   title="${attachment}"
-						   href="attachments/${attachment}">${attachment}</a>
+						<j:if test="${it.isImageFile(attachment)}">
+							<a class="gallery" title="${attachment}" href="attachments/${attachment}" style="width:300px;">
+								<img src="attachments/${attachment}"  /> 
+							</a>
+						</j:if>
+						<j:if test="${!it.isImageFile(attachment)}">
+						    <a title="${attachment}" href="attachments/${attachment}">${attachment}</a>
+						</j:if>
 					</td>
 				</tr>
 			</j:forEach>

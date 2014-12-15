@@ -1,8 +1,5 @@
 package hudson.plugins.junitattachments;
 
-import org.apache.commons.lang.StringUtils;
-import org.kohsuke.stapler.DataBoundConstructor;
-
 import hudson.Extension;
 import hudson.FilePath;
 import hudson.Launcher;
@@ -26,6 +23,11 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.apache.commons.lang.StringUtils;
+import org.kohsuke.stapler.DataBoundConstructor;
 
 public class AttachmentPublisher extends TestDataPublisher {
 
@@ -134,6 +136,24 @@ public class AttachmentPublisher extends TestDataPublisher {
 
             // Return a single TestAction which will display the attached files
             FilePath root = getAttachmentPath(testObject.getOwner());
+			// Modules with junit is not currently managed correctly
+			try {
+				if (!root.exists()) {
+					String remote = root.getRemote();
+					Pattern jobs = Pattern.compile("^(.*)\\/jobs\\/(.*)\\/modules\\/.*\\/builds\\/(.*)$");
+					Matcher match = jobs.matcher(remote);
+					if (match.matches()) {
+						FilePath newRoot = new FilePath(new File(match.group(1) + "/jobs/" + match.group(2)
+								+ "/builds/" + match.group(3)));
+						if (newRoot.exists()) {
+							root = newRoot;
+						}
+					}
+				}
+			} catch (Exception e) {
+				// No ops
+			}
+
             AttachmentTestAction action = new AttachmentTestAction(testObject,
                     getAttachmentPath(root, fullName), attachmentPaths);
             return Collections.<TestAction> singletonList(action);
