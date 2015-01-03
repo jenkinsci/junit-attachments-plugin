@@ -1,8 +1,5 @@
 package hudson.plugins.junitattachments;
 
-import org.apache.commons.lang.StringUtils;
-import org.kohsuke.stapler.DataBoundConstructor;
-
 import hudson.Extension;
 import hudson.FilePath;
 import hudson.Launcher;
@@ -27,6 +24,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import org.apache.commons.lang.StringUtils;
+import org.kohsuke.stapler.DataBoundConstructor;
+
 public class AttachmentPublisher extends TestDataPublisher {
 
     @DataBoundConstructor
@@ -34,8 +34,7 @@ public class AttachmentPublisher extends TestDataPublisher {
     }
 
     public static FilePath getAttachmentPath(AbstractBuild<?, ?> build) {
-        return new FilePath(new File(build.getRootDir().getAbsolutePath()))
-                .child("junit-attachments");
+        return new FilePath(new File(build.getRootBuild().getRootDir().getAbsolutePath())).child("junit-attachments");
     }
 
     public static FilePath getAttachmentPath(FilePath root, String child) {
