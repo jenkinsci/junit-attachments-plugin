@@ -34,7 +34,7 @@ public class AttachmentPublisher extends TestDataPublisher {
     }
 
     public static FilePath getAttachmentPath(AbstractBuild<?, ?> build) {
-        return new FilePath(new File(build.getRootDir().getAbsolutePath()))
+        return new FilePath(new File(build.getRootBuild().getRootDir().getAbsolutePath()))
                 .child("junit-attachments");
     }
 
