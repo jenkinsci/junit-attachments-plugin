@@ -150,10 +150,10 @@ public class AttachmentPublisher extends TestDataPublisher {
                 //
                 // This means that all attachments will appear on the test class page as before,
                 // but they won't also be repeated on each individual test method's page
-                for (String testClass : attachments.keySet()) {
+                for (Map.Entry<String,List<String>> entry : attachments.entrySet()) {
                     HashMap<String, List<String>> testMap = new HashMap<String, List<String>>();
-                    testMap.put("", attachments.get(testClass));
-                    attachmentsMap.put(testClass, testMap);
+                    testMap.put("", entry.getValue());
+                    attachmentsMap.put(entry.getKey(), testMap);
                 }
                 attachments = null;
             }
