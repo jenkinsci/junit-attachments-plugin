@@ -176,7 +176,7 @@ public class AttachmentPublisherTest extends HudsonTestCase {
     }
 
     // Asserts that, for the given TestResult, the given attachments exist
-    private static void assertAttachmentsExist(TestResult result, String[] expectedFiles) {
+    protected static void assertAttachmentsExist(TestResult result, String[] expectedFiles) {
         AttachmentTestAction ata = result.getTestAction(AttachmentTestAction.class);
         if (expectedFiles == null) {
             assertNull(ata);
@@ -195,11 +195,11 @@ public class AttachmentPublisherTest extends HudsonTestCase {
         }
     }
 
-    private static ClassResult getClassResult(TestResultAction action, String className) {
+    protected static ClassResult getClassResult(TestResultAction action, String className) {
         return getClassResult(action, TEST_PACKAGE, className);
     }
 
-    private static ClassResult getClassResult(TestResultAction action, String packageName, String className) {
+    protected static ClassResult getClassResult(TestResultAction action, String packageName, String className) {
         return action.getResult().byPackage(packageName).getClassResult(className);
     }
 

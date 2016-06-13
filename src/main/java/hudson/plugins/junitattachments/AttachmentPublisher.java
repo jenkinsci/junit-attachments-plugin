@@ -1,5 +1,7 @@
 package hudson.plugins.junitattachments;
 
+import hudson.model.Run;
+import hudson.model.TaskListener;
 import org.apache.commons.lang.StringUtils;
 import org.kohsuke.stapler.DataBoundConstructor;
 
@@ -33,7 +35,7 @@ public class AttachmentPublisher extends TestDataPublisher {
     public AttachmentPublisher() {
     }
 
-    public static FilePath getAttachmentPath(AbstractBuild<?, ?> build) {
+    public static FilePath getAttachmentPath(Run<?, ?> build) {
         return new FilePath(new File(build.getRootDir().getAbsolutePath()))
                 .child("junit-attachments");
     }
@@ -47,8 +49,22 @@ public class AttachmentPublisher extends TestDataPublisher {
     }
 
     @Override
+    public Data contributeTestData(Run<?, ?> build, FilePath workspace, Launcher launcher,
+                                   TaskListener listener, TestResult testResult) throws IOException,
+            InterruptedException {
+        final GetTestDataMethodObject methodObject = new GetTestDataMethodObject(build, workspace, launcher, listener, testResult);
+        Map<String, Map<String, List<String>>> attachments = methodObject.getAttachments();
+
+        if (attachments.isEmpty()) {
+            return null;
+        }
+
+        return new Data(attachments);
+    }
+
+    @Override
     public Data getTestData(AbstractBuild<?, ?> build, Launcher launcher,
-            BuildListener listener, TestResult testResult) throws IOException,
+                            BuildListener listener, TestResult testResult) throws IOException,
             InterruptedException {
         final GetTestDataMethodObject methodObject = new GetTestDataMethodObject(build, launcher, listener, testResult);
         Map<String, Map<String, List<String>>> attachments = methodObject.getAttachments();
@@ -67,7 +83,7 @@ public class AttachmentPublisher extends TestDataPublisher {
         private Map<String, Map<String, List<String>>> attachmentsMap;
 
         /**
-         * @param attachmentsMap { fully-qualified test class name -> { test method name -> [ attachment file name ] } }
+         * @param attachmentsMap { fully-qualified test class name -&gt; { test method name -&gt; [ attachment file name ] } }
          */
         public Data(Map<String, Map<String, List<String>>> attachmentsMap) {
             this.attachmentsMap = attachmentsMap;
@@ -133,7 +149,7 @@ public class AttachmentPublisher extends TestDataPublisher {
             }
 
             // Return a single TestAction which will display the attached files
-            FilePath root = getAttachmentPath(testObject.getOwner());
+            FilePath root = getAttachmentPath(testObject.getRun());
             AttachmentTestAction action = new AttachmentTestAction(testObject,
                     getAttachmentPath(root, fullName), attachmentPaths);
             return Collections.<TestAction> singletonList(action);

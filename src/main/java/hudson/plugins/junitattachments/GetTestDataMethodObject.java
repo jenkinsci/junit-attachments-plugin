@@ -8,12 +8,14 @@ import hudson.FilePath;
 import hudson.Launcher;
 import hudson.Util;
 import hudson.model.AbstractBuild;
+import hudson.model.Run;
 import hudson.model.TaskListener;
 import hudson.tasks.junit.CaseResult;
 import hudson.tasks.junit.SuiteResult;
 import hudson.tasks.junit.TestResult;
 import org.apache.tools.ant.DirectoryScanner;
 
+import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -25,7 +27,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * This class is a helper for hudson.tasks.junit.TestDataPublisher.getTestData(AbstractBuild<?, ?>, Launcher,
+ * This class is a helper for hudson.tasks.junit.TestDataPublisher.getTestData(AbstractBuild&lt;?, ?&gt;, Launcher,
  * BuildListener, TestResult).
  *
  * @author mfriedenhagen
@@ -37,7 +39,7 @@ public class GetTestDataMethodObject {
     private static final Logger LOG = Logger.getLogger(GetTestDataMethodObject.class.getName());
 
     /** the build to inspect. */
-    private final AbstractBuild<?, ?> build;
+    private final Run<?, ?> build;
 
     /** the test results associated with the build. */
     private final TestResult testResult;
@@ -51,6 +53,11 @@ public class GetTestDataMethodObject {
     private final TaskListener listener;
 
     /**
+     * The workspace to check in for attachments.
+     */
+    private final FilePath workspace;
+
+    /**
      * @param build
      *            see {@link GetTestDataMethodObject#build}
      * @param testResult
@@ -62,6 +69,23 @@ public class GetTestDataMethodObject {
         this.testResult = testResult;
         this.listener = listener;
         attachmentsStorage = AttachmentPublisher.getAttachmentPath(build);
+        workspace = build.getWorkspace();
+    }
+
+    /**
+     * @param build
+     *            see {@link GetTestDataMethodObject#build}
+     * @param testResult
+     *            see {@link GetTestDataMethodObject#testResult}
+     */
+    public GetTestDataMethodObject(Run<?, ?> build, @Nonnull FilePath workspace,
+                                   @SuppressWarnings("unused") Launcher launcher,
+                                   TaskListener listener, TestResult testResult) {
+        this.build = build;
+        this.testResult = testResult;
+        this.listener = listener;
+        attachmentsStorage = AttachmentPublisher.getAttachmentPath(build);
+        this.workspace = workspace;
     }
 
     /**
@@ -80,7 +104,7 @@ public class GetTestDataMethodObject {
         LOG.fine("reports: " + reports);
         for (Map.Entry<String, String> report : reports.entrySet()) {
             final String className = report.getKey();
-            final FilePath reportFile = build.getWorkspace().child(report.getValue());
+            final FilePath reportFile = workspace.child(report.getValue());
             final FilePath target = AttachmentPublisher.getAttachmentPath(attachmentsStorage, className);
             attachFilesForReport(className, reportFile, target);
             attachStdInAndOut(className, reportFile);
@@ -164,7 +188,7 @@ public class GetTestDataMethodObject {
 
             String fileName = line;
             if (fileName != null) {
-                FilePath src = build.getWorkspace().child(fileName); // even though we use child(), this should be absolute
+                FilePath src = workspace.child(fileName); // even though we use child(), this should be absolute
                 if (src.exists()) {
                     captureAttachment(className, testName, src);
                 } else {
