@@ -8,8 +8,6 @@ import org.kohsuke.stapler.DataBoundConstructor;
 import hudson.Extension;
 import hudson.FilePath;
 import hudson.Launcher;
-import hudson.model.BuildListener;
-import hudson.model.AbstractBuild;
 import hudson.model.Descriptor;
 import hudson.tasks.junit.TestAction;
 import hudson.tasks.junit.TestDataPublisher;
@@ -62,20 +60,6 @@ public class AttachmentPublisher extends TestDataPublisher {
         return new Data(attachments);
     }
 
-    @Override
-    public Data getTestData(AbstractBuild<?, ?> build, Launcher launcher,
-                            BuildListener listener, TestResult testResult) throws IOException,
-            InterruptedException {
-        final GetTestDataMethodObject methodObject = new GetTestDataMethodObject(build, launcher, listener, testResult);
-        Map<String, Map<String, List<String>>> attachments = methodObject.getAttachments();
-
-        if (attachments.isEmpty()) {
-            return null;
-        }
-
-        return new Data(attachments);
-    }
-
     public static class Data extends TestResultAction.Data {
 
         @Deprecated
@@ -83,7 +67,7 @@ public class AttachmentPublisher extends TestDataPublisher {
         private Map<String, Map<String, List<String>>> attachmentsMap;
 
         /**
-         * @param attachmentsMap { fully-qualified test class name -&gt; { test method name -&gt; [ attachment file name ] } }
+         * @param attachmentsMap { fully-qualified test class name → { test method name → [ attachment file name ] } }
          */
         public Data(Map<String, Map<String, List<String>>> attachmentsMap) {
             this.attachmentsMap = attachmentsMap;

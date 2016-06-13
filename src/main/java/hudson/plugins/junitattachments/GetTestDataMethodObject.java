@@ -63,6 +63,7 @@ public class GetTestDataMethodObject {
      * @param testResult
      *            see {@link GetTestDataMethodObject#testResult}
      */
+    @Deprecated
     public GetTestDataMethodObject(AbstractBuild<?, ?> build, @SuppressWarnings("unused") Launcher launcher,
             TaskListener listener, TestResult testResult) {
         this.build = build;

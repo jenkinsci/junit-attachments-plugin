@@ -32,7 +32,7 @@ import org.apache.commons.io.IOUtils;
 import org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition;
 import org.jenkinsci.plugins.workflow.job.WorkflowJob;
 import org.jenkinsci.plugins.workflow.job.WorkflowRun;
-import org.junit.ClassRule;
+import org.junit.Rule;
 import org.junit.Test;
 import org.jvnet.hudson.test.JenkinsRule;
 
@@ -46,8 +46,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 public class AttachmentPublisherPipelineTest {
-    @ClassRule
-    public static JenkinsRule jenkinsRule = new JenkinsRule();
+    @Rule
+    public JenkinsRule jenkinsRule = new JenkinsRule();
 
     @Test
     public void testWellKnownFilenamesAreAttached() throws Exception {
@@ -74,7 +74,11 @@ public class AttachmentPublisherPipelineTest {
         FilePath wsZip = workspace.child("workspace.zip");
         wsZip.copyFrom(getClass().getResource(workspaceZip));
         wsZip.unzip(workspace);
-        project.setDefinition(new CpsFlowDefinition(fileContentsFromResources(pipelineFile)));
+        for (FilePath f : workspace.list()) {
+            f.touch(System.currentTimeMillis());
+        }
+
+        project.setDefinition(new CpsFlowDefinition(fileContentsFromResources(pipelineFile), true));
 
         WorkflowRun r = project.scheduleBuild2(0).waitForStart();
 

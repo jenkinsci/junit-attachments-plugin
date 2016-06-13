@@ -23,7 +23,6 @@
  *
  */
 node {
-    sh 'find . -type f -exec touch {} \\;'
     step([$class: 'JUnitResultArchiver', testResults: "*.xml", testDataPublishers: [[$class: 'AttachmentPublisher']]])
 }
 
