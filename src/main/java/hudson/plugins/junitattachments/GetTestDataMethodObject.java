@@ -27,8 +27,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * This class is a helper for hudson.tasks.junit.TestDataPublisher.getTestData(AbstractBuild&lt;?, ?&gt;, Launcher,
- * BuildListener, TestResult).
+ * This class is a helper for {@code hudson.tasks.junit.TestDataPublisher.getTestData(AbstractBuild<?, ?>, Launcher,
+ * BuildListener, TestResult)}.
  *
  * @author mfriedenhagen
  * @author Kohsuke Kawaguchi

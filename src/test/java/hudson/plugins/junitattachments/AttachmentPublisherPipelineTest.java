@@ -80,9 +80,7 @@ public class AttachmentPublisherPipelineTest {
 
         project.setDefinition(new CpsFlowDefinition(fileContentsFromResources(pipelineFile), true));
 
-        WorkflowRun r = project.scheduleBuild2(0).waitForStart();
-
-        jenkinsRule.assertBuildStatus(expectedStatus, jenkinsRule.waitForCompletion(r));
+        WorkflowRun r = jenkinsRule.assertBuildStatus(expectedStatus, project.scheduleBuild2(0).get());
 
         TestResultAction action = r.getAction(TestResultAction.class);
         assertNotNull(action);
