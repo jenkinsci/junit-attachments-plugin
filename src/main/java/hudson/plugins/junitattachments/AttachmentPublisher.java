@@ -1,13 +1,13 @@
 package hudson.plugins.junitattachments;
 
+import hudson.model.Run;
+import hudson.model.TaskListener;
 import org.apache.commons.lang.StringUtils;
 import org.kohsuke.stapler.DataBoundConstructor;
 
 import hudson.Extension;
 import hudson.FilePath;
 import hudson.Launcher;
-import hudson.model.BuildListener;
-import hudson.model.AbstractBuild;
 import hudson.model.Descriptor;
 import hudson.tasks.junit.TestAction;
 import hudson.tasks.junit.TestDataPublisher;
@@ -33,7 +33,7 @@ public class AttachmentPublisher extends TestDataPublisher {
     public AttachmentPublisher() {
     }
 
-    public static FilePath getAttachmentPath(AbstractBuild<?, ?> build) {
+    public static FilePath getAttachmentPath(Run<?, ?> build) {
         return new FilePath(new File(build.getRootDir().getAbsolutePath()))
                 .child("junit-attachments");
     }
@@ -47,10 +47,10 @@ public class AttachmentPublisher extends TestDataPublisher {
     }
 
     @Override
-    public Data getTestData(AbstractBuild<?, ?> build, Launcher launcher,
-            BuildListener listener, TestResult testResult) throws IOException,
+    public Data contributeTestData(Run<?, ?> build, FilePath workspace, Launcher launcher,
+                                   TaskListener listener, TestResult testResult) throws IOException,
             InterruptedException {
-        final GetTestDataMethodObject methodObject = new GetTestDataMethodObject(build, launcher, listener, testResult);
+        final GetTestDataMethodObject methodObject = new GetTestDataMethodObject(build, workspace, launcher, listener, testResult);
         Map<String, Map<String, List<String>>> attachments = methodObject.getAttachments();
 
         if (attachments.isEmpty()) {
@@ -67,7 +67,7 @@ public class AttachmentPublisher extends TestDataPublisher {
         private Map<String, Map<String, List<String>>> attachmentsMap;
 
         /**
-         * @param attachmentsMap { fully-qualified test class name -> { test method name -> [ attachment file name ] } }
+         * @param attachmentsMap { fully-qualified test class name → { test method name → [ attachment file name ] } }
          */
         public Data(Map<String, Map<String, List<String>>> attachmentsMap) {
             this.attachmentsMap = attachmentsMap;
@@ -133,7 +133,7 @@ public class AttachmentPublisher extends TestDataPublisher {
             }
 
             // Return a single TestAction which will display the attached files
-            FilePath root = getAttachmentPath(testObject.getOwner());
+            FilePath root = getAttachmentPath(testObject.getRun());
             AttachmentTestAction action = new AttachmentTestAction(testObject,
                     getAttachmentPath(root, fullName), attachmentPaths);
             return Collections.<TestAction> singletonList(action);
@@ -150,10 +150,10 @@ public class AttachmentPublisher extends TestDataPublisher {
                 //
                 // This means that all attachments will appear on the test class page as before,
                 // but they won't also be repeated on each individual test method's page
-                for (String testClass : attachments.keySet()) {
+                for (Map.Entry<String,List<String>> entry : attachments.entrySet()) {
                     HashMap<String, List<String>> testMap = new HashMap<String, List<String>>();
-                    testMap.put("", attachments.get(testClass));
-                    attachmentsMap.put(testClass, testMap);
+                    testMap.put("", entry.getValue());
+                    attachmentsMap.put(entry.getKey(), testMap);
                 }
                 attachments = null;
             }

@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.jenkins-ci.plugins</groupId>
         <artifactId>plugin</artifactId>
-        <version>1.424</version>
+        <version>2.11</version>
     </parent>
 
     <artifactId>junit-attachments</artifactId>
@@ -27,6 +27,8 @@
             compare: http://docs.codehaus.org/display/MAVENUSER/POM+Element+for+Source+File+Encoding
         -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <jenkins.version>1.609.3</jenkins.version>
+        <java.level>6</java.level>
     </properties>
 
     <developers>
@@ -47,6 +49,37 @@
             <groupId>org.jenkins-ci.plugins</groupId>
             <artifactId>jquery</artifactId>
             <version>1.7.2-1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jenkins-ci.plugins</groupId>
+            <artifactId>junit</artifactId>
+            <version>1.14</version>
+        </dependency>
+
+        <!-- test dependencies -->
+        <dependency>
+            <groupId>org.jenkins-ci.plugins.workflow</groupId>
+            <artifactId>workflow-job</artifactId>
+            <version>1.14.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jenkins-ci.plugins.workflow</groupId>
+            <artifactId>workflow-basic-steps</artifactId>
+            <version>1.14.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jenkins-ci.plugins.workflow</groupId>
+            <artifactId>workflow-cps</artifactId>
+            <version>1.14.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jenkins-ci.plugins.workflow</groupId>
+            <artifactId>workflow-durable-task-step</artifactId>
+            <version>1.14.2</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 

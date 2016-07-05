@@ -2,10 +2,9 @@ package hudson.plugins.junitattachments;
 
 import hudson.FilePath;
 import hudson.model.DirectoryBrowserSupport;
-import hudson.model.Hudson;
 import hudson.tasks.junit.TestAction;
-import hudson.tasks.junit.CaseResult;
 import hudson.tasks.test.TestObject;
+import jenkins.model.Jenkins;
 
 import java.util.List;
 
@@ -39,7 +38,7 @@ public class AttachmentTestAction extends TestAction {
 
 	@Override
 	public String annotate(String text) {
-		String url = Hudson.getInstance().getRootUrl()
+		String url = Jenkins.getActiveInstance().getRootUrl()
 				+ testObject.getOwner().getUrl() + "testReport"
 				+ testObject.getUrl() + "/attachments/";
 		for (String attachment : attachments) {
