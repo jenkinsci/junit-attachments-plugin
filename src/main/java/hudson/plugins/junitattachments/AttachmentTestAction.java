@@ -39,7 +39,7 @@ public class AttachmentTestAction extends TestAction {
 	@Override
 	public String annotate(String text) {
 		String url = Jenkins.getActiveInstance().getRootUrl()
-				+ testObject.getOwner().getUrl() + "testReport"
+				+ testObject.getRun().getUrl() + "testReport"
 				+ testObject.getUrl() + "/attachments/";
 		for (String attachment : attachments) {
 			text = text.replace(attachment, "<a href=\"" + url + attachment
