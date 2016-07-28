@@ -6,6 +6,8 @@ import hudson.tasks.junit.TestAction;
 import hudson.tasks.test.TestObject;
 import jenkins.model.Jenkins;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.List;
 
 public class AttachmentTestAction extends TestAction {
@@ -58,6 +60,10 @@ public class AttachmentTestAction extends TestAction {
 
 	public static boolean isImageFile(String filename) {
 		return filename.matches("(?i).+\\.(gif|jpe?g|png)$");
+	}
+
+	public static String getUrl(String filename) throws UnsupportedEncodingException {
+		return "attachments/" + URLEncoder.encode(filename, "UTF-8");
 	}
 
 }

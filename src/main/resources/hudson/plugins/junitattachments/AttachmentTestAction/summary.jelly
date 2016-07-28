@@ -13,7 +13,7 @@
 					<td class="pane">
 						<a class="${it.isImageFile(attachment) ? 'gallery' : ''}"
 						   title="${attachment}"
-						   href="attachments/${attachment}">${attachment}</a>
+						   href="${it.getUrl(attachment)}">${attachment}</a>
 					</td>
 				</tr>
 			</j:forEach>
