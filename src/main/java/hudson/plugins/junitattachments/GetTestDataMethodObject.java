@@ -190,7 +190,9 @@ public class GetTestDataMethodObject {
             String fileName = line;
             if (fileName != null) {
                 FilePath src = workspace.child(fileName); // even though we use child(), this should be absolute
-                if (src.exists()) {
+                if (src.isDirectory()) {
+                    listener.getLogger().println("Attachment " + fileName + " was referenced from the test '" + className + "' but it is a directory, not a file. Skipping.");
+                } else if (src.exists()) {
                     captureAttachment(className, testName, src);
                 } else {
                     listener.getLogger().println("Attachment "+fileName+" was referenced from the test '"+className+"' but it doesn't exist. Skipping.");
