@@ -4,4 +4,4 @@
 target
 work
 .idea
-junit-attachments.iml
+*.iml
