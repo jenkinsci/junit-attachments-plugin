@@ -1,5 +1,5 @@
-/**
- * Copyright 2010-2011 Mirko Friedenhagen, Kohsuke Kawaguchi
+/*
+  Copyright 2010-2011 Mirko Friedenhagen, Kohsuke Kawaguchi
  */
 
 package hudson.plugins.junitattachments;
