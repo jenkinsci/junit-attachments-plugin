@@ -1,126 +1,122 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>org.jenkins-ci.plugins</groupId>
-        <artifactId>plugin</artifactId>
-        <version>2.36</version>
-        <relativePath />
-    </parent>
+  <parent>
+    <groupId>org.jenkins-ci.plugins</groupId>
+    <artifactId>plugin</artifactId>
+    <version>3.19</version>
+    <relativePath/>
+  </parent>
 
-    <artifactId>junit-attachments</artifactId>
-    <version>1.6-SNAPSHOT</version>
-    <packaging>hpi</packaging>
-    <name>JUnit Attachments Plugin</name>
-    <url>https://wiki.jenkins-ci.org/display/JENKINS/JUnit+Attachments+Plugin</url>
-    <issueManagement>
-        <system>JIRA</system>
-        <url>https://issues.jenkins-ci.org/secure/IssueNavigator.jspa?reset=true&amp;jqlQuery=project+%3D+JENKINS+AND+status+in+%28Open%2C+"In+Progress"%2C+Reopened%29+AND+component+%3D+${project.artifactId}</url>
-    </issueManagement>
+  <artifactId>junit-attachments</artifactId>
+  <version>1.6-SNAPSHOT</version>
+  <packaging>hpi</packaging>
+  <name>JUnit Attachments Plugin</name>
+  <url>https://wiki.jenkins-ci.org/display/JENKINS/JUnit+Attachments+Plugin</url>
+  <issueManagement>
+    <system>JIRA</system>
+    <url>https://issues.jenkins-ci.org/secure/IssueNavigator.jspa?reset=true&amp;jqlQuery=project+%3D+JENKINS+AND+status+in+%28Open%2C+"In+Progress"%2C+Reopened%29+AND+component+%3D+${project.artifactId}</url>
+  </issueManagement>
 
-	<scm>
-		<connection>scm:git:git://github.com/jenkinsci/${project.artifactId}-plugin.git</connection>
-		<developerConnection>scm:git:git@github.com:jenkinsci/${project.artifactId}-plugin.git</developerConnection>
-	  <tag>HEAD</tag>
+  <scm>
+    <connection>scm:git:git://github.com/jenkinsci/${project.artifactId}-plugin.git</connection>
+    <developerConnection>scm:git:git@github.com:jenkinsci/${project.artifactId}-plugin.git</developerConnection>
+    <tag>HEAD</tag>
   </scm>
 
-    <properties>
-        <!--
-            compare: http://docs.codehaus.org/display/MAVENUSER/POM+Element+for+Source+File+Encoding
-        -->
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <jenkins.version>2.121.2</jenkins.version>
-        <java.level>8</java.level>
-        <jenkins-ci.plugins.workflow.version>2.21</jenkins-ci.plugins.workflow.version>
-    </properties>
+  <properties>
+    <!--
+        compare: http://docs.codehaus.org/display/MAVENUSER/POM+Element+for+Source+File+Encoding
+    -->
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <jenkins.version>2.121.2</jenkins.version>
+    <java.level>8</java.level>
+    <jenkins-ci.plugins.workflow.version>2.21</jenkins-ci.plugins.workflow.version>
+  </properties>
 
-    <developers>
-        <developer>
-            <id>huybrechts</id>
-            <name>Tom Huybrechts</name>
-        </developer>
-        <developer>
-            <id>orrc</id>
-            <name>Christopher Orr</name>
-            <email>chris@orr.me.uk</email>
-            <timezone>1</timezone>
-        </developer>
-    </developers>
+  <developers>
+    <developer>
+      <id>huybrechts</id>
+      <name>Tom Huybrechts</name>
+    </developer>
+    <developer>
+      <id>orrc</id>
+      <name>Christopher Orr</name>
+      <email>chris@orr.me.uk</email>
+      <timezone>1</timezone>
+    </developer>
+  </developers>
 
-    <dependencies>
-        <dependency>
-            <groupId>org.jenkins-ci.plugins</groupId>
-            <artifactId>jquery</artifactId>
-            <version>1.11.2-1</version>
-        </dependency>
-        <dependency>
-            <groupId>org.jenkins-ci.plugins</groupId>
-            <artifactId>junit</artifactId>
-            <version>1.20</version>
-        </dependency>
+  <dependencies>
+    <dependency>
+      <groupId>org.jenkins-ci.plugins</groupId>
+      <artifactId>jquery</artifactId>
+      <version>1.12.4-0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.jenkins-ci.plugins</groupId>
+      <artifactId>junit</artifactId>
+      <version>1.20</version>
+    </dependency>
+    <dependency>
+      <groupId>org.jenkins-ci.plugins.workflow</groupId>
+      <artifactId>workflow-support</artifactId>
+      <version>2.17</version>
+    </dependency>
+    <dependency>
+      <groupId>org.jenkins-ci.plugins.workflow</groupId>
+      <artifactId>workflow-step-api</artifactId>
+      <version>2.15</version>
+    </dependency>
+    <dependency>
+      <groupId>org.jenkins-ci.plugins</groupId>
+      <artifactId>structs</artifactId>
+      <version>1.14</version>
+    </dependency>
+    <dependency>
+      <groupId>org.jenkins-ci.plugins.workflow</groupId>
+      <artifactId>workflow-api</artifactId>
+      <version>2.28</version>
+    </dependency>
+    <!-- test dependencies -->
+    <dependency>
+      <groupId>org.jenkins-ci.plugins.workflow</groupId>
+      <artifactId>workflow-job</artifactId>
+      <version>2.17</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.jenkins-ci.plugins.workflow</groupId>
+      <artifactId>workflow-basic-steps</artifactId>
+      <version>2.9</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.jenkins-ci.plugins.workflow</groupId>
+      <artifactId>workflow-cps</artifactId>
+      <version>2.39</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.jenkins-ci.plugins.workflow</groupId>
+      <artifactId>workflow-durable-task-step</artifactId>
+      <version>2.19</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
 
-        <dependency>
-            <groupId>org.jenkins-ci.plugins.workflow</groupId>
-            <artifactId>workflow-support</artifactId>
-            <version>2.17</version>
-        </dependency>
-
-      <dependency>
-        <groupId>org.jenkins-ci.plugins.workflow</groupId>
-        <artifactId>workflow-step-api</artifactId>
-        <version>2.15</version>
-      </dependency>
-
-      <dependency>
-        <groupId>org.jenkins-ci.plugins</groupId>
-        <artifactId>structs</artifactId>
-        <version>1.14</version>
-      </dependency>
-
-      <dependency>
-        <groupId>org.jenkins-ci.plugins.workflow</groupId>
-        <artifactId>workflow-api</artifactId>
-        <version>2.28</version>
-      </dependency>
-
-        <!-- test dependencies -->
-        <dependency>
-            <groupId>org.jenkins-ci.plugins.workflow</groupId>
-            <artifactId>workflow-job</artifactId>
-            <version>2.17</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.jenkins-ci.plugins.workflow</groupId>
-            <artifactId>workflow-basic-steps</artifactId>
-            <version>2.9</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.jenkins-ci.plugins.workflow</groupId>
-            <artifactId>workflow-cps</artifactId>
-            <version>2.39</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.jenkins-ci.plugins.workflow</groupId>
-            <artifactId>workflow-durable-task-step</artifactId>
-            <version>2.19</version>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
-
-    <repositories>
-      <repository>
-        <id>repo.jenkins-ci.org</id>
-        <url>https://repo.jenkins-ci.org/public/</url>
-      </repository>
-    </repositories>
-    <pluginRepositories>
-        <pluginRepository>
-            <id>repo.jenkins-ci.org</id>
-            <url>https://repo.jenkins-ci.org/public/</url>
-        </pluginRepository>
-    </pluginRepositories>
+  <repositories>
+    <repository>
+      <id>repo.jenkins-ci.org</id>
+      <url>https://repo.jenkins-ci.org/public/</url>
+    </repository>
+  </repositories>
+  <pluginRepositories>
+    <pluginRepository>
+      <id>repo.jenkins-ci.org</id>
+      <url>https://repo.jenkins-ci.org/public/</url>
+    </pluginRepository>
+  </pluginRepositories>
 </project>
 
