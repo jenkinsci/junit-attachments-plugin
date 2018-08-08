@@ -42,6 +42,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import static hudson.plugins.junitattachments.AttachmentPublisherTest.getClassResult;
 import static org.junit.Assert.assertEquals;
@@ -100,7 +101,7 @@ public class AttachmentPublisherPipelineTest {
     private TestResultAction getTestResultActionForPipeline(String workspaceZip, String pipelineFile, Result expectedStatus) throws Exception {
         WorkflowJob project = jenkinsRule.jenkins.createProject(WorkflowJob.class, "test-job");
         FilePath workspace = jenkinsRule.jenkins.getWorkspaceFor(project);
-        FilePath wsZip = workspace.child("workspace.zip");
+        FilePath wsZip = Objects.requireNonNull(workspace).child("workspace.zip");
         wsZip.copyFrom(getClass().getResource(workspaceZip));
         wsZip.unzip(workspace);
         for (FilePath f : workspace.list()) {
