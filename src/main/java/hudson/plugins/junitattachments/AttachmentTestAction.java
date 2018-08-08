@@ -63,7 +63,7 @@ public class AttachmentTestAction extends TestAction {
 	}
 
 	public static String getUrl(String filename) throws UnsupportedEncodingException {
-		return "attachments/" + URLEncoder.encode(filename, "UTF-8");
+		return "attachments/" + URLEncoder.encode(filename, "UTF-8").replace("+", "%20");
 	}
 
 }
