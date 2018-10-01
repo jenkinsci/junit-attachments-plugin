@@ -37,17 +37,15 @@ public class AttachmentPublisherTest extends HudsonTestCase {
         ClassResult cr = getClassResult(action, "test.foo.bar", "DefaultIntegrationTest");
 
         AttachmentTestAction ata = cr.getTestAction(AttachmentTestAction.class);
-        assert ata != null;
+        assertNotNull(ata);
 
         final List<String> attachments = ata.getAttachments();
-        assert attachments != null;
-
-        assert attachments.size() == 2;
+        assertNotNull(attachments);
+        assertEquals(2, attachments.size());
 
         Collections.sort(attachments);
-
-        assert "file" == attachments.get(0) ;
-        assert "test.foo.bar.DefaultIntegrationTest-output.txt" == attachments.get(1);
+        assertEquals("file", attachments.get(0));
+        assertEquals("test.foo.bar.DefaultIntegrationTest-output.txt", attachments.get(1));
     }
 
     public void testNoAttachmentsShownForPackage() throws Exception {
@@ -56,7 +54,7 @@ public class AttachmentPublisherTest extends HudsonTestCase {
         // At the package level, attachments shouldn't be shown
         PackageResult pr = action.getResult().byPackage(TEST_PACKAGE);
         AttachmentTestAction ata = pr.getTestAction(AttachmentTestAction.class);
-        assert ata != null;
+        assertNull(ata);
     }
 
     //-------------------------------------------------------------------------------------
@@ -78,7 +76,7 @@ public class AttachmentPublisherTest extends HudsonTestCase {
 
         ClassResult classResult = getClassResult(action, "SignupTest");
         List<CaseResult> cases = classResult.getChildren();
-        assert 3 == cases.size();
+        assertEquals(3, cases.size());
 
         // Each test case should have the respective one attachment
         String[] names = { "signup-reset", "signup-login", "signup-username" };
@@ -92,7 +90,7 @@ public class AttachmentPublisherTest extends HudsonTestCase {
 
         ClassResult classResult = getClassResult(action, "SignupTest");
         List<CaseResult> cases = classResult.getChildren();
-        assert 3 == cases.size();
+        assertEquals(3, cases.size());
 
         // Each test case should have the respective one attachment
         String[] names = { "signup-reset", "signup-login", "signup-username" };
@@ -114,7 +112,7 @@ public class AttachmentPublisherTest extends HudsonTestCase {
 
         ClassResult classResult = getClassResult(action, "LoginTest");
         List<CaseResult> cases = classResult.getChildren();
-        assert 4 == cases.size();
+        assertEquals(4, cases.size());
 
         // Each test case should have the respective one (or zero) attachments
         String[] expectedFiles = { "login-reset", null, "login-password", "login-reset" };
@@ -139,7 +137,7 @@ public class AttachmentPublisherTest extends HudsonTestCase {
 
         ClassResult classResult = getClassResult(action, "MiscTest1");
         List<CaseResult> cases = classResult.getChildren();
-        assert 1 == cases.size();
+        assertEquals(1, cases.size());
 
         // Attachment should not be inherited from testsuite
         assertAttachmentsExist(cases.get(0), null);
@@ -160,7 +158,7 @@ public class AttachmentPublisherTest extends HudsonTestCase {
 
         ClassResult classResult = getClassResult(action, "MiscTest2");
         List<CaseResult> cases = classResult.getChildren();
-        assert 2 == cases.size();
+        assertEquals(2, cases.size());
 
         // Alphabetically first comes the "doNothing" test
         assertAttachmentsExist(cases.get(0), null);
@@ -181,19 +179,19 @@ public class AttachmentPublisherTest extends HudsonTestCase {
     static void assertAttachmentsExist(TestResult result, String[] expectedFiles) {
         AttachmentTestAction ata = result.getTestAction(AttachmentTestAction.class);
         if (expectedFiles == null) {
-            assert ata != null;
+            assertNull(ata);
             return;
         }
-        assert ata != null;
+        assertNotNull(ata);
 
         // Assert that attachments exist for this TestResult
         List<String> attachments = ata.getAttachments();
-        assert attachments != null;
-        assert expectedFiles.length == attachments.size();
+        assertNotNull(attachments);
+        assertEquals(expectedFiles.length, attachments.size());
 
         // Assert that the expected files are there in the given order
         for (int i = 0; i < expectedFiles.length; i++) {
-            assert expectedFiles[i] == attachments.get(i);
+            assertEquals(expectedFiles[i], attachments.get(i));
         }
     }
 
@@ -222,7 +220,7 @@ public class AttachmentPublisherTest extends HudsonTestCase {
         assertBuildStatus(expectedStatus, b);
 
         TestResultAction action = b.getAction(TestResultAction.class);
-        assert  action != null;
+        assertNotNull(action);
 
         return action;
     }
