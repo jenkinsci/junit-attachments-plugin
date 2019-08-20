@@ -9,7 +9,7 @@
     </parent>
 
     <artifactId>junit-attachments</artifactId>
-    <version>1.6</version>
+    <version>${revision}${changelist}</version>
     <packaging>hpi</packaging>
     <name>JUnit Attachments Plugin</name>
     <url>https://wiki.jenkins.io/display/JENKINS/JUnit+Attachments+Plugin</url>
@@ -22,11 +22,11 @@
 		<connection>scm:git:git://github.com/jenkinsci/${project.artifactId}-plugin.git</connection>
 		<developerConnection>scm:git:git@github.com:jenkinsci/${project.artifactId}-plugin.git</developerConnection>
           <url>https://github.com/jenkinsci/${project.artifactId}-plugin</url>
-	  <tag>junit-attachments-1.6</tag>
+	  <tag>${scmTag}</tag>
   </scm>
 
     <properties>
-        <revision>1.6</revision>
+        <revision>1.7</revision>
         <changelist>-SNAPSHOT</changelist>
         <!--
             compare: http://docs.codehaus.org/display/MAVENUSER/POM+Element+for+Source+File+Encoding
