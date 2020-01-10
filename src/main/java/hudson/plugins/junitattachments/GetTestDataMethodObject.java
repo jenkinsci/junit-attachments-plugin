@@ -124,7 +124,7 @@ public class GetTestDataMethodObject {
                 d.scan();
 
                 // Associate any included files with the test class, rather than an individual test case
-                Map<String, List<String>> tests = new HashMap<String, List<String>>();
+                Map<String, List<String>> tests = attachments.getOrDefault(className, new HashMap<String, List<String>>());
                 tests.put("", new ArrayList<String>(Arrays.asList(d.getIncludedFiles())));
                 attachments.put(className, tests);
             }
