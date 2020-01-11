@@ -129,4 +129,32 @@ public class AttachmentPublisherPipelineTest {
 
     }
 
+    @Test
+    public void testBothWellKnownFilenamesAndPatternAreAttached() throws Exception {
+        TestResultAction action = getTestResultActionForPipeline("workspace4.zip", "pipelineTest.groovy", Result.SUCCESS);
+
+        ClassResult cr = getClassResult(action, "test.foo.bar", "DefaultIntegrationTest");
+        {
+            AttachmentTestAction ata = cr.getTestAction(AttachmentTestAction.class);
+            assertNotNull(ata);
+            final List<String> attachments = ata.getAttachments();
+            assertNotNull(attachments);
+            assertEquals(3, attachments.size());
+            Collections.sort(attachments);
+            assertEquals("attachment.txt", attachments.get(0));
+            assertEquals("file", attachments.get(1));
+            assertEquals("test.foo.bar.DefaultIntegrationTest-output.txt", attachments.get(2));
+        }
+
+        CaseResult caseResult = cr.getCaseResult("experimentsWithJavaElements");
+        {
+            AttachmentTestAction caseAta = caseResult.getTestAction(AttachmentTestAction.class);
+            assertNotNull(caseAta);
+            final List<String> caseAttachments = caseAta.getAttachments();
+            assertNotNull(caseAttachments);
+            assertEquals(1, caseAttachments.size());
+            assertEquals("attachment.txt", caseAttachments.get(0));
+        }
+    }
+
 }
