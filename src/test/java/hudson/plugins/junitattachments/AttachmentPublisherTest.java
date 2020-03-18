@@ -4,6 +4,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
+import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import hudson.FilePath;
 import hudson.Launcher;
 import hudson.model.AbstractBuild;
@@ -184,6 +186,20 @@ public class AttachmentPublisherTest {
         assertAttachmentsExist(cases.get(1), new String[] { "misc-something-1", "misc-something-2" });
     }
 
+    @Test
+    public void testAttachmentsWithStrangeFileNames() throws Exception {
+        FreeStyleBuild build = getBuild("workspace5.zip");
+
+        HtmlPage page = j.createWebClient().withJavaScriptEnabled(false)
+            .getPage(build, "testReport/com.example.test/SignupTest/");
+        HtmlAnchor anchor1 = page.getAnchorByText("unicödeAndかわいいStuff");
+        assertNotNull(anchor1.click());
+        HtmlAnchor anchor2 = page.getAnchorByText("with space");
+        assertNotNull(anchor2.click());
+        HtmlAnchor anchor3 = page.getAnchorByText("special%§$_-%&[;]{}()char");
+        assertNotNull(anchor3.click());
+    }
+
     //-------------------------------------------------------------------------------------
 
     private void runBuildAndAssertAttachmentsExist(String className, String[] expectedFiles) throws Exception {
@@ -221,12 +237,11 @@ public class AttachmentPublisherTest {
         return action.getResult().byPackage(packageName).getClassResult(className);
     }
 
-    // Creates a job from the given workspace zip file, builds it and retrieves the TestResultAction
-    private TestResultAction getTestResultActionForBuild(String workspaceZip, Result expectedStatus) throws Exception {
+    private FreeStyleBuild getBuild(String workspaceZip) throws Exception {
         FreeStyleProject project = j.createFreeStyleProject();
 
         DescribableList<TestDataPublisher, Descriptor<TestDataPublisher>> publishers =
-                new DescribableList<TestDataPublisher, Descriptor<TestDataPublisher>>(project);
+            new DescribableList<TestDataPublisher, Descriptor<TestDataPublisher>>(project);
         publishers.add(new AttachmentPublisher());
 
         project.setScm(new ExtractResourceSCM(getClass().getResource(workspaceZip)));
@@ -235,7 +250,12 @@ public class AttachmentPublisherTest {
         archiver.setTestDataPublishers(publishers);
         project.getPublishersList().add(archiver);
 
-        FreeStyleBuild b = project.scheduleBuild2(0).get();
+        return project.scheduleBuild2(0).get();
+    }
+
+    // Creates a job from the given workspace zip file, builds it and retrieves the TestResultAction
+    private TestResultAction getTestResultActionForBuild(String workspaceZip, Result expectedStatus) throws Exception {
+        FreeStyleBuild b = getBuild(workspaceZip);
         j.assertBuildStatus(expectedStatus, b);
 
         TestResultAction action = b.getAction(TestResultAction.class);
