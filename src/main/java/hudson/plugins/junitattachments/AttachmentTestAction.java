@@ -1,14 +1,12 @@
 package hudson.plugins.junitattachments;
 
 import hudson.FilePath;
+import hudson.Util;
 import hudson.model.DirectoryBrowserSupport;
 import hudson.tasks.junit.TestAction;
 import hudson.tasks.test.TestObject;
-import jenkins.model.Jenkins;
-
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.List;
+import jenkins.model.Jenkins;
 
 public class AttachmentTestAction extends TestAction {
 
@@ -62,8 +60,8 @@ public class AttachmentTestAction extends TestAction {
 		return filename.matches("(?i).+\\.(gif|jpe?g|png)$");
 	}
 
-	public static String getUrl(String filename) throws UnsupportedEncodingException {
-		return "attachments/" + URLEncoder.encode(filename, "UTF-8");
+	public static String getUrl(String filename) {
+		return "attachments/" + Util.rawEncode(filename);
 	}
 
 }
