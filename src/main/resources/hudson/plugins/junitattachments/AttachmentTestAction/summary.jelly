@@ -8,23 +8,15 @@
 		<tr>
 			<td class="pane-header">${%Files}</td>
 		</tr>
-			<j:forEach var="attachment" items="${it.attachments}">
-				<tr>
-					<td class="pane">
-						<a class="${it.isImageFile(attachment) ? 'gallery' : ''}"
-						   title="${attachment}"
-						   href="${it.getUrl(attachment)}">${attachment}</a>
-					</td>
-				</tr>
-			</j:forEach>
+		<j:forEach var="attachment" items="${it.attachments}">
+			<tr>
+				<td class="pane">
+					<a class="${it.isImageFile(attachment) ? 'gallery' : ''}"
+						 title="${attachment}"
+						 href="${it.getUrl(attachment)}">${attachment}</a>
+				</td>
+			</tr>
+		</j:forEach>
 	</table>
 	</td></tr>
-
-    <st:adjunct includes="hudson.plugins.jquery.colorbox" />
-    <script type="text/javascript">
-        Q(document).ready(function() {
-            Q("a.gallery").colorbox({rel: "gallery", maxWidth: "95%", maxHeight: "95%", speed: 150});
-        });
-    </script>
-
 </j:jelly>
