@@ -9,7 +9,7 @@
     </parent>
 
     <artifactId>junit-attachments</artifactId>
-    <version>${revision}${changelist}</version>
+    <version>1.7</version>
     <packaging>hpi</packaging>
     <name>JUnit Attachments Plugin</name>
     <url>https://github.com/jenkinsci/junit-attachments-plugin</url>
@@ -18,7 +18,7 @@
         <connection>scm:git:git://github.com/${gitHubRepo}.git</connection>
         <developerConnection>scm:git:git@github.com:${gitHubRepo}.git</developerConnection>
         <url>https://github.com/${gitHubRepo}</url>
-        <tag>${scmTag}</tag>
+        <tag>junit-attachments-1.7</tag>
     </scm>
 
     <properties>
