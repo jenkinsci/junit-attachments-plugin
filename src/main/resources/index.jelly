@@ -1,0 +1,5 @@
+<?jelly escape-by-default='true'?>
+<div>
+    This plugin can archive certain files (attachments) together with your JUnit results.
+    Attached files are shown in the JUnit results.
+</div>
