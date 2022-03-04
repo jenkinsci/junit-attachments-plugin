@@ -3,6 +3,7 @@ package hudson.plugins.junitattachments;
 import hudson.model.Run;
 import hudson.model.TaskListener;
 import org.apache.commons.lang.StringUtils;
+import org.jenkinsci.Symbol;
 import org.kohsuke.stapler.DataBoundConstructor;
 
 import hudson.Extension;
@@ -164,6 +165,7 @@ public class AttachmentPublisher extends TestDataPublisher {
     }
 
     @Extension
+    @Symbol("attachments")
     public static class DescriptorImpl extends Descriptor<TestDataPublisher> {
 
         @Override
