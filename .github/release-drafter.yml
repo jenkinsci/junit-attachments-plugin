@@ -1,2 +1,1 @@
 _extends: .github
-tag-template: junit-attachments-$NEXT_MINOR_VERSION
