@@ -15,7 +15,8 @@ import hudson.tasks.junit.SuiteResult;
 import hudson.tasks.junit.TestResult;
 import org.apache.tools.ant.DirectoryScanner;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -79,7 +80,7 @@ public class GetTestDataMethodObject {
      * @param testResult
      *            see {@link GetTestDataMethodObject#testResult}
      */
-    public GetTestDataMethodObject(Run<?, ?> build, @Nonnull FilePath workspace,
+    public GetTestDataMethodObject(Run<?, ?> build, @NonNull FilePath workspace,
                                    @SuppressWarnings("unused") Launcher launcher,
                                    TaskListener listener, TestResult testResult) {
         this.build = build;
@@ -113,6 +114,7 @@ public class GetTestDataMethodObject {
         return attachments;
     }
 
+    @SuppressFBWarnings(value = "NP_NULL_ON_SOME_PATH_FROM_RETURN_VALUE", justification = "TODO needs triage")
     private void attachFilesForReport(final String className, final FilePath reportFile, final FilePath target)
             throws IOException, InterruptedException {
         final FilePath testDir = reportFile.getParent().child(className);
@@ -205,6 +207,7 @@ public class GetTestDataMethodObject {
     private static final String SUFFIX = "]]";
     private static final Pattern ATTACHMENT_PATTERN = Pattern.compile("\\[\\[ATTACHMENT\\|.+\\]\\]");
 
+    @SuppressFBWarnings(value = "NP_NULL_ON_SOME_PATH_FROM_RETURN_VALUE", justification = "TODO needs triage")
     private void attachStdInAndOut(String className, FilePath reportFile)
             throws IOException, InterruptedException {
         final FilePath stdInAndOut = reportFile.getParent().child(
