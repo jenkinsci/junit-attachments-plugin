@@ -1,13 +1,14 @@
 <?jelly escape-by-default='true'?>
-<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define"
-	xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
+<j:jelly xmlns:j="jelly:core">
 
 	<tr><td>
 	<h3>${%Attachments}</h3>
-	<table class="pane" id="attachments">
-		<tr>
-			<td class="pane-header">${%Files}</td>
-		</tr>
+	<table class="jenkins-table" id="attachments">
+		<thead>
+			<tr>
+				<th class="pane-header">${%Files}</th>
+			</tr>
+		</thead>
 		<j:forEach var="attachment" items="${it.attachments}">
 			<tr>
 				<td class="pane">
