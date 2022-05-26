@@ -46,7 +46,7 @@ public class GetTestDataMethodObject {
     private final TestResult testResult;
 
     /**
-     * Map from class names to a list of attachment path names on the master.
+     * Map from class names to a list of attachment path names on the controller.
      * The path names are relative to the {@linkplain #getAttachmentStorageFor(String) class-specific attachment storage}
      */
     private final Map<String, Map<String, List<String>>> attachments = new HashMap<String, Map<String, List<String>>>();
@@ -222,7 +222,7 @@ public class GetTestDataMethodObject {
      * Captures a single file as an attachment by copying it and recording it.
      *
      * @param src
-     *      File on the build workspace to be copied back to the master and captured.
+     *      File on the build workspace to be copied back to the controller and captured.
      */
     private void captureAttachment(String className, FilePath src) throws IOException, InterruptedException {
         captureAttachment(className, null, src);
