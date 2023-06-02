@@ -23,35 +23,20 @@
 
     <properties>
         <changelist>999999-SNAPSHOT</changelist>
-        <jenkins.version>2.361.4</jenkins.version>
+        <jenkins.version>2.387.3</jenkins.version>
         <gitHubRepo>jenkinsci/${project.artifactId}-plugin</gitHubRepo>
     </properties>
-
-    <developers>
-        <developer>
-            <id>huybrechts</id>
-            <name>Tom Huybrechts</name>
-        </developer>
-        <developer>
-            <id>orrc</id>
-            <name>Christopher Orr</name>
-            <email>chris@orr.me.uk</email>
-            <timezone>1</timezone>
-        </developer>
-    </developers>
-
     <dependencyManagement>
         <dependencies>
             <dependency>
                 <groupId>io.jenkins.tools.bom</groupId>
-                <artifactId>bom-2.361.x</artifactId>
-                <version>2102.v854b_fec19c92</version>
+                <artifactId>bom-2.387.x</artifactId>
+                <version>2133.v2e6c00fe4d61</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>
-
     <dependencies>
         <dependency>
             <groupId>org.jenkins-ci.plugins</groupId>
