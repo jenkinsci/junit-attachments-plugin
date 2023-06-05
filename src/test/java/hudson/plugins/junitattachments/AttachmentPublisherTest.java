@@ -4,8 +4,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
-import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import org.htmlunit.html.HtmlAnchor;
+import org.htmlunit.html.HtmlPage;
 import hudson.FilePath;
 import hudson.Launcher;
 import hudson.model.AbstractBuild;
