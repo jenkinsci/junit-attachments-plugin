@@ -1,5 +1,10 @@
 # JUnit Attachments Plugin
 
+[![Build Status](https://ci.jenkins.io/job/Plugins/job/junit-attachments-plugin/job/main/badge/icon)](https://ci.jenkins.io/job/Plugins/job/junit-attachments-plugin/job/main/)
+[![Jenkins Plugin](https://img.shields.io/jenkins/plugin/v/junit-attachments.svg)](https://plugins.jenkins.io/junit-attachments)
+[![GitHub release](https://img.shields.io/github/release/jenkinsci/junit-attachments-plugin.svg?label=changelog)](https://github.com/jenkinsci/junit-attachments-plugin/releases/latest)
+[![GitHub license](https://img.shields.io/github/license/jenkinsci/junit-attachments-plugin)](https://github.com/jenkinsci/junit-attachments-plugin/blob/main/LICENSE.md)
+
 This plugin can archive certain files (attachments) together with your JUnit results.
 ![](images/junit-attachments.png)
 
@@ -34,3 +39,7 @@ The above mechanism has a problem that your test needs to know about where your 
 
 Each `ATTACHMENT` should be on its own line, without any text before or after.
 See [Kohsuke's post](https://kohsuke.org/2012/03/13/attaching-files-to-junit-tests/) for more details.
+
+## License
+
+Licensed under MIT, see [LICENSE](LICENSE.md)
