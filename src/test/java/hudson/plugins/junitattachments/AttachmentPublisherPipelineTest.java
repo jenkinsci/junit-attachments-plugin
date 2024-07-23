@@ -40,6 +40,7 @@ import org.jvnet.hudson.test.JenkinsRule;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -78,7 +79,7 @@ public class AttachmentPublisherPipelineTest {
         TestResultAction action = getTestResultActionForPipeline("workspace2.zip", "pipelineTest.groovy", Result.UNSTABLE);
 
         ClassResult cr = getClassResult(action, TEST_PACKAGE, "SignupTest");
-        List<CaseResult> caseResults = cr.getChildren();
+        Collection<CaseResult> caseResults = cr.getChildren();
         assertEquals(3, caseResults.size());
 
         CaseResult failingCase = cr.getCaseResult("A_003_Type_the_text__jenkins__into_the_field__username_");

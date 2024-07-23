@@ -25,6 +25,7 @@ import hudson.tasks.test.TestResult;
 import hudson.util.DescribableList;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import org.junit.Rule;
@@ -88,7 +89,7 @@ public class AttachmentPublisherTest {
         TestResultAction action = getTestResultActionForBuild("workspace2.zip", Result.UNSTABLE);
 
         ClassResult classResult = getClassResult(action, "SignupTest");
-        List<CaseResult> cases = classResult.getChildren();
+        List<CaseResult> cases = new ArrayList<>(classResult.getChildren());
         assertEquals(3, cases.size());
 
         // Each test case should have the respective one attachment
@@ -103,7 +104,7 @@ public class AttachmentPublisherTest {
         TestResultAction action = getTestResultActionForBuild("workspace3.zip", Result.UNSTABLE);
 
         ClassResult classResult = getClassResult(action, "SignupTest");
-        List<CaseResult> cases = classResult.getChildren();
+        List<CaseResult> cases = new ArrayList<>(classResult.getChildren());
         assertEquals(3, cases.size());
 
         // Each test case should have the respective one attachment
@@ -127,7 +128,7 @@ public class AttachmentPublisherTest {
         TestResultAction action = getTestResultActionForBuild("workspace2.zip", Result.UNSTABLE);
 
         ClassResult classResult = getClassResult(action, "LoginTest");
-        List<CaseResult> cases = classResult.getChildren();
+        List<CaseResult> cases = new ArrayList<>(classResult.getChildren());
         assertEquals(4, cases.size());
 
         // Each test case should have the respective one (or zero) attachments
@@ -154,7 +155,7 @@ public class AttachmentPublisherTest {
         TestResultAction action = getTestResultActionForBuild("workspace2.zip", Result.UNSTABLE);
 
         ClassResult classResult = getClassResult(action, "MiscTest1");
-        List<CaseResult> cases = classResult.getChildren();
+        List<CaseResult> cases = new ArrayList<>(classResult.getChildren());
         assertEquals(1, cases.size());
 
         // Attachment should not be inherited from testsuite
@@ -177,7 +178,7 @@ public class AttachmentPublisherTest {
         TestResultAction action = getTestResultActionForBuild("workspace2.zip", Result.UNSTABLE);
 
         ClassResult classResult = getClassResult(action, "MiscTest2");
-        List<CaseResult> cases = classResult.getChildren();
+        List<CaseResult> cases = new ArrayList<>(classResult.getChildren());
         assertEquals(2, cases.size());
 
         // Alphabetically first comes the "doNothing" test
