@@ -29,6 +29,8 @@ import hudson.model.Result;
 import hudson.tasks.junit.CaseResult;
 import hudson.tasks.junit.ClassResult;
 import hudson.tasks.junit.TestResultAction;
+import hudson.tasks.test.TabulatedResult;
+import hudson.tasks.test.TestResult;
 import org.apache.commons.io.IOUtils;
 import org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition;
 import org.jenkinsci.plugins.workflow.job.WorkflowJob;
@@ -78,11 +80,11 @@ public class AttachmentPublisherPipelineTest {
     public void annotationDoesNotFailForPipeline() throws Exception {
         TestResultAction action = getTestResultActionForPipeline("workspace2.zip", "pipelineTest.groovy", Result.UNSTABLE);
 
-        ClassResult cr = getClassResult(action, TEST_PACKAGE, "SignupTest");
-        Collection<CaseResult> caseResults = cr.getChildren();
+        TabulatedResult cr = getClassResult(action, TEST_PACKAGE, "SignupTest");
+        Collection<? extends TestResult> caseResults = cr.getChildren();
         assertEquals(3, caseResults.size());
 
-        CaseResult failingCase = cr.getCaseResult("A_003_Type_the_text__jenkins__into_the_field__username_");
+        CaseResult failingCase = ((ClassResult) cr).getCaseResult("A_003_Type_the_text__jenkins__into_the_field__username_");
         assertNotNull(failingCase);
         assertEquals("Timed out after 10 seconds", failingCase.annotate(failingCase.getErrorDetails()));
 
