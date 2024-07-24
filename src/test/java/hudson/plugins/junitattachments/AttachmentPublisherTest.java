@@ -15,12 +15,12 @@ import hudson.model.FreeStyleBuild;
 import hudson.model.FreeStyleProject;
 import hudson.model.Result;
 import hudson.tasks.Builder;
-import hudson.tasks.junit.CaseResult;
 import hudson.tasks.junit.ClassResult;
 import hudson.tasks.junit.JUnitResultArchiver;
 import hudson.tasks.junit.PackageResult;
 import hudson.tasks.junit.TestDataPublisher;
 import hudson.tasks.junit.TestResultAction;
+import hudson.tasks.test.TabulatedResult;
 import hudson.tasks.test.TestResult;
 import hudson.util.DescribableList;
 import java.io.IOException;
@@ -88,8 +88,8 @@ public class AttachmentPublisherTest {
     public void testAttachmentsShownForTestcases_SignupTest() throws Exception {
         TestResultAction action = getTestResultActionForBuild("workspace2.zip", Result.UNSTABLE);
 
-        ClassResult classResult = getClassResult(action, "SignupTest");
-        List<CaseResult> cases = new ArrayList<>(classResult.getChildren());
+        TabulatedResult classResult = getClassResult(action, "SignupTest");
+        List<TestResult> cases = new ArrayList<>(classResult.getChildren());
         assertEquals(3, cases.size());
 
         // Each test case should have the respective one attachment
@@ -103,8 +103,8 @@ public class AttachmentPublisherTest {
     public void testAttachmentsShownForTestcases_SignupTest_WithRunnerPrefix() throws Exception {
         TestResultAction action = getTestResultActionForBuild("workspace3.zip", Result.UNSTABLE);
 
-        ClassResult classResult = getClassResult(action, "SignupTest");
-        List<CaseResult> cases = new ArrayList<>(classResult.getChildren());
+        TabulatedResult classResult = getClassResult(action, "SignupTest");
+        List<TestResult> cases = new ArrayList<>(classResult.getChildren());
         assertEquals(3, cases.size());
 
         // Each test case should have the respective one attachment
@@ -127,8 +127,8 @@ public class AttachmentPublisherTest {
     public void testAttachmentsShownForTestcases_LoginTest() throws Exception {
         TestResultAction action = getTestResultActionForBuild("workspace2.zip", Result.UNSTABLE);
 
-        ClassResult classResult = getClassResult(action, "LoginTest");
-        List<CaseResult> cases = new ArrayList<>(classResult.getChildren());
+        TabulatedResult classResult = getClassResult(action, "LoginTest");
+        List<TestResult> cases = new ArrayList<>(classResult.getChildren());
         assertEquals(4, cases.size());
 
         // Each test case should have the respective one (or zero) attachments
@@ -154,8 +154,8 @@ public class AttachmentPublisherTest {
     public void testAttachmentsShownForTestcases_MiscTest1() throws Exception {
         TestResultAction action = getTestResultActionForBuild("workspace2.zip", Result.UNSTABLE);
 
-        ClassResult classResult = getClassResult(action, "MiscTest1");
-        List<CaseResult> cases = new ArrayList<>(classResult.getChildren());
+        TabulatedResult classResult = getClassResult(action, "MiscTest1");
+        List<TestResult> cases = new ArrayList<>(classResult.getChildren());
         assertEquals(1, cases.size());
 
         // Attachment should not be inherited from testsuite
@@ -177,8 +177,8 @@ public class AttachmentPublisherTest {
     public void testAttachmentsShownForTestcases_MiscTest2() throws Exception {
         TestResultAction action = getTestResultActionForBuild("workspace2.zip", Result.UNSTABLE);
 
-        ClassResult classResult = getClassResult(action, "MiscTest2");
-        List<CaseResult> cases = new ArrayList<>(classResult.getChildren());
+        TabulatedResult classResult = getClassResult(action, "MiscTest2");
+        List<TestResult> cases = new ArrayList<>(classResult.getChildren());
         assertEquals(2, cases.size());
 
         // Alphabetically first comes the "doNothing" test
