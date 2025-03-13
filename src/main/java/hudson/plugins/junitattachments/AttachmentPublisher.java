@@ -1,8 +1,6 @@
 package hudson.plugins.junitattachments;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
 import hudson.model.*;
-import jenkins.tasks.SimpleBuildStep;
 import org.apache.commons.lang.StringUtils;
 import org.jenkinsci.Symbol;
 import org.kohsuke.stapler.DataBoundConstructor;
