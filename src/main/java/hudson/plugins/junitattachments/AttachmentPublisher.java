@@ -81,6 +81,7 @@ public class AttachmentPublisher extends TestDataPublisher {
 
         /**
          * @param attachmentsMap { fully-qualified test class name → { test method name → [ attachment file name ] } }
+         * @param showAttachmentsAtClassLevel Whether to display test case attachments at the test class level
          */
         public Data(
                 Map<String, Map<String, List<String>>> attachmentsMap,
