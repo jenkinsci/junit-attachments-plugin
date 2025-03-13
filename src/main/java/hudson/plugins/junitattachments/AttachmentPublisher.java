@@ -1,7 +1,8 @@
 package hudson.plugins.junitattachments;
 
-import hudson.model.Run;
-import hudson.model.TaskListener;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import hudson.model.*;
+import jenkins.tasks.SimpleBuildStep;
 import org.apache.commons.lang.StringUtils;
 import org.jenkinsci.Symbol;
 import org.kohsuke.stapler.DataBoundConstructor;
@@ -9,7 +10,6 @@ import org.kohsuke.stapler.DataBoundConstructor;
 import hudson.Extension;
 import hudson.FilePath;
 import hudson.Launcher;
-import hudson.model.Descriptor;
 import hudson.tasks.junit.TestAction;
 import hudson.tasks.junit.TestDataPublisher;
 import hudson.tasks.junit.TestResult;
@@ -17,21 +17,34 @@ import hudson.tasks.junit.TestResultAction;
 import hudson.tasks.junit.CaseResult;
 import hudson.tasks.junit.ClassResult;
 import hudson.tasks.test.TestObject;
+import org.kohsuke.stapler.DataBoundSetter;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 public class AttachmentPublisher extends TestDataPublisher {
 
+    private Boolean showAttachmentsAtClassLevel = true;
+
     @DataBoundConstructor
     public AttachmentPublisher() {
+    }
+
+    public boolean isShowAttachmentsAtClassLevel() {
+        return showAttachmentsAtClassLevel != null ? showAttachmentsAtClassLevel : true;
+    }
+
+    @DataBoundSetter
+    public void setShowAttachmentsAtClassLevel(Boolean showAttachmentsAtClassLevel) {
+        this.showAttachmentsAtClassLevel = showAttachmentsAtClassLevel;
+    }
+
+    protected Object readResolve() {
+        if (this.showAttachmentsAtClassLevel == null) {
+            this.showAttachmentsAtClassLevel = true;
+        }
+        return this;
     }
 
     public static FilePath getAttachmentPath(Run<?, ?> build) {
@@ -58,7 +71,7 @@ public class AttachmentPublisher extends TestDataPublisher {
             return null;
         }
 
-        return new Data(attachments);
+        return new Data(attachments, this.showAttachmentsAtClassLevel);
     }
 
     public static class Data extends TestResultAction.Data {
@@ -66,12 +79,16 @@ public class AttachmentPublisher extends TestDataPublisher {
         @Deprecated
         private transient Map<String, List<String>> attachments;
         private Map<String, Map<String, List<String>>> attachmentsMap;
+        private final boolean showAttachmentsAtClassLevel;
 
         /**
          * @param attachmentsMap { fully-qualified test class name → { test method name → [ attachment file name ] } }
          */
-        public Data(Map<String, Map<String, List<String>>> attachmentsMap) {
+        public Data(
+                Map<String, Map<String, List<String>>> attachmentsMap,
+                boolean showAttachmentsAtClassLevel) {
             this.attachmentsMap = attachmentsMap;
+            this.showAttachmentsAtClassLevel = showAttachmentsAtClassLevel;
         }
 
         @Override
@@ -85,6 +102,10 @@ public class AttachmentPublisher extends TestDataPublisher {
 
             if (testObject instanceof ClassResult) {
                 // We're looking at the page for a test class (i.e. a single TestCase)
+                if (!showAttachmentsAtClassLevel) {
+                    return Collections.emptyList();
+                }
+
                 packageName = testObject.getParent().getName();
                 className = testObject.getName();
                 testName = null;
@@ -174,5 +195,4 @@ public class AttachmentPublisher extends TestDataPublisher {
         }
 
     }
-
 }
