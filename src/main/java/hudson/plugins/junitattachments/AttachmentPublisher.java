@@ -38,13 +38,6 @@ public class AttachmentPublisher extends TestDataPublisher {
         this.showAttachmentsAtClassLevel = showAttachmentsAtClassLevel;
     }
 
-    protected Object readResolve() {
-        if (this.showAttachmentsAtClassLevel == null) {
-            this.showAttachmentsAtClassLevel = true;
-        }
-        return this;
-    }
-
     public static FilePath getAttachmentPath(Run<?, ?> build) {
         return new FilePath(new File(build.getRootDir().getAbsolutePath()))
                 .child("junit-attachments");
@@ -69,7 +62,7 @@ public class AttachmentPublisher extends TestDataPublisher {
             return null;
         }
 
-        return new Data(attachments, this.showAttachmentsAtClassLevel);
+        return new Data(attachments, isShowAttachmentsAtClassLevel());
     }
 
     public static class Data extends TestResultAction.Data {
@@ -77,7 +70,7 @@ public class AttachmentPublisher extends TestDataPublisher {
         @Deprecated
         private transient Map<String, List<String>> attachments;
         private Map<String, Map<String, List<String>>> attachmentsMap;
-        private final boolean showAttachmentsAtClassLevel;
+        private Boolean showAttachmentsAtClassLevel;
 
         /**
          * @param attachmentsMap { fully-qualified test class name → { test method name → [ attachment file name ] } }
@@ -85,7 +78,7 @@ public class AttachmentPublisher extends TestDataPublisher {
          */
         public Data(
                 Map<String, Map<String, List<String>>> attachmentsMap,
-                boolean showAttachmentsAtClassLevel) {
+                Boolean showAttachmentsAtClassLevel) {
             this.attachmentsMap = attachmentsMap;
             this.showAttachmentsAtClassLevel = showAttachmentsAtClassLevel;
         }
@@ -162,6 +155,10 @@ public class AttachmentPublisher extends TestDataPublisher {
 
         /** Handles migration from the old serialisation format. */
         private Object readResolve() {
+            if (this.showAttachmentsAtClassLevel == null) {
+                this.showAttachmentsAtClassLevel = true;
+            }
+
             if (attachments != null && attachmentsMap == null) {
                 // Migrate from the flat list per test class to a map of <test method, attachments>
                 attachmentsMap = new HashMap<String, Map<String, List<String>>>();
