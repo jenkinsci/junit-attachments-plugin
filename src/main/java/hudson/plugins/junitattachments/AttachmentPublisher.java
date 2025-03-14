@@ -1,6 +1,7 @@
 package hudson.plugins.junitattachments;
 
-import hudson.model.*;
+import hudson.model.Run;
+import hudson.model.TaskListener;
 import org.apache.commons.lang.StringUtils;
 import org.jenkinsci.Symbol;
 import org.kohsuke.stapler.DataBoundConstructor;
@@ -8,6 +9,7 @@ import org.kohsuke.stapler.DataBoundConstructor;
 import hudson.Extension;
 import hudson.FilePath;
 import hudson.Launcher;
+import hudson.model.Descriptor;
 import hudson.tasks.junit.TestAction;
 import hudson.tasks.junit.TestDataPublisher;
 import hudson.tasks.junit.TestResult;
@@ -19,7 +21,13 @@ import org.kohsuke.stapler.DataBoundSetter;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 public class AttachmentPublisher extends TestDataPublisher {
 
