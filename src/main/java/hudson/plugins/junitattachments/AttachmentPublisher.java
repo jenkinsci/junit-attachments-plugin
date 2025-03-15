@@ -17,6 +17,7 @@ import hudson.tasks.junit.TestResultAction;
 import hudson.tasks.junit.CaseResult;
 import hudson.tasks.junit.ClassResult;
 import hudson.tasks.test.TestObject;
+import org.kohsuke.stapler.DataBoundSetter;
 
 import java.io.File;
 import java.io.IOException;
@@ -30,8 +31,19 @@ import java.util.TreeMap;
 
 public class AttachmentPublisher extends TestDataPublisher {
 
+    private Boolean showAttachmentsAtClassLevel = true;
+
     @DataBoundConstructor
     public AttachmentPublisher() {
+    }
+
+    public boolean isShowAttachmentsAtClassLevel() {
+        return showAttachmentsAtClassLevel != null ? showAttachmentsAtClassLevel : true;
+    }
+
+    @DataBoundSetter
+    public void setShowAttachmentsAtClassLevel(Boolean showAttachmentsAtClassLevel) {
+        this.showAttachmentsAtClassLevel = showAttachmentsAtClassLevel;
     }
 
     public static FilePath getAttachmentPath(Run<?, ?> build) {
@@ -58,7 +70,7 @@ public class AttachmentPublisher extends TestDataPublisher {
             return null;
         }
 
-        return new Data(attachments);
+        return new Data(attachments, isShowAttachmentsAtClassLevel());
     }
 
     public static class Data extends TestResultAction.Data {
@@ -66,12 +78,17 @@ public class AttachmentPublisher extends TestDataPublisher {
         @Deprecated
         private transient Map<String, List<String>> attachments;
         private Map<String, Map<String, List<String>>> attachmentsMap;
+        private Boolean showAttachmentsAtClassLevel;
 
         /**
          * @param attachmentsMap { fully-qualified test class name → { test method name → [ attachment file name ] } }
+         * @param showAttachmentsAtClassLevel Whether to display test case attachments at the test class level
          */
-        public Data(Map<String, Map<String, List<String>>> attachmentsMap) {
+        public Data(
+                Map<String, Map<String, List<String>>> attachmentsMap,
+                Boolean showAttachmentsAtClassLevel) {
             this.attachmentsMap = attachmentsMap;
+            this.showAttachmentsAtClassLevel = showAttachmentsAtClassLevel;
         }
 
         @Override
@@ -85,6 +102,10 @@ public class AttachmentPublisher extends TestDataPublisher {
 
             if (testObject instanceof ClassResult) {
                 // We're looking at the page for a test class (i.e. a single TestCase)
+                if (!showAttachmentsAtClassLevel) {
+                    return Collections.emptyList();
+                }
+
                 packageName = testObject.getParent().getName();
                 className = testObject.getName();
                 testName = null;
@@ -142,6 +163,10 @@ public class AttachmentPublisher extends TestDataPublisher {
 
         /** Handles migration from the old serialisation format. */
         private Object readResolve() {
+            if (this.showAttachmentsAtClassLevel == null) {
+                this.showAttachmentsAtClassLevel = true;
+            }
+
             if (attachments != null && attachmentsMap == null) {
                 // Migrate from the flat list per test class to a map of <test method, attachments>
                 attachmentsMap = new HashMap<String, Map<String, List<String>>>();
@@ -174,5 +199,4 @@ public class AttachmentPublisher extends TestDataPublisher {
         }
 
     }
-
 }
