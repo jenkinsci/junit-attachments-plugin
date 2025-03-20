@@ -29,37 +29,35 @@ import hudson.model.Result;
 import hudson.tasks.junit.CaseResult;
 import hudson.tasks.junit.ClassResult;
 import hudson.tasks.junit.TestResultAction;
-import hudson.tasks.test.TabulatedResult;
 import hudson.tasks.test.TestResult;
 import org.apache.commons.io.IOUtils;
 import org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition;
 import org.jenkinsci.plugins.workflow.job.WorkflowJob;
 import org.jenkinsci.plugins.workflow.job.WorkflowRun;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.jvnet.hudson.test.Issue;
 import org.jvnet.hudson.test.JenkinsRule;
+import org.jvnet.hudson.test.junit.jupiter.WithJenkins;
 
 import java.io.IOException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
 import static hudson.plugins.junitattachments.AttachmentPublisherTest.getClassResult;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class AttachmentPublisherPipelineTest {
+@WithJenkins
+class AttachmentPublisherPipelineTest {
     // Package name used in tests in workspace2.zip
     private static final String TEST_PACKAGE = "com.example.test";
 
-    @Rule
-    public JenkinsRule jenkinsRule = new JenkinsRule();
-
     @Test
-    public void testWellKnownFilenamesAreAttached() throws Exception {
-        TestResultAction action = getTestResultActionForPipeline("workspace.zip", "pipelineTest.groovy", Result.SUCCESS);
+    void testWellKnownFilenamesAreAttached(JenkinsRule jenkinsRule) throws Exception {
+        TestResultAction action = getTestResultActionForPipeline(jenkinsRule, "workspace.zip", "pipelineTest.groovy", Result.SUCCESS);
 
         ClassResult cr = getClassResult(action, "test.foo.bar", "DefaultIntegrationTest");
 
@@ -77,14 +75,14 @@ public class AttachmentPublisherPipelineTest {
 
     @Issue("JENKINS-36504")
     @Test
-    public void annotationDoesNotFailForPipeline() throws Exception {
-        TestResultAction action = getTestResultActionForPipeline("workspace2.zip", "pipelineTest.groovy", Result.UNSTABLE);
+    void annotationDoesNotFailForPipeline(JenkinsRule jenkinsRule) throws Exception {
+        TestResultAction action = getTestResultActionForPipeline(jenkinsRule, "workspace2.zip", "pipelineTest.groovy", Result.UNSTABLE);
 
-        TabulatedResult cr = getClassResult(action, TEST_PACKAGE, "SignupTest");
+        ClassResult cr = getClassResult(action, TEST_PACKAGE, "SignupTest");
         Collection<? extends TestResult> caseResults = cr.getChildren();
         assertEquals(3, caseResults.size());
 
-        CaseResult failingCase = ((ClassResult) cr).getCaseResult("A_003_Type_the_text__jenkins__into_the_field__username_");
+        CaseResult failingCase = cr.getCaseResult("A_003_Type_the_text__jenkins__into_the_field__username_");
         assertNotNull(failingCase);
         assertEquals("Timed out after 10 seconds", failingCase.annotate(failingCase.getErrorDetails()));
 
@@ -100,8 +98,8 @@ public class AttachmentPublisherPipelineTest {
     }
 
     @Test
-    public void testBothWellKnownFilenamesAndPatternAreAttached() throws Exception {
-        TestResultAction action = getTestResultActionForPipeline("workspace4.zip", "pipelineTest.groovy", Result.SUCCESS);
+    void testBothWellKnownFilenamesAndPatternAreAttached(JenkinsRule jenkinsRule) throws Exception {
+        TestResultAction action = getTestResultActionForPipeline(jenkinsRule, "workspace4.zip", "pipelineTest.groovy", Result.SUCCESS);
 
         ClassResult cr = getClassResult(action, "test.foo.bar", "DefaultIntegrationTest");
         {
@@ -128,11 +126,11 @@ public class AttachmentPublisherPipelineTest {
     }
 
     // Creates a job from the given workspace zip file, builds it and retrieves the TestResultAction
-    private TestResultAction getTestResultActionForPipeline(String workspaceZip, String pipelineFile, Result expectedStatus) throws Exception {
+    private static TestResultAction getTestResultActionForPipeline(JenkinsRule jenkinsRule, String workspaceZip, String pipelineFile, Result expectedStatus) throws Exception {
         WorkflowJob project = jenkinsRule.jenkins.createProject(WorkflowJob.class, "test-job");
         FilePath workspace = jenkinsRule.jenkins.getWorkspaceFor(project);
         FilePath wsZip = workspace.child("workspace.zip");
-        wsZip.copyFrom(getClass().getResource(workspaceZip));
+        wsZip.copyFrom(AttachmentPublisherPipelineTest.class.getResource(workspaceZip));
         wsZip.unzip(workspace);
         for (FilePath f : workspace.list()) {
             f.touch(System.currentTimeMillis());
@@ -148,12 +146,12 @@ public class AttachmentPublisherPipelineTest {
         return action;
     }
 
-    private String fileContentsFromResources(String fileName) throws IOException {
+    private static String fileContentsFromResources(String fileName) throws IOException {
         String fileContents = null;
 
-        URL url = getClass().getResource(fileName);
+        URL url = AttachmentPublisherPipelineTest.class.getResource(fileName);
         if (url != null) {
-            fileContents = IOUtils.toString(url);
+            fileContents = IOUtils.toString(url, StandardCharsets.UTF_8);
         }
 
         return fileContents;

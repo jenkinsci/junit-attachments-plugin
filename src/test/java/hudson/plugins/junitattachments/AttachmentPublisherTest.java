@@ -1,8 +1,8 @@
 package hudson.plugins.junitattachments;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import org.htmlunit.html.HtmlAnchor;
 import org.htmlunit.html.HtmlPage;
@@ -28,22 +28,21 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import org.junit.Rule;
-import org.junit.Test;
+
+import org.junit.jupiter.api.Test;
 import org.jvnet.hudson.test.ExtractResourceSCM;
 import org.jvnet.hudson.test.JenkinsRule;
+import org.jvnet.hudson.test.junit.jupiter.WithJenkins;
 
-public class AttachmentPublisherTest {
-
-    @Rule
-    public JenkinsRule j = new JenkinsRule();
+@WithJenkins
+class AttachmentPublisherTest {
 
     // Package name used in tests in workspace2.zip
     private static final String TEST_PACKAGE = "com.example.test";
 
     @Test
-    public void testWellKnownFilenamesAreAttached() throws Exception {
-        TestResultAction action = getTestResultActionForBuild("workspace.zip", Result.SUCCESS);
+    void testWellKnownFilenamesAreAttached(JenkinsRule j) throws Exception {
+        TestResultAction action = getTestResultActionForBuild(j, "workspace.zip", Result.SUCCESS);
 
         ClassResult cr = getClassResult(action, "test.foo.bar", "DefaultIntegrationTest");
 
@@ -60,8 +59,8 @@ public class AttachmentPublisherTest {
     }
 
     @Test
-    public void testNoAttachmentsShownForPackage() throws Exception {
-        TestResultAction action = getTestResultActionForBuild("workspace2.zip", Result.UNSTABLE);
+    void testNoAttachmentsShownForPackage(JenkinsRule j) throws Exception {
+        TestResultAction action = getTestResultActionForBuild(j, "workspace2.zip", Result.UNSTABLE);
 
         // At the package level, attachments shouldn't be shown
         PackageResult pr = action.getResult().byPackage(TEST_PACKAGE);
@@ -73,20 +72,20 @@ public class AttachmentPublisherTest {
 
     // Tests that the correct summary of attachments are shown at the class level
     @Test
-    public void testAttachmentsShownForClass_SignupTest() throws Exception {
+    void testAttachmentsShownForClass_SignupTest(JenkinsRule j) throws Exception {
         // There should be 5 attachments: 3 from the test methods, and 2 from the test suite
         //
         // The two testsuite files should come first, in order of appearance,
         // while the remaining files should appear in order of the test method name
         String[] expectedFiles = { "signup-suite-1", "signup-suite-2",
                 "signup-reset", "signup-login", "signup-username" };
-        runBuildAndAssertAttachmentsExist("SignupTest", expectedFiles);
+        runBuildAndAssertAttachmentsExist(j, "SignupTest", expectedFiles);
     }
 
     // Tests that the correct attachments are shown for individual test methods
     @Test
-    public void testAttachmentsShownForTestcases_SignupTest() throws Exception {
-        TestResultAction action = getTestResultActionForBuild("workspace2.zip", Result.UNSTABLE);
+    void testAttachmentsShownForTestcases_SignupTest(JenkinsRule j) throws Exception {
+        TestResultAction action = getTestResultActionForBuild(j, "workspace2.zip", Result.UNSTABLE);
 
         TabulatedResult classResult = getClassResult(action, "SignupTest");
         List<TestResult> cases = new ArrayList<>(classResult.getChildren());
@@ -98,10 +97,11 @@ public class AttachmentPublisherTest {
             assertAttachmentsExist(cases.get(i), new String[] { names[i] });
         }
     }
+
     // Tests that the correct attachments are shown for individual test methods with additional output prefix by ant/maven
     @Test
-    public void testAttachmentsShownForTestcases_SignupTest_WithRunnerPrefix() throws Exception {
-        TestResultAction action = getTestResultActionForBuild("workspace3.zip", Result.UNSTABLE);
+    void testAttachmentsShownForTestcases_SignupTest_WithRunnerPrefix(JenkinsRule j) throws Exception {
+        TestResultAction action = getTestResultActionForBuild(j, "workspace3.zip", Result.UNSTABLE);
 
         TabulatedResult classResult = getClassResult(action, "SignupTest");
         List<TestResult> cases = new ArrayList<>(classResult.getChildren());
@@ -117,15 +117,15 @@ public class AttachmentPublisherTest {
     //-------------------------------------------------------------------------------------
 
     @Test
-    public void testAttachmentsShownForClass_LoginTest() throws Exception {
+    void testAttachmentsShownForClass_LoginTest(JenkinsRule j) throws Exception {
         // There should be 2 attachments from the test methods
         String[] expectedFiles = { "login-reset", "login-password" };
-        runBuildAndAssertAttachmentsExist("LoginTest", expectedFiles);
+        runBuildAndAssertAttachmentsExist(j, "LoginTest", expectedFiles);
     }
 
     @Test
-    public void testAttachmentsShownForTestcases_LoginTest() throws Exception {
-        TestResultAction action = getTestResultActionForBuild("workspace2.zip", Result.UNSTABLE);
+    void testAttachmentsShownForTestcases_LoginTest(JenkinsRule j) throws Exception {
+        TestResultAction action = getTestResultActionForBuild(j, "workspace2.zip", Result.UNSTABLE);
 
         TabulatedResult classResult = getClassResult(action, "LoginTest");
         List<TestResult> cases = new ArrayList<>(classResult.getChildren());
@@ -143,16 +143,16 @@ public class AttachmentPublisherTest {
     //-------------------------------------------------------------------------------------
 
     @Test
-    public void testAttachmentsShownForClass_MiscTest1() throws Exception {
+    void testAttachmentsShownForClass_MiscTest1(JenkinsRule j) throws Exception {
         // There should be 2 attachments from the test suite
         String[] expectedFiles = { "misc-suite-1", "misc-suite-2" };
-        runBuildAndAssertAttachmentsExist("MiscTest1", expectedFiles);
+        runBuildAndAssertAttachmentsExist(j, "MiscTest1", expectedFiles);
     }
 
     // Individual test case should have no attachments, i.e. not overridden by class system-out
     @Test
-    public void testAttachmentsShownForTestcases_MiscTest1() throws Exception {
-        TestResultAction action = getTestResultActionForBuild("workspace2.zip", Result.UNSTABLE);
+    void testAttachmentsShownForTestcases_MiscTest1(JenkinsRule j) throws Exception {
+        TestResultAction action = getTestResultActionForBuild(j, "workspace2.zip", Result.UNSTABLE);
 
         TabulatedResult classResult = getClassResult(action, "MiscTest1");
         List<TestResult> cases = new ArrayList<>(classResult.getChildren());
@@ -165,17 +165,17 @@ public class AttachmentPublisherTest {
     //-------------------------------------------------------------------------------------
 
     @Test
-    public void testAttachmentsShownForClass_MiscTest2() throws Exception {
+    void testAttachmentsShownForClass_MiscTest2(JenkinsRule j) throws Exception {
         // There should be 6 attachments from the test suite, first stdout, then stderr,
         // followed by two from a single test case
         String[] expectedFiles = { "misc-suite-3", "misc-suite-4", "misc-suite-1", "misc-suite-2",
                 "misc-something-1", "misc-something-2" };
-        runBuildAndAssertAttachmentsExist("MiscTest2", expectedFiles);
+        runBuildAndAssertAttachmentsExist(j, "MiscTest2", expectedFiles);
     }
 
     @Test
-    public void testAttachmentsShownForTestcases_MiscTest2() throws Exception {
-        TestResultAction action = getTestResultActionForBuild("workspace2.zip", Result.UNSTABLE);
+    void testAttachmentsShownForTestcases_MiscTest2(JenkinsRule j) throws Exception {
+        TestResultAction action = getTestResultActionForBuild(j, "workspace2.zip", Result.UNSTABLE);
 
         TabulatedResult classResult = getClassResult(action, "MiscTest2");
         List<TestResult> cases = new ArrayList<>(classResult.getChildren());
@@ -188,8 +188,8 @@ public class AttachmentPublisherTest {
     }
 
     @Test
-    public void testAttachmentsWithStrangeFileNames() throws Exception {
-        FreeStyleBuild build = getBuild("workspace5.zip");
+    void testAttachmentsWithStrangeFileNames(JenkinsRule j) throws Exception {
+        FreeStyleBuild build = getBuild(j, "workspace5.zip");
 
         HtmlPage page = j.createWebClient().withJavaScriptEnabled(false)
             .getPage(build, "testReport/com.example.test/SignupTest/");
@@ -203,15 +203,15 @@ public class AttachmentPublisherTest {
 
     //-------------------------------------------------------------------------------------
 
-    private void runBuildAndAssertAttachmentsExist(String className, String[] expectedFiles) throws Exception {
-        TestResultAction action = getTestResultActionForBuild("workspace2.zip", Result.UNSTABLE);
+    private static void runBuildAndAssertAttachmentsExist(JenkinsRule j, String className, String[] expectedFiles) throws Exception {
+        TestResultAction action = getTestResultActionForBuild(j, "workspace2.zip", Result.UNSTABLE);
 
         ClassResult cr = getClassResult(action, className);
         assertAttachmentsExist(cr, expectedFiles);
     }
 
     // Asserts that, for the given TestResult, the given attachments exist
-    static void assertAttachmentsExist(TestResult result, String[] expectedFiles) {
+    private static void assertAttachmentsExist(TestResult result, String[] expectedFiles) {
         AttachmentTestAction ata = result.getTestAction(AttachmentTestAction.class);
         if (expectedFiles == null) {
             assertNull(ata);
@@ -238,14 +238,14 @@ public class AttachmentPublisherTest {
         return action.getResult().byPackage(packageName).getClassResult(className);
     }
 
-    private FreeStyleBuild getBuild(String workspaceZip) throws Exception {
+    private static FreeStyleBuild getBuild(JenkinsRule j, String workspaceZip) throws Exception {
         FreeStyleProject project = j.createFreeStyleProject();
 
         DescribableList<TestDataPublisher, Descriptor<TestDataPublisher>> publishers =
-            new DescribableList<TestDataPublisher, Descriptor<TestDataPublisher>>(project);
+		        new DescribableList<>(project);
         publishers.add(new AttachmentPublisher());
 
-        project.setScm(new ExtractResourceSCM(getClass().getResource(workspaceZip)));
+        project.setScm(new ExtractResourceSCM(AttachmentPublisherTest.class.getResource(workspaceZip)));
         project.getBuildersList().add(new TouchBuilder());
         JUnitResultArchiver archiver = new JUnitResultArchiver("*.xml");
         archiver.setTestDataPublishers(publishers);
@@ -255,8 +255,8 @@ public class AttachmentPublisherTest {
     }
 
     // Creates a job from the given workspace zip file, builds it and retrieves the TestResultAction
-    private TestResultAction getTestResultActionForBuild(String workspaceZip, Result expectedStatus) throws Exception {
-        FreeStyleBuild b = getBuild(workspaceZip);
+    private static TestResultAction getTestResultActionForBuild(JenkinsRule j, String workspaceZip, Result expectedStatus) throws Exception {
+        FreeStyleBuild b = getBuild(j, workspaceZip);
         j.assertBuildStatus(expectedStatus, b);
 
         TestResultAction action = b.getAction(TestResultAction.class);
