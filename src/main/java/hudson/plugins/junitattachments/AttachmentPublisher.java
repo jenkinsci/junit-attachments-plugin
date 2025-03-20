@@ -21,10 +21,8 @@ import org.kohsuke.stapler.DataBoundSetter;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -51,10 +49,14 @@ public class AttachmentPublisher extends TestDataPublisher {
                 .child("junit-attachments");
     }
 
-    public static FilePath getAttachmentPath(FilePath root, String child) {
+    public static FilePath getAttachmentPath(FilePath root, String className, String testName) {
         FilePath dir = root;
-        if (!StringUtils.isEmpty(child)) {
-            dir = dir.child(TestObject.safe(child));
+        if (!StringUtils.isEmpty(className)) {
+            dir = dir.child(TestObject.safe(className));
+
+            if (!StringUtils.isEmpty(testName)) {
+                dir = dir.child(TestObject.safe(testName).replace("\"", ""));
+            }
         }
         return dir;
     }
@@ -120,12 +122,7 @@ public class AttachmentPublisher extends TestDataPublisher {
             }
 
             // Determine the fully-qualified test class (i.e. com.example.foo.MyTestCase)
-            String fullName = "";
-            if (!packageName.equals("(root)")) {
-                fullName += packageName;
-                fullName += ".";
-            }
-            fullName += className;
+            String fullName = getFullyQualifiedTestClassName(packageName, className);
 
             // Get the mapping of individual test -> attachment names
             Map<String, List<String>> tests = attachmentsMap.get(fullName);
@@ -133,31 +130,26 @@ public class AttachmentPublisher extends TestDataPublisher {
                 return Collections.emptyList();
             }
 
-            List<String> attachmentPaths;
-            if (testName == null) {
-                // If we're looking at the page for the test class, rather than an individual test
-                // method, then gather together the set of attachments from all of its test methods
-                LinkedHashSet<String> paths = new LinkedHashSet<String>();
-
-                // Ensure attachments are shown in the same order as the tests
-                TreeMap<String, List<String>> sortedTests = new TreeMap<String, List<String>>(tests);
-                for (List<String> testList : sortedTests.values()) {
-                    paths.addAll(testList);
-                }
-                attachmentPaths = new ArrayList<String>(paths);
-            } else {
-                attachmentPaths = tests.get(testName);
-            }
-
-            // If we didn't find anything for this test class or test method, give up
-            if (attachmentPaths == null || attachmentPaths.isEmpty()) {
-                return Collections.emptyList();
-            }
-
             // Return a single TestAction which will display the attached files
             FilePath root = getAttachmentPath(testObject.getRun());
-            AttachmentTestAction action = new AttachmentTestAction(testObject,
-                    getAttachmentPath(root, fullName), attachmentPaths);
+            AttachmentTestAction action;
+            if (testObject instanceof ClassResult) {
+                // Ensure attachments are shown in the same order as the tests
+                TreeMap<String, List<String>> sortedTests = new TreeMap<String, List<String>>(tests);
+
+                action = new TestClassAttachmentTestAction((ClassResult) testObject,
+                        getAttachmentPath(root, fullName, null), sortedTests);
+            }
+            else {
+                List<String> attachmentPaths = tests.get(testName);
+                if (attachmentPaths == null || attachmentPaths.isEmpty()) {
+                    return Collections.emptyList();
+                }
+
+                action = new TestCaseAttachmentTestAction((CaseResult) testObject,
+                        getAttachmentPath(root, fullName, testName), attachmentPaths);
+            }
+
             return Collections.<TestAction> singletonList(action);
         }
 
@@ -187,6 +179,16 @@ public class AttachmentPublisher extends TestDataPublisher {
             return this;
         }
 
+        private static String getFullyQualifiedTestClassName(String packageName, String className) {
+            String fullName = "";
+            if (!packageName.equals("(root)")) {
+                fullName += packageName;
+                fullName += ".";
+            }
+            fullName += className;
+
+            return fullName;
+        }
     }
 
     @Extension
