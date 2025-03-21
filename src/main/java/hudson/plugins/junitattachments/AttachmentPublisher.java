@@ -130,15 +130,21 @@ public class AttachmentPublisher extends TestDataPublisher {
                 return Collections.emptyList();
             }
 
-            // Return a single TestAction which will display the attached files
             FilePath root = getAttachmentPath(testObject.getRun());
+            // Historical builds might have attachments stored in class level directories
+            boolean attachmentsStoredAtClassLevel = areAttachmentsStoredAtClassLevel(root, fullName, tests);
+
+            // Return a single TestAction which will display the attached files
             AttachmentTestAction action;
             if (testObject instanceof ClassResult) {
                 // Ensure attachments are shown in the same order as the tests
                 TreeMap<String, List<String>> sortedTests = new TreeMap<String, List<String>>(tests);
 
-                action = new TestClassAttachmentTestAction((ClassResult) testObject,
-                        getAttachmentPath(root, fullName, null), sortedTests);
+                action = new TestClassAttachmentTestAction(
+                        (ClassResult) testObject,
+                        getAttachmentPath(root, fullName, null),
+                        sortedTests,
+                        attachmentsStoredAtClassLevel);
             }
             else {
                 List<String> attachmentPaths = tests.get(testName);
@@ -146,8 +152,12 @@ public class AttachmentPublisher extends TestDataPublisher {
                     return Collections.emptyList();
                 }
 
-                action = new TestCaseAttachmentTestAction((CaseResult) testObject,
-                        getAttachmentPath(root, fullName, testName), attachmentPaths);
+                FilePath attachmentsDirectory = attachmentsStoredAtClassLevel ?
+                        getAttachmentPath(root, fullName, null) :
+                        getAttachmentPath(root, fullName, testName);
+
+                action = new TestCaseAttachmentTestAction(
+                        (CaseResult) testObject, attachmentsDirectory, attachmentPaths);
             }
 
             return Collections.<TestAction> singletonList(action);
@@ -188,6 +198,26 @@ public class AttachmentPublisher extends TestDataPublisher {
             fullName += className;
 
             return fullName;
+        }
+
+        private boolean areAttachmentsStoredAtClassLevel(
+                FilePath root, String fullName, Map<String, List<String>> classAttachments) {
+
+            for (Map.Entry<String,List<String>> entry : classAttachments.entrySet()) {
+                for (String attachment : entry.getValue()) {
+                    FilePath testCaseAttachmentsDirectory = getAttachmentPath(root, fullName, entry.getKey());
+                    var testCaseAttachmentPath = new FilePath(testCaseAttachmentsDirectory, attachment);
+                    try {
+                        if (testCaseAttachmentPath.exists()) {
+                            return false;
+                        }
+                    } catch (IOException | InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
+
+            return  true;
         }
     }
 
