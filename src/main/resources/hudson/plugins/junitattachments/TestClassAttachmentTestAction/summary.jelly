@@ -1,0 +1,28 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core">
+
+	<tr><td>
+	<h3>${%Attachments}</h3>
+	<table class="jenkins-table" id="attachments">
+		<thead>
+			<tr>
+				<th class="pane-header">${%Test Case}</th>
+				<th class="pane-header">${%Files}</th>
+			</tr>
+		</thead>
+		<j:forEach var="entry" items="${it.attachments.entrySet()}">
+			<j:forEach var="file" items="${entry.value}">
+				<tr>
+					<td class="pane">${entry.key}</td>
+					<td class="pane">
+						<j:set var="fileUrl" value="${it.getUrl(entry.key, file)}" />
+						<a class="${it.isImageFile(file) ? 'gallery' : ''}"
+							 title="${fileUrl}"
+							 href="${fileUrl}">${file}</a>
+					</td>
+				</tr>
+			</j:forEach>
+		</j:forEach>
+	</table>
+	</td></tr>
+</j:jelly>

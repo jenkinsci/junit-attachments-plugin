@@ -107,7 +107,7 @@ public class GetTestDataMethodObject {
         for (Map.Entry<String, String> report : reports.entrySet()) {
             final String className = report.getKey();
             final FilePath reportFile = workspace.child(report.getValue());
-            final FilePath target = AttachmentPublisher.getAttachmentPath(attachmentsStorage, className);
+            final FilePath target = AttachmentPublisher.getAttachmentPath(attachmentsStorage, className, null);
             attachFilesForReport(className, reportFile, target);
             attachStdInAndOut(className, reportFile);
         }
@@ -241,17 +241,12 @@ public class GetTestDataMethodObject {
         }
 
         String filename = src.getName();
-        boolean fileAlreadyCopied = containsFilename(tests, filename);
-        if (!fileAlreadyCopied) {
+        if (!testFiles.contains(filename)) {
             // Only need to copy the file if it hasn't already been handled for this test class
-            FilePath target = AttachmentPublisher.getAttachmentPath(attachmentsStorage, className);
+            FilePath target = AttachmentPublisher.getAttachmentPath(attachmentsStorage, className, testName);
             target.mkdirs();
             FilePath dst = new FilePath(target, filename);
             src.copyTo(dst);
-        }
-
-        // Add the file to the list of attachments for this test method, if it wasn't already
-        if (!testFiles.contains(filename)) {
             testFiles.add(filename);
         }
     }

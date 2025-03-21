@@ -1,23 +1,18 @@
 package hudson.plugins.junitattachments;
 
 import hudson.FilePath;
-import hudson.Util;
 import hudson.model.DirectoryBrowserSupport;
 import hudson.tasks.junit.TestAction;
 import hudson.tasks.test.TestObject;
-import java.util.List;
-import jenkins.model.Jenkins;
 
-public class AttachmentTestAction extends TestAction {
+public abstract class AttachmentTestAction extends TestAction {
 
-	private final FilePath storage;
-	private final List<String> attachments;
-	private final TestObject testObject;
+	final FilePath storage;
+	final TestObject testObject;
 
-	public AttachmentTestAction(TestObject testObject, FilePath storage, List<String> attachments) {
+	public AttachmentTestAction(TestObject testObject, FilePath storage) {
 		this.storage = storage;
 		this.testObject = testObject;
-		this.attachments = attachments;
 	}
 
 	public String getDisplayName() {
@@ -36,20 +31,6 @@ public class AttachmentTestAction extends TestAction {
 		return new DirectoryBrowserSupport(this, storage, "Attachments", "package.gif", true);
 	}
 
-	@Override
-	public String annotate(String text) {
-		String url = Jenkins.get().getRootUrl() + testObject.getUrl() + "/attachments/";
-		for (String attachment : attachments) {
-			text = text.replace(attachment, "<a href=\"" + url + attachment
-					+ "\">" + attachment + "</a>");
-		}
-		return text;
-	}
-
-	public List<String> getAttachments() {
-		return attachments;
-	}
-
 	public TestObject getTestObject() {
 		return testObject;
 	}
@@ -57,9 +38,4 @@ public class AttachmentTestAction extends TestAction {
 	public static boolean isImageFile(String filename) {
 		return filename.matches("(?i).+\\.(gif|jpe?g|png)$");
 	}
-
-	public static String getUrl(String filename) {
-		return "attachments/" + Util.rawEncode(filename);
-	}
-
 }

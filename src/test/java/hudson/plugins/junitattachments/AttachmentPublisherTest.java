@@ -16,6 +16,7 @@ import hudson.model.FreeStyleProject;
 import hudson.model.Result;
 import hudson.tasks.Builder;
 import hudson.tasks.junit.ClassResult;
+import hudson.tasks.junit.CaseResult;
 import hudson.tasks.junit.JUnitResultArchiver;
 import hudson.tasks.junit.PackageResult;
 import hudson.tasks.junit.TestDataPublisher;
@@ -30,6 +31,8 @@ import java.util.Collections;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
+import java.util.Map;
+
 import org.jvnet.hudson.test.ExtractResourceSCM;
 import org.jvnet.hudson.test.JenkinsRule;
 import org.jvnet.hudson.test.junit.jupiter.WithJenkins;
@@ -46,16 +49,18 @@ class AttachmentPublisherTest {
 
         ClassResult cr = getClassResult(action, "test.foo.bar", "DefaultIntegrationTest");
 
-        AttachmentTestAction ata = cr.getTestAction(AttachmentTestAction.class);
+        TestClassAttachmentTestAction ata = cr.getTestAction(TestClassAttachmentTestAction.class);
         assertNotNull(ata);
 
-        final List<String> attachments = ata.getAttachments();
-        assertNotNull(attachments);
-        assertEquals(2, attachments.size());
+        final Map<String, List<String>> attachmentsByTestCase = ata.getAttachments();
+        assertNotNull(attachmentsByTestCase);
+        assertEquals(1, attachmentsByTestCase.size());
 
-        Collections.sort(attachments);
-        assertEquals("file", attachments.get(0));
-        assertEquals("test.foo.bar.DefaultIntegrationTest-output.txt", attachments.get(1));
+        List<String> testCaseAttachments = attachmentsByTestCase.get("");
+        assertEquals(2, testCaseAttachments.size());
+        Collections.sort(testCaseAttachments);
+        assertEquals("file", testCaseAttachments.get(0));
+        assertEquals("test.foo.bar.DefaultIntegrationTest-output.txt", testCaseAttachments.get(1));
     }
 
     @Test
@@ -119,7 +124,7 @@ class AttachmentPublisherTest {
     @Test
     void testAttachmentsShownForClass_LoginTest(JenkinsRule j) throws Exception {
         // There should be 2 attachments from the test methods
-        String[] expectedFiles = { "login-reset", "login-password" };
+        String[] expectedFiles = { "login-reset", "login-password", "login-reset" };
         runBuildAndAssertAttachmentsExist(j, "LoginTest", expectedFiles);
     }
 
@@ -212,7 +217,14 @@ class AttachmentPublisherTest {
 
     // Asserts that, for the given TestResult, the given attachments exist
     private static void assertAttachmentsExist(TestResult result, String[] expectedFiles) {
-        AttachmentTestAction ata = result.getTestAction(AttachmentTestAction.class);
+        AttachmentTestAction ata = null;
+        if (result instanceof ClassResult) {
+            ata = result.getTestAction(AttachmentTestAction.class);
+        }
+        else if (result instanceof CaseResult) {
+            ata = result.getTestAction(AttachmentTestAction.class);
+        }
+
         if (expectedFiles == null) {
             assertNull(ata);
             return;
@@ -220,7 +232,18 @@ class AttachmentPublisherTest {
         assertNotNull(ata);
 
         // Assert that attachments exist for this TestResult
-        List<String> attachments = ata.getAttachments();
+        List<String> attachments;
+        if (result instanceof ClassResult) {
+            Map<String, List<String>> attachmentsByTestCase = ((TestClassAttachmentTestAction)ata).getAttachments();
+            attachments = new ArrayList<>();
+            for (List<String> list : attachmentsByTestCase.values()) {
+                attachments.addAll(list);
+            }
+        }
+        else {
+            attachments = ((TestCaseAttachmentTestAction)ata).getAttachments();
+        }
+
         assertNotNull(attachments);
         assertEquals(expectedFiles.length, attachments.size());
 
