@@ -41,10 +41,12 @@ import org.jvnet.hudson.test.junit.jupiter.WithJenkins;
 
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Paths;
 import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import static hudson.plugins.junitattachments.AttachmentPublisherTest.getClassResult;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -61,16 +63,18 @@ class AttachmentPublisherPipelineTest {
 
         ClassResult cr = getClassResult(action, "test.foo.bar", "DefaultIntegrationTest");
 
-        AttachmentTestAction ata = cr.getTestAction(AttachmentTestAction.class);
+        TestClassAttachmentTestAction ata = cr.getTestAction(TestClassAttachmentTestAction.class);
         assertNotNull(ata);
 
-        final List<String> attachments = ata.getAttachments();
-        assertNotNull(attachments);
-        assertEquals(2, attachments.size());
+        Map<String, List<String>> attachmentsByTestCase = ata.getAttachments();
+        assertNotNull(attachmentsByTestCase);
+        assertEquals(1, attachmentsByTestCase.size());
 
-        Collections.sort(attachments);
-        assertEquals("file", attachments.get(0));
-        assertEquals("test.foo.bar.DefaultIntegrationTest-output.txt", attachments.get(1));
+        List<String> testCaseAttachments = attachmentsByTestCase.get("");
+        assertEquals(2, testCaseAttachments.size());
+        Collections.sort(testCaseAttachments);
+        assertEquals("file", testCaseAttachments.get(0));
+        assertEquals("test.foo.bar.DefaultIntegrationTest-output.txt", testCaseAttachments.get(1));
     }
 
     @Issue("JENKINS-36504")
@@ -86,7 +90,7 @@ class AttachmentPublisherPipelineTest {
         assertNotNull(failingCase);
         assertEquals("Timed out after 10 seconds", failingCase.annotate(failingCase.getErrorDetails()));
 
-        AttachmentTestAction ata = failingCase.getTestAction(AttachmentTestAction.class);
+        TestCaseAttachmentTestAction ata = failingCase.getTestAction(TestCaseAttachmentTestAction.class);
         assertNotNull(ata);
 
         final List<String> attachments = ata.getAttachments();
@@ -103,20 +107,23 @@ class AttachmentPublisherPipelineTest {
 
         ClassResult cr = getClassResult(action, "test.foo.bar", "DefaultIntegrationTest");
         {
-            AttachmentTestAction ata = cr.getTestAction(AttachmentTestAction.class);
+            TestClassAttachmentTestAction ata = cr.getTestAction(TestClassAttachmentTestAction.class);
             assertNotNull(ata);
-            final List<String> attachments = ata.getAttachments();
-            assertNotNull(attachments);
-            assertEquals(3, attachments.size());
-            Collections.sort(attachments);
-            assertEquals("attachment.txt", attachments.get(0));
-            assertEquals("file", attachments.get(1));
-            assertEquals("test.foo.bar.DefaultIntegrationTest-output.txt", attachments.get(2));
+            final Map<String, List<String>> attachmentsByTestCase = ata.getAttachments();
+            assertNotNull(attachmentsByTestCase);
+            assertEquals(2, attachmentsByTestCase.size());
+
+            List<String> testClassAttachments = attachmentsByTestCase.get("");
+            assertEquals(3, testClassAttachments.size());
+            Collections.sort(testClassAttachments);
+            assertEquals(Paths.get("experimentsWithJavaElements", "attachment.txt").toString(), testClassAttachments.get(0));
+            assertEquals("file", testClassAttachments.get(1));
+            assertEquals("test.foo.bar.DefaultIntegrationTest-output.txt", testClassAttachments.get(2));
         }
 
         CaseResult caseResult = cr.getCaseResult("experimentsWithJavaElements");
         {
-            AttachmentTestAction caseAta = caseResult.getTestAction(AttachmentTestAction.class);
+            TestCaseAttachmentTestAction caseAta = caseResult.getTestAction(TestCaseAttachmentTestAction.class);
             assertNotNull(caseAta);
             final List<String> caseAttachments = caseAta.getAttachments();
             assertNotNull(caseAttachments);
@@ -155,7 +162,6 @@ class AttachmentPublisherPipelineTest {
         }
 
         return fileContents;
-
     }
 
 }
