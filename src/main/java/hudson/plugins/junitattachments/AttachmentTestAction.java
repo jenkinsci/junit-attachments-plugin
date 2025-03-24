@@ -20,7 +20,7 @@ public abstract class AttachmentTestAction extends TestAction {
 	}
 
 	public String getIconFileName() {
-		return "package.gif";
+		return "symbol-cube";
 	}
 
 	public String getUrlName() {
@@ -28,7 +28,7 @@ public abstract class AttachmentTestAction extends TestAction {
 	}
 
 	public DirectoryBrowserSupport doDynamic() {
-		return new DirectoryBrowserSupport(this, storage, "Attachments", "package.gif", true);
+		return new DirectoryBrowserSupport(this, storage, "Attachments", "symbol-cube", true);
 	}
 
 	public TestObject getTestObject() {
