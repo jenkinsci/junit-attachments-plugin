@@ -3,4 +3,7 @@
     <f:entry title="Show attachments at test class level" field="showAttachmentsAtClassLevel">
         <f:checkbox checked="${it.showAttachmentsAtClassLevel}"/>
     </f:entry>
+    <f:entry title="Keep list of attachments in standard output" field="showAttachmentsInStdOut">
+        <f:checkbox checked="${it.showAttachmentsInStdOut}"/>
+    </f:entry>
 </j:jelly>
