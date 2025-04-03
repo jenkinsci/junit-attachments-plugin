@@ -30,6 +30,7 @@ import java.util.TreeMap;
 public class AttachmentPublisher extends TestDataPublisher {
 
     private Boolean showAttachmentsAtClassLevel = true;
+    private Boolean showAttachmentsInStdOut = true;
 
     @DataBoundConstructor
     public AttachmentPublisher() {
@@ -39,9 +40,18 @@ public class AttachmentPublisher extends TestDataPublisher {
         return showAttachmentsAtClassLevel != null ? showAttachmentsAtClassLevel : true;
     }
 
+    public boolean isShowAttachmentsInStdOut() {
+        return showAttachmentsInStdOut != null ? showAttachmentsInStdOut : true;
+    }
+
     @DataBoundSetter
     public void setShowAttachmentsAtClassLevel(Boolean showAttachmentsAtClassLevel) {
         this.showAttachmentsAtClassLevel = showAttachmentsAtClassLevel;
+    }
+
+    @DataBoundSetter
+    public void setShowAttachmentsInStdOut(Boolean showAttachmentsInStdOut) {
+        this.showAttachmentsInStdOut = showAttachmentsInStdOut;
     }
 
     public static FilePath getAttachmentPath(Run<?, ?> build) {
@@ -72,7 +82,7 @@ public class AttachmentPublisher extends TestDataPublisher {
             return null;
         }
 
-        return new Data(attachments, isShowAttachmentsAtClassLevel());
+        return new Data(attachments, isShowAttachmentsAtClassLevel(), isShowAttachmentsInStdOut());
     }
 
     public static class Data extends TestResultAction.Data {
@@ -81,6 +91,7 @@ public class AttachmentPublisher extends TestDataPublisher {
         private transient Map<String, List<String>> attachments;
         private Map<String, Map<String, List<String>>> attachmentsMap;
         private Boolean showAttachmentsAtClassLevel;
+        private Boolean showAttachmentsInStdOut;
 
         /**
          * @param attachmentsMap { fully-qualified test class name → { test method name → [ attachment file name ] } }
@@ -88,9 +99,11 @@ public class AttachmentPublisher extends TestDataPublisher {
          */
         public Data(
                 Map<String, Map<String, List<String>>> attachmentsMap,
-                Boolean showAttachmentsAtClassLevel) {
+                Boolean showAttachmentsAtClassLevel,
+                Boolean showAttachmentsInStdOut) {
             this.attachmentsMap = attachmentsMap;
             this.showAttachmentsAtClassLevel = showAttachmentsAtClassLevel;
+            this.showAttachmentsInStdOut = showAttachmentsInStdOut;
         }
 
         @Override
@@ -157,7 +170,7 @@ public class AttachmentPublisher extends TestDataPublisher {
                         getAttachmentPath(root, fullName, testName);
 
                 action = new TestCaseAttachmentTestAction(
-                        (CaseResult) testObject, attachmentsDirectory, attachmentPaths);
+                        (CaseResult) testObject, attachmentsDirectory, attachmentPaths, showAttachmentsInStdOut);
             }
 
             return Collections.<TestAction> singletonList(action);
@@ -167,6 +180,10 @@ public class AttachmentPublisher extends TestDataPublisher {
         private Object readResolve() {
             if (this.showAttachmentsAtClassLevel == null) {
                 this.showAttachmentsAtClassLevel = true;
+            }
+
+            if (this.showAttachmentsInStdOut == null) {
+                this.showAttachmentsInStdOut = true;
             }
 
             if (attachments != null && attachmentsMap == null) {
