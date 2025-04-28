@@ -319,7 +319,11 @@ public class GetTestDataMethodObject {
 
         Path commonBase = Paths.get(iterator.next().getRemote()).toAbsolutePath().normalize();
         if (filePaths.size() == 1) {
-            return new FilePath(commonBase.getParent().toFile());
+            Path parent = commonBase.getParent();
+            if (parent == null) {
+                throw new IllegalStateException("Cannot determine base directory because the file path is a root path: " + commonBase);
+            }
+            return new FilePath(parent.toFile());
         }
 
         while (iterator.hasNext()) {
@@ -340,7 +344,17 @@ public class GetTestDataMethodObject {
         while (i < minCount && p1.getName(i).equals(p2.getName(i))) {
             i++;
         }
-        return i == 0 ? null : p1.getRoot().resolve(p1.subpath(0, i));
+
+        if (i == 0) {
+            return null;
+        }
+
+        Path root = p1.getRoot();
+        if (root == null) {
+            throw new IllegalArgumentException("Expected absolute paths but got a relative path: " + p1);
+        }
+
+        return root.resolve(p1.subpath(0, i));
     }
 
 }
