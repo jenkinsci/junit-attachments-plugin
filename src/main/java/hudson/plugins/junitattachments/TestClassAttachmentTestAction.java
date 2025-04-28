@@ -29,9 +29,9 @@ public class TestClassAttachmentTestAction extends AttachmentTestAction {
 
     public String getUrl(String testCase, String filename) {
         if (this.attachmentsStoredAtClassLevel) {
-            return "attachments/" + Util.rawEncode(filename);
+            return "attachments/" + Util.rawEncode(filename.replace('\\', '/'));
         }
 
-        return "attachments/" + Util.rawEncode(testCase) + "/" + Util.rawEncode(filename);
+        return "attachments/" + Util.rawEncode(testCase) + "/" + Util.rawEncode(filename.replace('\\', '/'));
     }
 }
