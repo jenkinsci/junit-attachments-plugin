@@ -106,16 +106,16 @@ public class GetTestDataMethodObject {
      *
      */
     public Map<String, Map<String, List<String>>> getAttachments(
-            boolean maintainAttachmentsDirectoryStructure) throws IllegalStateException, IOException, InterruptedException {
+            boolean keepAttachmentsDirectories) throws IllegalStateException, IOException, InterruptedException {
         // build a map of className -> result xml file
-        Map<String, String> reports = getReports(maintainAttachmentsDirectoryStructure);
+        Map<String, String> reports = getReports(keepAttachmentsDirectories);
         LOG.fine("reports: " + reports);
         for (Map.Entry<String, String> report : reports.entrySet()) {
             final String className = report.getKey();
             final FilePath reportFile = workspace.child(report.getValue());
             final FilePath target = AttachmentPublisher.getAttachmentPath(attachmentsStorage, className, null);
             attachFilesForReport(className, reportFile, target);
-            attachStdInAndOut(className, reportFile, maintainAttachmentsDirectoryStructure);
+            attachStdInAndOut(className, reportFile, keepAttachmentsDirectories);
         }
         return attachments;
     }
@@ -142,7 +142,7 @@ public class GetTestDataMethodObject {
     /**
      * Creates a map of the all classNames to their corresponding result file.
      */
-    private Map<String,String> getReports(boolean maintainAttachmentsDirectoryStructure)
+    private Map<String,String> getReports(boolean keepAttachmentsDirectories)
             throws IOException, InterruptedException {
 
         Map<String,String> reports = new HashMap<String, String>();
@@ -174,7 +174,7 @@ public class GetTestDataMethodObject {
                     testClassName,
                     testCaseName,
                     findAttachmentsInOutput(testClassName, caseStdout + "\n" + caseStderr),
-                    maintainAttachmentsDirectoryStructure);
+                    keepAttachmentsDirectories);
             }
 
             // Capture stdout and stderr for the testsuite as a whole, if they exist
@@ -183,12 +183,12 @@ public class GetTestDataMethodObject {
             captureAttachments(
                 suiteName,
                 findAttachmentsInOutput(suiteName, suiteStdout),
-                maintainAttachmentsDirectoryStructure);
+                keepAttachmentsDirectories);
 
             captureAttachments(
                 suiteName,
                 findAttachmentsInOutput(suiteName, suiteStderr),
-                maintainAttachmentsDirectoryStructure);
+                keepAttachmentsDirectories);
         }
         return reports;
     }
@@ -234,7 +234,7 @@ public class GetTestDataMethodObject {
     private static final Pattern ATTACHMENT_PATTERN = Pattern.compile("\\[\\[ATTACHMENT\\|.+\\]\\]");
 
     @SuppressFBWarnings(value = "NP_NULL_ON_SOME_PATH_FROM_RETURN_VALUE", justification = "TODO needs triage")
-    private void attachStdInAndOut(String className, FilePath reportFile, boolean maintainAttachmentsDirectoryStructure)
+    private void attachStdInAndOut(String className, FilePath reportFile, boolean keepAttachmentsDirectories)
             throws IOException, InterruptedException {
         final FilePath stdInAndOut = reportFile.getParent().child(className + "-output.txt");
         LOG.fine("stdInAndOut: " + stdInAndOut.absolutize());
@@ -242,7 +242,7 @@ public class GetTestDataMethodObject {
             captureAttachments(
                     className,
                     new HashSet<FilePath>(List.of(stdInAndOut)),
-                    maintainAttachmentsDirectoryStructure);
+                    keepAttachmentsDirectories);
         }
     }
 
@@ -255,15 +255,15 @@ public class GetTestDataMethodObject {
     private void captureAttachments(
             String className,
             Set<FilePath> filePaths,
-            boolean maintainAttachmentsDirectoryStructure) throws IOException, InterruptedException {
-        captureAttachments(className, null, filePaths, maintainAttachmentsDirectoryStructure);
+            boolean keepAttachmentsDirectories) throws IOException, InterruptedException {
+        captureAttachments(className, null, filePaths, keepAttachmentsDirectories);
     }
 
     private void captureAttachments(
             String className,
             String testName,
             Set<FilePath> filePaths,
-            boolean maintainAttachmentsDirectoryStructure) throws IOException, InterruptedException {
+            boolean keepAttachmentsDirectories) throws IOException, InterruptedException {
 
         if (filePaths == null || filePaths.isEmpty()) {
             return;
@@ -272,7 +272,7 @@ public class GetTestDataMethodObject {
         Map<String, List<String>> tests = attachments.computeIfAbsent(className, k -> new HashMap<String, List<String>>());
         List<String> testFiles = tests.computeIfAbsent(Util.fixNull(testName), k -> new ArrayList<String>());
 
-        var baseDirectory = maintainAttachmentsDirectoryStructure ?
+        var baseDirectory = keepAttachmentsDirectories ?
                 getCommonBaseDirectory(filePaths) :
                 null;
 
@@ -280,7 +280,7 @@ public class GetTestDataMethodObject {
         target.mkdirs();
 
         for (FilePath filePath : filePaths) {
-            String relativeFilePath = maintainAttachmentsDirectoryStructure ?
+            String relativeFilePath = keepAttachmentsDirectories ?
                     getRelativePath(baseDirectory, filePath) :
                     filePath.getName();
 

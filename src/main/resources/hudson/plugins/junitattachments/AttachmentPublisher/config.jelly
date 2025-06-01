@@ -7,7 +7,7 @@
         <f:checkbox checked="${it.showAttachmentsInStdOut}"/>
     </f:entry>
     <f:entry title="Maintain the original directory structure of the attachments for each test case"
-             field="maintainAttachmentsDirectoryStructure">
-        <f:checkbox checked="${it.maintainAttachmentsDirectoryStructure}"/>
+             field="keepAttachmentsDirectories">
+        <f:checkbox checked="${it.keepAttachmentsDirectories}"/>
     </f:entry>
 </j:jelly>

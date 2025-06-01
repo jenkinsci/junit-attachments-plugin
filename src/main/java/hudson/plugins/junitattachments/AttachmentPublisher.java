@@ -31,7 +31,7 @@ public class AttachmentPublisher extends TestDataPublisher {
 
     private Boolean showAttachmentsAtClassLevel = true;
     private Boolean showAttachmentsInStdOut = true;
-    private Boolean maintainAttachmentsDirectoryStructure = false;
+    private Boolean keepAttachmentsDirectories = false;
 
     @DataBoundConstructor
     public AttachmentPublisher() {
@@ -45,8 +45,8 @@ public class AttachmentPublisher extends TestDataPublisher {
         return showAttachmentsInStdOut != null ? showAttachmentsInStdOut : true;
     }
 
-    public boolean isMaintainAttachmentsDirectoryStructure() {
-        return maintainAttachmentsDirectoryStructure != null ? maintainAttachmentsDirectoryStructure : false;
+    public boolean isKeepAttachmentsDirectories() {
+        return keepAttachmentsDirectories != null ? keepAttachmentsDirectories : false;
     }
 
     @DataBoundSetter
@@ -60,8 +60,8 @@ public class AttachmentPublisher extends TestDataPublisher {
     }
 
     @DataBoundSetter
-    public void setMaintainAttachmentsDirectoryStructure(Boolean maintainAttachmentsDirectoryStructure) {
-        this.maintainAttachmentsDirectoryStructure = maintainAttachmentsDirectoryStructure;
+    public void setKeepAttachmentsDirectories(Boolean keepAttachmentsDirectories) {
+        this.keepAttachmentsDirectories = keepAttachmentsDirectories;
     }
 
     public static FilePath getAttachmentPath(Run<?, ?> build) {
@@ -86,7 +86,7 @@ public class AttachmentPublisher extends TestDataPublisher {
                                    TaskListener listener, TestResult testResult) throws IOException,
             InterruptedException {
         final GetTestDataMethodObject methodObject = new GetTestDataMethodObject(build, workspace, launcher, listener, testResult);
-        Map<String, Map<String, List<String>>> attachments = methodObject.getAttachments(isMaintainAttachmentsDirectoryStructure());
+        Map<String, Map<String, List<String>>> attachments = methodObject.getAttachments(isKeepAttachmentsDirectories());
 
         if (attachments.isEmpty()) {
             return null;
@@ -96,7 +96,7 @@ public class AttachmentPublisher extends TestDataPublisher {
             attachments,
             isShowAttachmentsAtClassLevel(),
             isShowAttachmentsInStdOut(),
-            isMaintainAttachmentsDirectoryStructure());
+            isKeepAttachmentsDirectories());
     }
 
     public static class Data extends TestResultAction.Data {
@@ -106,7 +106,7 @@ public class AttachmentPublisher extends TestDataPublisher {
         private Map<String, Map<String, List<String>>> attachmentsMap;
         private Boolean showAttachmentsAtClassLevel;
         private Boolean showAttachmentsInStdOut;
-        private Boolean maintainAttachmentsDirectoryStructure;
+        private Boolean keepAttachmentsDirectories;
 
         /**
          * @param attachmentsMap { fully-qualified test class name → { test method name → [ attachment file name ] } }
@@ -116,11 +116,11 @@ public class AttachmentPublisher extends TestDataPublisher {
                 Map<String, Map<String, List<String>>> attachmentsMap,
                 Boolean showAttachmentsAtClassLevel,
                 Boolean showAttachmentsInStdOut,
-                Boolean maintainAttachmentsDirectoryStructure) {
+                Boolean keepAttachmentsDirectories) {
             this.attachmentsMap = attachmentsMap;
             this.showAttachmentsAtClassLevel = showAttachmentsAtClassLevel;
             this.showAttachmentsInStdOut = showAttachmentsInStdOut;
-            this.maintainAttachmentsDirectoryStructure = maintainAttachmentsDirectoryStructure;
+            this.keepAttachmentsDirectories = keepAttachmentsDirectories;
         }
 
         @Override
@@ -203,8 +203,8 @@ public class AttachmentPublisher extends TestDataPublisher {
                 this.showAttachmentsInStdOut = true;
             }
 
-            if (this.maintainAttachmentsDirectoryStructure == null) {
-                this.maintainAttachmentsDirectoryStructure = false;
+            if (this.keepAttachmentsDirectories == null) {
+                this.keepAttachmentsDirectories = false;
             }
 
             if (attachments != null && attachmentsMap == null) {
