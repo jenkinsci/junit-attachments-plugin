@@ -2,7 +2,6 @@ package hudson.plugins.junitattachments;
 
 import hudson.model.Run;
 import hudson.model.TaskListener;
-import org.apache.commons.lang.StringUtils;
 import org.jenkinsci.Symbol;
 import org.kohsuke.stapler.DataBoundConstructor;
 
@@ -61,10 +60,10 @@ public class AttachmentPublisher extends TestDataPublisher {
 
     public static FilePath getAttachmentPath(FilePath root, String className, String testName) {
         FilePath dir = root;
-        if (!StringUtils.isEmpty(className)) {
+        if (className != null && !className.isEmpty()) {
             dir = dir.child(TestObject.safe(className));
 
-            if (!StringUtils.isEmpty(testName)) {
+            if (testName != null && !testName.isEmpty()) {
                 dir = dir.child(TestObject.safe(testName).replace("\"", ""));
             }
         }
