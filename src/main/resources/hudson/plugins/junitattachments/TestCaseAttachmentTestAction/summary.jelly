@@ -1,17 +1,14 @@
 <?jelly escape-by-default='true'?>
 <j:jelly xmlns:j="jelly:core">
 
-	<tr><td>
-	<h3>${%Attachments}</h3>
-	<table class="jenkins-table" id="attachments">
+	<h1>${%Attachments}</h1>
+	<table class="jenkins-table sortable" id="attachments">
 		<thead>
-			<tr>
-				<th class="pane-header">${%Files}</th>
-			</tr>
+			<th>${%Files}</th>
 		</thead>
 		<j:forEach var="attachment" items="${it.attachments}">
 			<tr>
-				<td class="pane">
+				<td>
 					<a class="${it.isImageFile(attachment) ? 'gallery' : ''}"
 						 title="${attachment}"
 						 href="${it.getUrl(attachment)}">${attachment}</a>
@@ -19,5 +16,5 @@
 			</tr>
 		</j:forEach>
 	</table>
-	</td></tr>
+
 </j:jelly>
