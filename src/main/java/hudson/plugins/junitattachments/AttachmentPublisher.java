@@ -30,6 +30,7 @@ public class AttachmentPublisher extends TestDataPublisher {
 
     private Boolean showAttachmentsAtClassLevel = true;
     private Boolean showAttachmentsInStdOut = true;
+    private Boolean keepAttachmentsDirectories = false;
 
     @DataBoundConstructor
     public AttachmentPublisher() {
@@ -43,6 +44,10 @@ public class AttachmentPublisher extends TestDataPublisher {
         return showAttachmentsInStdOut != null ? showAttachmentsInStdOut : true;
     }
 
+    public boolean isKeepAttachmentsDirectories() {
+        return keepAttachmentsDirectories != null ? keepAttachmentsDirectories : false;
+    }
+
     @DataBoundSetter
     public void setShowAttachmentsAtClassLevel(Boolean showAttachmentsAtClassLevel) {
         this.showAttachmentsAtClassLevel = showAttachmentsAtClassLevel;
@@ -51,6 +56,11 @@ public class AttachmentPublisher extends TestDataPublisher {
     @DataBoundSetter
     public void setShowAttachmentsInStdOut(Boolean showAttachmentsInStdOut) {
         this.showAttachmentsInStdOut = showAttachmentsInStdOut;
+    }
+
+    @DataBoundSetter
+    public void setKeepAttachmentsDirectories(Boolean keepAttachmentsDirectories) {
+        this.keepAttachmentsDirectories = keepAttachmentsDirectories;
     }
 
     public static FilePath getAttachmentPath(Run<?, ?> build) {
@@ -75,13 +85,17 @@ public class AttachmentPublisher extends TestDataPublisher {
                                    TaskListener listener, TestResult testResult) throws IOException,
             InterruptedException {
         final GetTestDataMethodObject methodObject = new GetTestDataMethodObject(build, workspace, launcher, listener, testResult);
-        Map<String, Map<String, List<String>>> attachments = methodObject.getAttachments();
+        Map<String, Map<String, List<String>>> attachments = methodObject.getAttachments(isKeepAttachmentsDirectories());
 
         if (attachments.isEmpty()) {
             return null;
         }
 
-        return new Data(attachments, isShowAttachmentsAtClassLevel(), isShowAttachmentsInStdOut());
+        return new Data(
+            attachments,
+            isShowAttachmentsAtClassLevel(),
+            isShowAttachmentsInStdOut(),
+            isKeepAttachmentsDirectories());
     }
 
     public static class Data extends TestResultAction.Data {
@@ -91,6 +105,7 @@ public class AttachmentPublisher extends TestDataPublisher {
         private Map<String, Map<String, List<String>>> attachmentsMap;
         private Boolean showAttachmentsAtClassLevel;
         private Boolean showAttachmentsInStdOut;
+        private Boolean keepAttachmentsDirectories;
 
         /**
          * @param attachmentsMap { fully-qualified test class name → { test method name → [ attachment file name ] } }
@@ -99,10 +114,12 @@ public class AttachmentPublisher extends TestDataPublisher {
         public Data(
                 Map<String, Map<String, List<String>>> attachmentsMap,
                 Boolean showAttachmentsAtClassLevel,
-                Boolean showAttachmentsInStdOut) {
+                Boolean showAttachmentsInStdOut,
+                Boolean keepAttachmentsDirectories) {
             this.attachmentsMap = attachmentsMap;
             this.showAttachmentsAtClassLevel = showAttachmentsAtClassLevel;
             this.showAttachmentsInStdOut = showAttachmentsInStdOut;
+            this.keepAttachmentsDirectories = keepAttachmentsDirectories;
         }
 
         @Override
@@ -183,6 +200,10 @@ public class AttachmentPublisher extends TestDataPublisher {
 
             if (this.showAttachmentsInStdOut == null) {
                 this.showAttachmentsInStdOut = true;
+            }
+
+            if (this.keepAttachmentsDirectories == null) {
+                this.keepAttachmentsDirectories = false;
             }
 
             if (attachments != null && attachmentsMap == null) {
