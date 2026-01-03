@@ -6,4 +6,8 @@
     <f:entry title="Keep list of attachments in standard output" field="showAttachmentsInStdOut">
         <f:checkbox checked="${it.showAttachmentsInStdOut}"/>
     </f:entry>
+    <f:entry title="Maintain the original directory structure of the attachments for each test case"
+             field="keepAttachmentsDirectories">
+        <f:checkbox checked="${it.keepAttachmentsDirectories}"/>
+    </f:entry>
 </j:jelly>
