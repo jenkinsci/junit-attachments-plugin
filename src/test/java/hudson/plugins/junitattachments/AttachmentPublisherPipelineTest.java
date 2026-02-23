@@ -196,8 +196,7 @@ class AttachmentPublisherPipelineTest {
                 .filter(TestCaseAttachmentTestAction.class::isInstance)
                 .map(TestCaseAttachmentTestAction.class::cast)
                 .collect(Collectors.toList());
-        // TODO there should be only one TestCaseAttachmentTestAction per CaseResult but currently we for each time a test with the same classname.testname was invoked
-        // assertThat(testCaseAttachmentTestActions, hasSize(1));
+        assertThat(testCaseAttachmentTestActions, hasSize(1));
 
         TestCaseAttachmentTestAction testAttachmentAction = testCaseAttachmentTestActions.get(0);
         assertThat(testAttachmentAction.getAttachments(), hasSize(1));

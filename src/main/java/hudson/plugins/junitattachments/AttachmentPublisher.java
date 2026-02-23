@@ -81,7 +81,7 @@ public class AttachmentPublisher extends TestDataPublisher {
             return null;
         }
 
-        return new Data(attachments, isShowAttachmentsAtClassLevel(), isShowAttachmentsInStdOut());
+        return new Data(attachments, isShowAttachmentsAtClassLevel(), isShowAttachmentsInStdOut(), methodObject.getEnclosingBlocks());
     }
 
     public static class Data extends TestResultAction.Data {
@@ -91,18 +91,22 @@ public class AttachmentPublisher extends TestDataPublisher {
         private Map<String, Map<String, List<String>>> attachmentsMap;
         private Boolean showAttachmentsAtClassLevel;
         private Boolean showAttachmentsInStdOut;
+        private List<String> enclosingBlocks;
 
         /**
          * @param attachmentsMap { fully-qualified test class name → { test method name → [ attachment file name ] } }
          * @param showAttachmentsAtClassLevel Whether to display test case attachments at the test class level
+         * @param enclosingBlocks Pipeline enclosing stages/blocks used to namespace storage and filter actions
          */
         public Data(
                 Map<String, Map<String, List<String>>> attachmentsMap,
                 Boolean showAttachmentsAtClassLevel,
-                Boolean showAttachmentsInStdOut) {
+                Boolean showAttachmentsInStdOut,
+                List<String> enclosingBlocks) {
             this.attachmentsMap = attachmentsMap;
             this.showAttachmentsAtClassLevel = showAttachmentsAtClassLevel;
             this.showAttachmentsInStdOut = showAttachmentsInStdOut;
+            this.enclosingBlocks = enclosingBlocks;
         }
 
         @Override
@@ -120,11 +124,35 @@ public class AttachmentPublisher extends TestDataPublisher {
                     return Collections.emptyList();
                 }
 
+                // If enclosingBlocks is non-empty, check that at least one child CaseResult matches
+                if (enclosingBlocks != null && !enclosingBlocks.isEmpty()) {
+                    ClassResult classResult = (ClassResult) testObject;
+                    boolean found = false;
+                    for (CaseResult child : classResult.getChildren()) {
+                        if (enclosingBlocks.equals(child.getSuiteResult().getEnclosingBlocks())) {
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (!found) {
+                        return Collections.emptyList();
+                    }
+                }
+
                 packageName = testObject.getParent().getName();
                 className = testObject.getName();
                 testName = null;
             } else if (testObject instanceof CaseResult) {
                 // We're looking at the page for an individual test (i.e. a single @Test method)
+
+                // If enclosingBlocks is non-empty, filter by matching enclosing flow node IDs
+                if (enclosingBlocks != null && !enclosingBlocks.isEmpty()) {
+                    CaseResult caseResult = (CaseResult) testObject;
+                    if (!enclosingBlocks.equals(caseResult.getSuiteResult().getEnclosingBlocks())) {
+                        return Collections.emptyList();
+                    }
+                }
+
                 packageName = testObject.getParent().getParent().getName();
                 className = testObject.getParent().getName();
                 testName = testObject.getName();
@@ -143,8 +171,12 @@ public class AttachmentPublisher extends TestDataPublisher {
             }
 
             FilePath root = getAttachmentPath(testObject.getRun());
+            if (enclosingBlocks != null && !enclosingBlocks.isEmpty()) {
+                // TODO sanitize
+                root = root.child(String.join("-", enclosingBlocks));
+            }
             // Historical builds might have attachments stored in class level directories
-            boolean attachmentsStoredAtClassLevel = areAttachmentsStoredAtClassLevel(root, fullName, tests);
+            boolean attachmentsStoredAtClassLevel = enclosingBlocks == null && areAttachmentsStoredAtClassLevel(root, fullName, tests);
 
             // Return a single TestAction which will display the attached files
             AttachmentTestAction action;
