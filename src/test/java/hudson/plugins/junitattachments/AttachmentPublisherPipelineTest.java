@@ -31,6 +31,7 @@ import hudson.tasks.junit.ClassResult;
 import hudson.tasks.junit.TestResultAction;
 import hudson.tasks.test.TestResult;
 import org.apache.commons.io.IOUtils;
+import org.hamcrest.Matchers;
 import org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition;
 import org.jenkinsci.plugins.workflow.job.WorkflowJob;
 import org.jenkinsci.plugins.workflow.job.WorkflowRun;
@@ -40,6 +41,7 @@ import org.jvnet.hudson.test.JenkinsRule;
 import org.jvnet.hudson.test.junit.jupiter.WithJenkins;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.nio.file.Paths;
 import java.nio.charset.StandardCharsets;
@@ -47,8 +49,11 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static hudson.plugins.junitattachments.AttachmentPublisherTest.getClassResult;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -129,6 +134,77 @@ class AttachmentPublisherPipelineTest {
             assertNotNull(caseAttachments);
             assertEquals(1, caseAttachments.size());
             assertEquals("attachment.txt", caseAttachments.get(0));
+        }
+    }
+
+    @Test
+    @Issue("https://github.com/jenkinsci/junit-attachments-plugin/issues/202")
+    void testMultipleTestExecutions(JenkinsRule jenkinsRule) throws Exception {
+        WorkflowJob project = jenkinsRule.jenkins.createProject(WorkflowJob.class, "tests-in-branches");
+        project.setDefinition(new CpsFlowDefinition("""
+            def simulateTest(String folder) {
+                dir(folder) {
+                    writeFile file: 'attachment.txt', text: "this is branch $folder"
+                    writeFile file: 'test.xml', text: '''<?xml version="1.0" encoding="UTF-8"?>
+                    <testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" version="3.0.2" name="com.example.MyTest" time="1" tests="1" errors="0" skipped="0" failures="0">
+                      <testcase name="someTestWithAttachments" classname="com.example.MyTest" time="1">
+                        <system-out><![CDATA[This is some system.out data from branch %%BRANCH%%
+                    ]]></system-out>
+                        <system-err><![CDATA[This is some system.err.data with an attachment
+                        [[ATTACHMENT|attachment.txt]]
+                    ]]></system-err>
+                      </testcase>
+                    </testsuite>
+                            '''.replace("%%BRANCH%%", folder)
+                    junit stdioRetention: 'ALL', testDataPublishers: [attachments()], testResults: 'test.xml'
+                }
+            }
+            node {
+                parallel firstBranch: {
+                    simulateTest("firstBranch")
+                }, secondBranch: {
+                    simulateTest("secondBranch")
+                },
+                failFast: false
+            }
+                """, true));
+
+        WorkflowRun run = jenkinsRule.buildAndAssertSuccess(project);
+        TestResultAction tra = run.getAction(TestResultAction.class);
+        List<CaseResult> passedTests = tra.getPassedTests();
+        assertThat(passedTests, hasSize(2));
+        for (CaseResult cr : passedTests) {
+            // which branch was this in
+            List<String> branchNames = cr.getEnclosingFlowNodeNames();
+            if (branchNames.contains("firstBranch")) {
+                assertThat(getTestAttachementAsText(jenkinsRule, cr), Matchers.is("this is branch firstBranch"));
+            }
+            if (branchNames.contains("secondBranch")) {
+                assertThat(getTestAttachementAsText(jenkinsRule, cr), Matchers.is("this is branch secondBranch"));
+            }
+        }
+    }
+
+    /**
+     * Obtain the string content of a single attachment from a single test.
+     * @param cr the Single test to obtain the attachment for.
+     * @return String content of the attachment for the test
+     * @throws IOException if we could not obtain the test data (using HTTP to download)
+     */
+    private static String getTestAttachementAsText(JenkinsRule jenkinsRule, CaseResult cr) throws IOException {
+        List<TestCaseAttachmentTestAction> testCaseAttachmentTestActions = cr.getTestActions().stream()
+                .filter(TestCaseAttachmentTestAction.class::isInstance)
+                .map(TestCaseAttachmentTestAction.class::cast)
+                .collect(Collectors.toList());
+        // TODO there should be only one TestCaseAttachmentTestAction per CaseResult but currently we for each time a test with the same classname.testname was invoked
+        // assertThat(testCaseAttachmentTestActions, hasSize(1));
+
+        TestCaseAttachmentTestAction testAttachmentAction = testCaseAttachmentTestActions.get(0);
+        assertThat(testAttachmentAction.getAttachments(), hasSize(1));
+        URL url = new URL(jenkinsRule.getURL(), cr.getUrl() + "/");
+        url = new URL(url, TestCaseAttachmentTestAction.getUrl(testAttachmentAction.getAttachments().get(0)));
+        try (InputStream is = url.openConnection().getInputStream()) {
+            return new String(is.readAllBytes(), StandardCharsets.UTF_8);
         }
     }
 
