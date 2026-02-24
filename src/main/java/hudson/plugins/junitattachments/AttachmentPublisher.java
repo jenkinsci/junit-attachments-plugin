@@ -20,6 +20,7 @@ import org.kohsuke.stapler.DataBoundSetter;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -106,7 +107,7 @@ public class AttachmentPublisher extends TestDataPublisher {
             this.attachmentsMap = attachmentsMap;
             this.showAttachmentsAtClassLevel = showAttachmentsAtClassLevel;
             this.showAttachmentsInStdOut = showAttachmentsInStdOut;
-            this.enclosingBlocks = enclosingBlocks;
+            this.enclosingBlocks = enclosingBlocks == null ? null : new ArrayList<>(enclosingBlocks);
         }
 
         @Override
