@@ -20,6 +20,7 @@ import edu.umd.cs.findbugs.annotations.NonNull;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -52,6 +53,7 @@ public class GetTestDataMethodObject {
     private final Map<String, Map<String, List<String>>> attachments = new HashMap<String, Map<String, List<String>>>();
     private final FilePath attachmentsStorage;
     private final TaskListener listener;
+    private final List<String> enclosingBlocks;
 
     /**
      * The workspace to check in for attachments.
@@ -70,6 +72,7 @@ public class GetTestDataMethodObject {
         this.build = build;
         this.testResult = testResult;
         this.listener = listener;
+        this.enclosingBlocks = Collections.emptyList();
         attachmentsStorage = AttachmentPublisher.getAttachmentPath(build);
         workspace = build.getWorkspace();
     }
@@ -86,8 +89,27 @@ public class GetTestDataMethodObject {
         this.build = build;
         this.testResult = testResult;
         this.listener = listener;
-        attachmentsStorage = AttachmentPublisher.getAttachmentPath(build);
         this.workspace = workspace;
+
+        List<String> blocks = Collections.emptyList();
+        for (SuiteResult suite : testResult.getSuites()) {
+            List<String> eb = suite.getEnclosingBlocks();
+            if (eb != null && !eb.isEmpty()) {
+                blocks = eb;
+                break;
+            }
+        }
+        this.enclosingBlocks = blocks;
+
+        FilePath baseStorage = AttachmentPublisher.getAttachmentPath(build);
+        if (!blocks.isEmpty()) {
+            baseStorage = baseStorage.child(String.join("-", blocks));
+        }
+        this.attachmentsStorage = baseStorage;
+    }
+
+    public List<String> getEnclosingBlocks() {
+        return enclosingBlocks;
     }
 
     /**

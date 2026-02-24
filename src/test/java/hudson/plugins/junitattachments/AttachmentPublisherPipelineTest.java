@@ -30,7 +30,6 @@ import hudson.tasks.junit.CaseResult;
 import hudson.tasks.junit.ClassResult;
 import hudson.tasks.junit.TestResultAction;
 import hudson.tasks.test.TestResult;
-import org.apache.commons.io.IOUtils;
 import org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition;
 import org.jenkinsci.plugins.workflow.job.WorkflowJob;
 import org.jenkinsci.plugins.workflow.job.WorkflowRun;
@@ -40,6 +39,7 @@ import org.jvnet.hudson.test.JenkinsRule;
 import org.jvnet.hudson.test.junit.jupiter.WithJenkins;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.nio.file.Paths;
 import java.nio.charset.StandardCharsets;
@@ -47,10 +47,19 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static hudson.plugins.junitattachments.AttachmentPublisherTest.getClassResult;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.aMapWithSize;
+import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.hasEntry;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @WithJenkins
 class AttachmentPublisherPipelineTest {
@@ -132,6 +141,125 @@ class AttachmentPublisherPipelineTest {
         }
     }
 
+    @Test
+    @Issue("https://github.com/jenkinsci/junit-attachments-plugin/issues/202")
+    void testMultipleTestExecutions(JenkinsRule jenkinsRule) throws Exception {
+        WorkflowRun run = buildParallelBranchesProject(jenkinsRule);
+        TestResultAction tra = run.getAction(TestResultAction.class);
+        List<CaseResult> passedTests = tra.getPassedTests();
+        assertThat(passedTests, hasSize(2));
+        boolean foundFirstBranch = false;
+        boolean foundSecondBranch = false;
+
+        for (CaseResult cr : passedTests) {
+            // which branch was this in
+            List<String> branchNames = cr.getEnclosingFlowNodeNames();
+            if (branchNames.contains("firstBranch")) {
+                foundFirstBranch = true;
+                assertThat(getTestAttachmentAsText(jenkinsRule, cr), is("this is branch firstBranch"));
+            }
+            if (branchNames.contains("secondBranch")) {
+                foundSecondBranch = true;
+                assertThat(getTestAttachmentAsText(jenkinsRule, cr), is("this is branch secondBranch"));
+            }
+        }
+        assertTrue(foundFirstBranch, "Found first branch");
+        assertTrue(foundSecondBranch, "Found second branch");
+    }
+
+    @Test
+    @Issue("https://github.com/jenkinsci/junit-attachments-plugin/issues/202")
+    void testMultipleTestExecutionsClassResult(JenkinsRule jenkinsRule) throws Exception {
+        WorkflowRun run = buildParallelBranchesProject(jenkinsRule);
+        TestResultAction tra = run.getAction(TestResultAction.class);
+
+        ClassResult classResult = getClassResult(tra, "com.example", "MyTest");
+        assertNotNull(classResult);
+
+        // Each branch produces one Data, and each Data should produce one TestClassAttachmentTestAction
+        // for the ClassResult (since the ClassResult has children from both branches).
+        List<TestClassAttachmentTestAction> classActions = classResult.getTestActions().stream()
+                .filter(TestClassAttachmentTestAction.class::isInstance)
+                .map(TestClassAttachmentTestAction.class::cast)
+                .collect(Collectors.toList());
+        assertThat(classActions, hasSize(2));
+
+        // Each action should have exactly one test case with one attachment
+        // and we should have one that is "this is branch firstBranch" and one that is "this is branch secondBranch"
+        boolean foundFirstBranch = false;
+        boolean foundSecondBranch = false;
+        for (TestClassAttachmentTestAction action : classActions) {
+            assertThat(action.getAttachments(),
+                    allOf(aMapWithSize(1),
+                          hasEntry(
+                                  is("someTestWithAttachments"),
+                                  contains("attachment.txt"))));
+
+            URL url = new URL(jenkinsRule.getURL(), classResult.getUrl() + "/");
+            url = new URL(url, action.getUrl("someTestWithAttachments", "attachment.txt"));
+            String s = fromURL(url);
+            if ("this is branch firstBranch".equals(s)) {
+                foundFirstBranch = true;
+            } else if("this is branch secondBranch".equals(s)) {
+                foundSecondBranch = true;
+            }
+        }
+        assertTrue(foundFirstBranch, "Found first branch");
+        assertTrue(foundSecondBranch, "Found second branch");
+    }
+
+    private static WorkflowRun buildParallelBranchesProject(JenkinsRule jenkinsRule) throws Exception {
+        WorkflowJob project = jenkinsRule.jenkins.createProject(WorkflowJob.class, "tests-in-branches");
+        project.setDefinition(new CpsFlowDefinition("""
+            def simulateTest(String folder) {
+                dir(folder) {
+                    writeFile file: 'attachment.txt', text: "this is branch $folder"
+                    writeFile file: 'test.xml', text: '''<?xml version="1.0" encoding="UTF-8"?>
+                    <testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" version="3.0.2" name="com.example.MyTest" time="1" tests="1" errors="0" skipped="0" failures="0">
+                      <testcase name="someTestWithAttachments" classname="com.example.MyTest" time="1">
+                        <system-out><![CDATA[This is some system.out data from branch %%BRANCH%%
+                    ]]></system-out>
+                        <system-err><![CDATA[This is some system.err.data with an attachment
+                        [[ATTACHMENT|attachment.txt]]
+                    ]]></system-err>
+                      </testcase>
+                    </testsuite>
+                            '''.replace("%%BRANCH%%", folder)
+                    junit stdioRetention: 'ALL', testDataPublishers: [attachments()], testResults: 'test.xml'
+                }
+            }
+            node {
+                parallel firstBranch: {
+                    simulateTest("firstBranch")
+                }, secondBranch: {
+                    simulateTest("secondBranch")
+                },
+                failFast: false
+            }
+                """, true));
+        return jenkinsRule.buildAndAssertSuccess(project);
+    }
+
+    /**
+     * Obtain the string content of a single attachment from a single test.
+     * @param cr the Single test to obtain the attachment for.
+     * @return String content of the attachment for the test
+     * @throws IOException if we could not obtain the test data (using HTTP to download)
+     */
+    private static String getTestAttachmentAsText(JenkinsRule jenkinsRule, CaseResult cr) throws IOException {
+        List<TestCaseAttachmentTestAction> testCaseAttachmentTestActions = cr.getTestActions().stream()
+                .filter(TestCaseAttachmentTestAction.class::isInstance)
+                .map(TestCaseAttachmentTestAction.class::cast)
+                .collect(Collectors.toList());
+        assertThat(testCaseAttachmentTestActions, hasSize(1));
+
+        TestCaseAttachmentTestAction testAttachmentAction = testCaseAttachmentTestActions.get(0);
+        assertThat(testAttachmentAction.getAttachments(), hasSize(1));
+        URL url = new URL(jenkinsRule.getURL(), cr.getUrl() + "/");
+        url = new URL(url, TestCaseAttachmentTestAction.getUrl(testAttachmentAction.getAttachments().get(0)));
+        return fromURL(url);
+    }
+
     // Creates a job from the given workspace zip file, builds it and retrieves the TestResultAction
     private static TestResultAction getTestResultActionForPipeline(JenkinsRule jenkinsRule, String workspaceZip, String pipelineFile, Result expectedStatus) throws Exception {
         WorkflowJob project = jenkinsRule.jenkins.createProject(WorkflowJob.class, "test-job");
@@ -158,10 +286,15 @@ class AttachmentPublisherPipelineTest {
 
         URL url = AttachmentPublisherPipelineTest.class.getResource(fileName);
         if (url != null) {
-            fileContents = IOUtils.toString(url, StandardCharsets.UTF_8);
+            fileContents = fromURL(url);
         }
 
         return fileContents;
     }
 
+    private static final String fromURL(URL url) throws IOException {
+        try (InputStream is = url.openConnection().getInputStream()) {
+            return new String(is.readAllBytes(), StandardCharsets.UTF_8);
+        }
+    }
 }
