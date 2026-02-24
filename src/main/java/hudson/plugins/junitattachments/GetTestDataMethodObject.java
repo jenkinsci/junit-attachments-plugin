@@ -103,7 +103,6 @@ public class GetTestDataMethodObject {
 
         FilePath baseStorage = AttachmentPublisher.getAttachmentPath(build);
         if (!blocks.isEmpty()) {
-            // TODO sanitize this as it is user supplied
             baseStorage = baseStorage.child(String.join("-", blocks));
         }
         this.attachmentsStorage = baseStorage;

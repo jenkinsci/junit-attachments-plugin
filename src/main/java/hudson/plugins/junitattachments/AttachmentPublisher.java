@@ -142,12 +142,11 @@ public class AttachmentPublisher extends TestDataPublisher {
                 packageName = testObject.getParent().getName();
                 className = testObject.getName();
                 testName = null;
-            } else if (testObject instanceof CaseResult) {
+            } else if (testObject instanceof CaseResult caseResult) {
                 // We're looking at the page for an individual test (i.e. a single @Test method)
 
                 // If enclosingBlocks is non-empty, filter by matching enclosing flow node IDs
                 if (enclosingBlocks != null && !enclosingBlocks.isEmpty()) {
-                    CaseResult caseResult = (CaseResult) testObject;
                     if (!enclosingBlocks.equals(caseResult.getSuiteResult().getEnclosingBlocks())) {
                         return Collections.emptyList();
                     }
@@ -172,7 +171,6 @@ public class AttachmentPublisher extends TestDataPublisher {
 
             FilePath root = getAttachmentPath(testObject.getRun());
             if (enclosingBlocks != null && !enclosingBlocks.isEmpty()) {
-                // TODO sanitize
                 root = root.child(String.join("-", enclosingBlocks));
             }
             // Historical builds might have attachments stored in class level directories
@@ -180,15 +178,16 @@ public class AttachmentPublisher extends TestDataPublisher {
 
             // Return a single TestAction which will display the attached files
             AttachmentTestAction action;
-            if (testObject instanceof ClassResult) {
+            if (testObject instanceof ClassResult cr) {
                 // Ensure attachments are shown in the same order as the tests
                 TreeMap<String, List<String>> sortedTests = new TreeMap<String, List<String>>(tests);
 
                 action = new TestClassAttachmentTestAction(
-                        (ClassResult) testObject,
+                        cr,
                         getAttachmentPath(root, fullName, null),
                         sortedTests,
-                        attachmentsStoredAtClassLevel);
+                        attachmentsStoredAtClassLevel,
+                        enclosingBlocks);
             }
             else {
                 List<String> attachmentPaths = tests.get(testName);
