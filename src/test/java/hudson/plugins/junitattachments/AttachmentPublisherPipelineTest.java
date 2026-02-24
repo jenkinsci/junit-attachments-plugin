@@ -148,16 +148,23 @@ class AttachmentPublisherPipelineTest {
         TestResultAction tra = run.getAction(TestResultAction.class);
         List<CaseResult> passedTests = tra.getPassedTests();
         assertThat(passedTests, hasSize(2));
+        boolean foundFirstBranch = false;
+        boolean foundSecondBranch = false;
+
         for (CaseResult cr : passedTests) {
             // which branch was this in
             List<String> branchNames = cr.getEnclosingFlowNodeNames();
             if (branchNames.contains("firstBranch")) {
-                assertThat(getTestAttachementAsText(jenkinsRule, cr), is("this is branch firstBranch"));
+                foundFirstBranch = true;
+                assertThat(getTestAttachmentAsText(jenkinsRule, cr), is("this is branch firstBranch"));
             }
             if (branchNames.contains("secondBranch")) {
-                assertThat(getTestAttachementAsText(jenkinsRule, cr), is("this is branch secondBranch"));
+                foundSecondBranch = true;
+                assertThat(getTestAttachmentAsText(jenkinsRule, cr), is("this is branch secondBranch"));
             }
         }
+        assertTrue(foundFirstBranch, "Found first branch");
+        assertTrue(foundSecondBranch, "Found second branch");
     }
 
     @Test
@@ -239,7 +246,7 @@ class AttachmentPublisherPipelineTest {
      * @return String content of the attachment for the test
      * @throws IOException if we could not obtain the test data (using HTTP to download)
      */
-    private static String getTestAttachementAsText(JenkinsRule jenkinsRule, CaseResult cr) throws IOException {
+    private static String getTestAttachmentAsText(JenkinsRule jenkinsRule, CaseResult cr) throws IOException {
         List<TestCaseAttachmentTestAction> testCaseAttachmentTestActions = cr.getTestActions().stream()
                 .filter(TestCaseAttachmentTestAction.class::isInstance)
                 .map(TestCaseAttachmentTestAction.class::cast)
