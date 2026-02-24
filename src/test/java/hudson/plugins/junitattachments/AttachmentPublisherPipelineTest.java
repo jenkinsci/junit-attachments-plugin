@@ -30,8 +30,6 @@ import hudson.tasks.junit.CaseResult;
 import hudson.tasks.junit.ClassResult;
 import hudson.tasks.junit.TestResultAction;
 import hudson.tasks.test.TestResult;
-import org.apache.commons.io.IOUtils;
-import org.hamcrest.Matchers;
 import org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition;
 import org.jenkinsci.plugins.workflow.job.WorkflowJob;
 import org.jenkinsci.plugins.workflow.job.WorkflowRun;
@@ -53,9 +51,15 @@ import java.util.stream.Collectors;
 
 import static hudson.plugins.junitattachments.AttachmentPublisherTest.getClassResult;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.aMapWithSize;
+import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.hasEntry;
 import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @WithJenkins
 class AttachmentPublisherPipelineTest {
@@ -140,6 +144,64 @@ class AttachmentPublisherPipelineTest {
     @Test
     @Issue("https://github.com/jenkinsci/junit-attachments-plugin/issues/202")
     void testMultipleTestExecutions(JenkinsRule jenkinsRule) throws Exception {
+        WorkflowRun run = buildParallelBranchesProject(jenkinsRule);
+        TestResultAction tra = run.getAction(TestResultAction.class);
+        List<CaseResult> passedTests = tra.getPassedTests();
+        assertThat(passedTests, hasSize(2));
+        for (CaseResult cr : passedTests) {
+            // which branch was this in
+            List<String> branchNames = cr.getEnclosingFlowNodeNames();
+            if (branchNames.contains("firstBranch")) {
+                assertThat(getTestAttachementAsText(jenkinsRule, cr), is("this is branch firstBranch"));
+            }
+            if (branchNames.contains("secondBranch")) {
+                assertThat(getTestAttachementAsText(jenkinsRule, cr), is("this is branch secondBranch"));
+            }
+        }
+    }
+
+    @Test
+    @Issue("https://github.com/jenkinsci/junit-attachments-plugin/issues/202")
+    void testMultipleTestExecutionsClassResult(JenkinsRule jenkinsRule) throws Exception {
+        WorkflowRun run = buildParallelBranchesProject(jenkinsRule);
+        TestResultAction tra = run.getAction(TestResultAction.class);
+
+        ClassResult classResult = getClassResult(tra, "com.example", "MyTest");
+        assertNotNull(classResult);
+
+        // Each branch produces one Data, and each Data should produce one TestClassAttachmentTestAction
+        // for the ClassResult (since the ClassResult has children from both branches).
+        List<TestClassAttachmentTestAction> classActions = classResult.getTestActions().stream()
+                .filter(TestClassAttachmentTestAction.class::isInstance)
+                .map(TestClassAttachmentTestAction.class::cast)
+                .collect(Collectors.toList());
+        assertThat(classActions, hasSize(2));
+
+        // Each action should have exactly one test case with one attachment
+        // and we should have one that is "this is branch firstBranch" and one that is "this is branch secondBranch"
+        boolean foundFirstBranch = false;
+        boolean foundSecondBranch = false;
+        for (TestClassAttachmentTestAction action : classActions) {
+            assertThat(action.getAttachments(),
+                    allOf(aMapWithSize(1),
+                          hasEntry(
+                                  is("someTestWithAttachments"),
+                                  contains("attachment.txt"))));
+
+            URL url = new URL(jenkinsRule.getURL(), classResult.getUrl() + "/");
+            url = new URL(url, action.getUrl("someTestWithAttachments", "attachment.txt"));
+            String s = fromURL(url);
+            if ("this is branch firstBranch".equals(s)) {
+                foundFirstBranch = true;
+            } else if("this is branch secondBranch".equals(s)) {
+                foundSecondBranch = true;
+            }
+        }
+        assertTrue(foundFirstBranch, "Found first branch");
+        assertTrue(foundSecondBranch, "Found second branch");
+    }
+
+    private static WorkflowRun buildParallelBranchesProject(JenkinsRule jenkinsRule) throws Exception {
         WorkflowJob project = jenkinsRule.jenkins.createProject(WorkflowJob.class, "tests-in-branches");
         project.setDefinition(new CpsFlowDefinition("""
             def simulateTest(String folder) {
@@ -168,21 +230,7 @@ class AttachmentPublisherPipelineTest {
                 failFast: false
             }
                 """, true));
-
-        WorkflowRun run = jenkinsRule.buildAndAssertSuccess(project);
-        TestResultAction tra = run.getAction(TestResultAction.class);
-        List<CaseResult> passedTests = tra.getPassedTests();
-        assertThat(passedTests, hasSize(2));
-        for (CaseResult cr : passedTests) {
-            // which branch was this in
-            List<String> branchNames = cr.getEnclosingFlowNodeNames();
-            if (branchNames.contains("firstBranch")) {
-                assertThat(getTestAttachementAsText(jenkinsRule, cr), Matchers.is("this is branch firstBranch"));
-            }
-            if (branchNames.contains("secondBranch")) {
-                assertThat(getTestAttachementAsText(jenkinsRule, cr), Matchers.is("this is branch secondBranch"));
-            }
-        }
+        return jenkinsRule.buildAndAssertSuccess(project);
     }
 
     /**
@@ -202,9 +250,7 @@ class AttachmentPublisherPipelineTest {
         assertThat(testAttachmentAction.getAttachments(), hasSize(1));
         URL url = new URL(jenkinsRule.getURL(), cr.getUrl() + "/");
         url = new URL(url, TestCaseAttachmentTestAction.getUrl(testAttachmentAction.getAttachments().get(0)));
-        try (InputStream is = url.openConnection().getInputStream()) {
-            return new String(is.readAllBytes(), StandardCharsets.UTF_8);
-        }
+        return fromURL(url);
     }
 
     // Creates a job from the given workspace zip file, builds it and retrieves the TestResultAction
@@ -233,10 +279,15 @@ class AttachmentPublisherPipelineTest {
 
         URL url = AttachmentPublisherPipelineTest.class.getResource(fileName);
         if (url != null) {
-            fileContents = IOUtils.toString(url, StandardCharsets.UTF_8);
+            fileContents = fromURL(url);
         }
 
         return fileContents;
     }
 
+    private static final String fromURL(URL url) throws IOException {
+        try (InputStream is = url.openConnection().getInputStream()) {
+            return new String(is.readAllBytes(), StandardCharsets.UTF_8);
+        }
+    }
 }
