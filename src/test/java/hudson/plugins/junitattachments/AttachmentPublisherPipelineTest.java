@@ -208,6 +208,46 @@ class AttachmentPublisherPipelineTest {
         assertTrue(foundSecondBranch, "Found second branch");
     }
 
+    @Test
+    void testClassnameWithUmlautsAndSpaces(JenkinsRule jenkinsRule) throws Exception {
+        // Surefire writes @DisplayName values as the classname into the XML report.
+        // When the display name contains umlauts or spaces, TestObject.safe() passes
+        // them through unchanged (it only replaces / \ : ? # % < >), so those
+        // characters end up as literal path components on disk. On systems where
+        // sun.jnu.encoding is not UTF-8 (e.g. ASCII-only CI containers), mkdirs()
+        // then throws "Malformed input or input contains unmappable characters".
+        WorkflowJob project = jenkinsRule.jenkins.createProject(WorkflowJob.class, "umlaut-classname-test");
+        project.setDefinition(new CpsFlowDefinition("""
+            node {
+                writeFile file: 'screenshot.png', text: 'fake png'
+                writeFile file: 'test.xml', text: '''<?xml version="1.0" encoding="UTF-8"?>
+                <testsuite name="com.example.MyTest" time="1" tests="1" errors="0" skipped="0" failures="0">
+                  <testcase name="prüfe Umlauts und Leerzeichen" classname="com.example.MyTest > Für Umlauts und Leerzeichen" time="1">
+                    <system-out><![CDATA[[[ATTACHMENT|screenshot.png]]
+                ]]></system-out>
+                  </testcase>
+                </testsuite>
+                '''
+                junit stdioRetention: 'ALL', testDataPublishers: [attachments()], testResults: 'test.xml'
+            }
+            """, true));
+
+        WorkflowRun run = jenkinsRule.buildAndAssertSuccess(project);
+        TestResultAction tra = run.getAction(TestResultAction.class);
+        assertNotNull(tra);
+
+        List<CaseResult> passedTests = tra.getPassedTests();
+        assertThat(passedTests, hasSize(1));
+
+        CaseResult caseResult = passedTests.get(0);
+        List<TestCaseAttachmentTestAction> attachmentActions = caseResult.getTestActions().stream()
+                .filter(TestCaseAttachmentTestAction.class::isInstance)
+                .map(TestCaseAttachmentTestAction.class::cast)
+                .collect(Collectors.toList());
+        assertThat(attachmentActions, hasSize(1));
+        assertThat(attachmentActions.get(0).getAttachments(), contains("screenshot.png"));
+    }
+
     private static WorkflowRun buildParallelBranchesProject(JenkinsRule jenkinsRule) throws Exception {
         WorkflowJob project = jenkinsRule.jenkins.createProject(WorkflowJob.class, "tests-in-branches");
         project.setDefinition(new CpsFlowDefinition("""

@@ -62,13 +62,29 @@ public class AttachmentPublisher extends TestDataPublisher {
     public static FilePath getAttachmentPath(FilePath root, String className, String testName) {
         FilePath dir = root;
         if (className != null && !className.isEmpty()) {
-            dir = dir.child(TestObject.safe(className));
+            dir = dir.child(toAsciiSafe(TestObject.safe(className)));
 
             if (testName != null && !testName.isEmpty()) {
-                dir = dir.child(TestObject.safe(testName).replace("\"", ""));
+                dir = dir.child(toAsciiSafe(TestObject.safe(testName).replace("\"", "")));
             }
         }
         return dir;
+    }
+
+    /**
+     * Replaces any character outside printable ASCII (0x21–0x7E) with '_'.
+     * TestObject.safe() leaves Unicode letters (e.g. umlauts) and spaces intact,
+     * which causes "malformed input or input contains unmappable characters" on
+     * systems where sun.jnu.encoding is ASCII when those strings are used as
+     * filesystem path components.
+     */
+    private static String toAsciiSafe(String s) {
+        StringBuilder sb = new StringBuilder(s.length());
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            sb.append((c >= 0x21 && c <= 0x7E) ? c : '_');
+        }
+        return sb.toString();
     }
 
     @Override
