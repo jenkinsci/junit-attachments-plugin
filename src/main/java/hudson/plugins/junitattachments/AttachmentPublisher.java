@@ -65,10 +65,23 @@ public class AttachmentPublisher extends TestDataPublisher {
             dir = dir.child(TestObject.safe(className));
 
             if (testName != null && !testName.isEmpty()) {
-                dir = dir.child(TestObject.safe(testName).replace("\"", ""));
+                dir = dir.child(getStorageName(testName));
             }
         }
         return dir;
+    }
+
+    /**
+     * The name of the directory that holds the attachments of the given test case.
+     *
+     * <p>Attachments are stored under a sanitised form of the name, so any URL pointing at them
+     * has to be built from the same sanitised form rather than from the raw name.
+     *
+     * @param name the raw test case name
+     * @return the directory name used to store its attachments
+     */
+    public static String getStorageName(String name) {
+        return TestObject.safe(name).replace("\"", "");
     }
 
     @Override

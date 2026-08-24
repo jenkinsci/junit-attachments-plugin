@@ -44,6 +44,9 @@ public class TestClassAttachmentTestAction extends AttachmentTestAction {
             return getUrlName() + "/" + Util.rawEncode(filename);
         }
 
-        return getUrlName() + "/" + Util.rawEncode(testCase) + "/" + Util.rawEncode(filename);
+        // The attachments of a test case live in a directory named after the sanitised test case
+        // name, so the URL has to be built from that same name and not from the raw one.
+        return getUrlName() + "/" + Util.rawEncode(AttachmentPublisher.getStorageName(testCase)) + "/"
+                + Util.rawEncode(filename);
     }
 }
