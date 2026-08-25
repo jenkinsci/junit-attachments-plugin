@@ -1,6 +1,5 @@
 # JUnit Attachments Plugin
 
-[![Build Status](https://ci.jenkins.io/job/Plugins/job/junit-attachments-plugin/job/main/badge/icon)](https://ci.jenkins.io/job/Plugins/job/junit-attachments-plugin/job/main/)
 [![Jenkins Plugin](https://img.shields.io/jenkins/plugin/v/junit-attachments.svg)](https://plugins.jenkins.io/junit-attachments)
 [![GitHub release](https://img.shields.io/github/release/jenkinsci/junit-attachments-plugin.svg?label=changelog)](https://github.com/jenkinsci/junit-attachments-plugin/releases/latest)
 [![GitHub license](https://img.shields.io/github/license/jenkinsci/junit-attachments-plugin)](https://github.com/jenkinsci/junit-attachments-plugin/blob/main/LICENSE.md)
