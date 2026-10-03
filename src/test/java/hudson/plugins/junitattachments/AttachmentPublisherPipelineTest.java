@@ -274,8 +274,24 @@ class AttachmentPublisherPipelineTest {
                 },
                 failFast: false
             }
-                """, true));
+            """, true));
         return jenkinsRule.buildAndAssertSuccess(project);
+    }
+
+    @Test
+    void testRelativePath(JenkinsRule jenkinsRule) throws Exception {
+        TestResultAction action = getTestResultActionForPipeline(jenkinsRule, "workspace6.zip", "pipelineGradleTest.groovy", Result.SUCCESS);
+
+        ClassResult cr = getClassResult(action, TEST_PACKAGE, "SignupTest");
+        Collection<? extends TestResult> caseResults = cr.getChildren();
+        assertEquals(1, caseResults.size());
+
+        CaseResult failingCase = cr.getCaseResult("RelativePath");
+        TestCaseAttachmentTestAction ata = failingCase.getTestAction(TestCaseAttachmentTestAction.class);
+        assertNotNull(ata);
+
+        final List<String> attachments = ata.getAttachments();
+        assertEquals(List.of("login-password"), attachments);
     }
 
     /**
@@ -330,7 +346,7 @@ class AttachmentPublisherPipelineTest {
         return fileContents;
     }
 
-    private static final String fromURL(URL url) throws IOException {
+    private static String fromURL(URL url) throws IOException {
         try (InputStream is = url.openConnection().getInputStream()) {
             return new String(is.readAllBytes(), StandardCharsets.UTF_8);
         }
