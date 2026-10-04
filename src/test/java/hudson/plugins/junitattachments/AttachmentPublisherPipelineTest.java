@@ -188,20 +188,8 @@ class AttachmentPublisherPipelineTest {
                 junit stdioRetention: 'ALL', testDataPublishers: [attachments()], testResults: 'test.xml'
             }
             """, true));
-
         WorkflowRun run = jenkinsRule.buildAndAssertSuccess(project);
-        TestResultAction tra = run.getAction(TestResultAction.class);
-        assertNotNull(tra);
-
-        List<CaseResult> passedTests = tra.getPassedTests();
-        assertThat(passedTests, hasSize(1));
-
-        CaseResult caseResult = passedTests.get(0);
-        List<TestCaseAttachmentTestAction> attachmentActions = caseResult.getTestActions().stream()
-                .filter(TestCaseAttachmentTestAction.class::isInstance)
-                .map(TestCaseAttachmentTestAction.class::cast)
-                .collect(Collectors.toList());
-        assertThat(attachmentActions, hasSize(1));
+        List<TestCaseAttachmentTestAction> attachmentActions = getAttachmentActions(run);
         assertThat(attachmentActions.get(0).getAttachments(), contains("screenshot.png"));
     }
 
@@ -292,6 +280,42 @@ class AttachmentPublisherPipelineTest {
 
         final List<String> attachments = ata.getAttachments();
         assertEquals(List.of("login-password"), attachments);
+    }
+
+    @Test
+    void testAsteriskInAttachmentPath(JenkinsRule jenkinsRule) throws Exception {
+            WorkflowJob project = jenkinsRule.jenkins.createProject(WorkflowJob.class, "umlaut-classname-test");
+            project.setDefinition(new CpsFlowDefinition("""
+            node {
+                writeFile file: 'screenshot.png', text: 'fake png'
+                writeFile file: 'test.xml', text: '''<?xml version="1.0" encoding="UTF-8"?>
+                <testsuite name="suite" time="1" tests="1" errors="0" skipped="0" failures="0">
+                  <testcase name="test" classname="Class" time="1">
+                    <system-out><![CDATA[[[ATTACHMENT|*.png]]
+                ]]></system-out>
+                  </testcase>
+                </testsuite>
+                '''
+                junit stdioRetention: 'ALL', testDataPublishers: [attachments()], testResults: 'test.xml'
+            }
+            """, true));
+            WorkflowRun run = jenkinsRule.buildAndAssertSuccess(project);
+            List<TestCaseAttachmentTestAction> attachmentActions = getAttachmentActions(run);
+            assertEquals(0, attachmentActions.size());
+    }
+
+    private List<TestCaseAttachmentTestAction> getAttachmentActions(WorkflowRun run) {
+        TestResultAction tra = run.getAction(TestResultAction.class);
+        assertNotNull(tra);
+
+        List<CaseResult> passedTests = tra.getPassedTests();
+        assertThat(passedTests, hasSize(1));
+
+        CaseResult caseResult = passedTests.get(0);
+        return caseResult.getTestActions().stream()
+                .filter(TestCaseAttachmentTestAction.class::isInstance)
+                .map(TestCaseAttachmentTestAction.class::cast)
+                .toList();
     }
 
     /**
