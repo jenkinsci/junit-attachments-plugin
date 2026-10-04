@@ -169,18 +169,16 @@ class AttachmentPublisherPipelineTest {
 
     @Test
     void testClassnameWithUmlautsAndSpaces(JenkinsRule jenkinsRule) throws Exception {
-        // Surefire writes @DisplayName values as the classname into the XML report.
-        // When the display name contains umlauts or spaces, TestObject.safe() passes
-        // them through unchanged (it only replaces / \ : ? # % < >), so those
-        // characters end up as literal path components on disk. On systems where
-        // sun.jnu.encoding is not UTF-8 (e.g. ASCII-only CI containers), mkdirs()
-        // then throws "Malformed input or input contains unmappable characters".
+        // Surefire writes @DisplayName values as the classname into the XML report,
+        // other test reporters might produce non-standard characters in suite name as well.
+        // Check that these do not cause invalid filenames.
+        // The test will fail if system encoding is not UTF-8.
         WorkflowJob project = jenkinsRule.jenkins.createProject(WorkflowJob.class, "umlaut-classname-test");
         project.setDefinition(new CpsFlowDefinition("""
             node {
                 writeFile file: 'screenshot.png', text: 'fake png'
                 writeFile file: 'test.xml', text: '''<?xml version="1.0" encoding="UTF-8"?>
-                <testsuite name="com.example.MyTest" time="1" tests="1" errors="0" skipped="0" failures="0">
+                <testsuite name="Sü/ \\\\ &quot;'y" time="1" tests="1" errors="0" skipped="0" failures="0">
                   <testcase name="tü / \\\\ &quot;'y" classname="Cü/ \\\\ &quot;'y" time="1">
                     <system-out><![CDATA[[[ATTACHMENT|screenshot.png]]
                 ]]></system-out>
