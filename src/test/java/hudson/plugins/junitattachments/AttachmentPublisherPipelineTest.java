@@ -168,6 +168,44 @@ class AttachmentPublisherPipelineTest {
     }
 
     @Test
+    void testClassnameWithUmlautsAndSpaces(JenkinsRule jenkinsRule) throws Exception {
+        // Surefire writes @DisplayName values as the classname into the XML report,
+        // other test reporters might produce non-standard characters in suite name as well.
+        // Check that these do not cause invalid filenames.
+        // The test will fail if system encoding is not UTF-8.
+        WorkflowJob project = jenkinsRule.jenkins.createProject(WorkflowJob.class, "umlaut-classname-test");
+        project.setDefinition(new CpsFlowDefinition("""
+            node {
+                writeFile file: 'screenshot.png', text: 'fake png'
+                writeFile file: 'test.xml', text: '''<?xml version="1.0" encoding="UTF-8"?>
+                <testsuite name="Sü/ \\\\ &quot;'y" time="1" tests="1" errors="0" skipped="0" failures="0">
+                  <testcase name="tü / \\\\ &quot;'y" classname="Cü/ \\\\ &quot;'y" time="1">
+                    <system-out><![CDATA[[[ATTACHMENT|screenshot.png]]
+                ]]></system-out>
+                  </testcase>
+                </testsuite>
+                '''
+                junit stdioRetention: 'ALL', testDataPublishers: [attachments()], testResults: 'test.xml'
+            }
+            """, true));
+
+        WorkflowRun run = jenkinsRule.buildAndAssertSuccess(project);
+        TestResultAction tra = run.getAction(TestResultAction.class);
+        assertNotNull(tra);
+
+        List<CaseResult> passedTests = tra.getPassedTests();
+        assertThat(passedTests, hasSize(1));
+
+        CaseResult caseResult = passedTests.get(0);
+        List<TestCaseAttachmentTestAction> attachmentActions = caseResult.getTestActions().stream()
+                .filter(TestCaseAttachmentTestAction.class::isInstance)
+                .map(TestCaseAttachmentTestAction.class::cast)
+                .collect(Collectors.toList());
+        assertThat(attachmentActions, hasSize(1));
+        assertThat(attachmentActions.get(0).getAttachments(), contains("screenshot.png"));
+    }
+
+    @Test
     @Issue("https://github.com/jenkinsci/junit-attachments-plugin/issues/202")
     void testMultipleTestExecutionsClassResult(JenkinsRule jenkinsRule) throws Exception {
         WorkflowRun run = buildParallelBranchesProject(jenkinsRule);
