@@ -9,11 +9,23 @@ This plugin can archive certain files (attachments) together with your JUnit res
 
 Attached files are shown in the JUnit results.
 
-Image attachments are shown inline.
+Image attachments can be shown in a popup.
 
 ![](images/image-attachment.png)
 
-To activate this plugin, configure your job with "Additional test report features" and select "Publish test attachments".
+## Using the plugin
+### Pipeline
+Make sure your pipeline script contains a `junit` step. You can activate attachments publishing like this:
+
+```groovy
+junit testResults: '**/*.xml', testDataPublishers: [attachments()]
+```
+See [JUnit step documentation](https://www.jenkins.io/doc/pipeline/steps/junit/#junit-archive-junit-formatted-test-results)
+or pipeline syntax help in your Jenkins instance for available options.
+
+### Freestyle job
+To activate this plugin in a freestyle job, configure your job with "Additional test report features" 
+and select "Publish test attachments".
 
 ## How to attach files
 ### By putting them into a known location
