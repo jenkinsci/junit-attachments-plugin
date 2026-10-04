@@ -1,5 +1,5 @@
 <?jelly escape-by-default='true'?>
-<j:jelly xmlns:j="jelly:core">
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler">
 
 	<h2>${%Attachments}</h2>
 	<table class="jenkins-table sortable" id="attachments">
@@ -16,5 +16,5 @@
 			</tr>
 		</j:forEach>
 	</table>
-
+    <st:adjunct includes="hudson.plugins.junitattachments.TestCaseAttachmentTestAction.gallery"/>
 </j:jelly>
