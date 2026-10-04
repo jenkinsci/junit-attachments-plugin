@@ -62,7 +62,7 @@ public class AttachmentPublisher extends TestDataPublisher {
     public static FilePath getAttachmentPath(FilePath root, String className, String testName) {
         FilePath dir = root;
         if (className != null && !className.isEmpty()) {
-            dir = dir.child(TestObject.safe(className));
+            dir = dir.child(getStorageName(className));
 
             if (testName != null && !testName.isEmpty()) {
                 dir = dir.child(getStorageName(testName));
