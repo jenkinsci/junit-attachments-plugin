@@ -72,6 +72,9 @@ class AzureArtifactManagerAzuriteTest {
     // overwriting any withCommand() call, and does not yet expose a way to append extra Azurite
     // flags (e.g. --skipApiVersionCheck). Use a plain GenericContainer with an explicit command
     // instead, replicating AzuriteContainer's default host/port setup.
+    // TODO: Testcontainers main adds AzuriteContainer#withCommandOptions(); once a release
+    // newer than 2.0.5 ships it, switch to
+    // new AzuriteContainer(...).withCommandOptions("--skipApiVersionCheck").
     @Container
     private static final GenericContainer<?> AZURITE = new GenericContainer<>(
             DockerImageName.parse("mcr.microsoft.com/azure-storage/azurite:3.34.0"))
