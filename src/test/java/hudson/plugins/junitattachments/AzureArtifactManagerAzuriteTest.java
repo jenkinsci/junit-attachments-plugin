@@ -56,7 +56,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
  * <p>Requires a running Docker daemon; Testcontainers starts and stops the Azurite container
  * automatically as part of the test.
  */
-@Testcontainers
+@Testcontainers(disabledWithoutDocker = true)
 @WithJenkins
 class AzureArtifactManagerAzuriteTest {
 
