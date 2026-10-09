@@ -1,5 +1,6 @@
 package hudson.plugins.junitattachments;
 
+import hudson.FilePath;
 import hudson.Util;
 import hudson.tasks.junit.ClassResult;
 import jenkins.util.VirtualFile;
@@ -24,6 +25,19 @@ public class TestClassAttachmentTestAction extends AttachmentTestAction {
         this.attachments = attachments;
         this.attachmentsStoredAtClassLevel = attachmentsStoredAtClassLevel;
         this.blocks = blocks;
+    }
+
+    /**
+     * @deprecated use {@link #TestClassAttachmentTestAction(ClassResult, VirtualFile, Map, boolean, List)}
+     */
+    @Deprecated
+    public TestClassAttachmentTestAction(
+            ClassResult classResult,
+            FilePath storage,
+            Map<String, List<String>> attachments,
+            boolean attachmentsStoredAtClassLevel,
+            List<String> blocks) {
+        this(classResult, storage.toVirtualFile(), attachments, attachmentsStoredAtClassLevel, blocks);
     }
 
     public Map<String, List<String>> getAttachments() {

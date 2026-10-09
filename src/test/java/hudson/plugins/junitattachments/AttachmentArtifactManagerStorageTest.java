@@ -20,6 +20,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -97,7 +98,8 @@ class AttachmentArtifactManagerStorageTest {
         assertNoFileNamed(buildDir.toPath(), "attachment.txt");
 
         // No staging residue left behind in the workspace either.
-        assertNoFileNamed(j.jenkins.getWorkspaceFor((WorkflowJob) run.getParent()).getRemote(), "junit-attachments-staging");
+        // FilePath#createTempDir appends a generated suffix to the prefix, so match on the prefix.
+        assertNoFileNamedStartingWith(j.jenkins.getWorkspaceFor((WorkflowJob) run.getParent()).getRemote(), "junit-attachments-staging");
     }
 
     @Test
@@ -150,18 +152,23 @@ class AttachmentArtifactManagerStorageTest {
     }
 
     private static void assertNoFileNamed(java.nio.file.Path root, String name) throws IOException {
+        assertNoFileMatching(root, name::equals, "named " + name);
+    }
+
+    private static void assertNoFileNamedStartingWith(String rootPath, String prefix) throws IOException {
+        assertNoFileMatching(new File(rootPath).toPath(), n -> n.startsWith(prefix), "starting with " + prefix);
+    }
+
+    private static void assertNoFileMatching(java.nio.file.Path root, Predicate<String> fileName, String description)
+            throws IOException {
         if (!Files.exists(root)) {
             return;
         }
         try (Stream<java.nio.file.Path> walk = Files.walk(root)) {
-            List<java.nio.file.Path> matches = walk.filter(p -> p.getFileName() != null && p.getFileName().toString().equals(name))
+            List<java.nio.file.Path> matches = walk.filter(p -> p.getFileName() != null && fileName.test(p.getFileName().toString()))
                     .collect(Collectors.toList());
-            assertThat("unexpected file/dir named " + name + " under " + root + ": " + matches, matches, empty());
+            assertThat("unexpected file/dir " + description + " under " + root + ": " + matches, matches, empty());
         }
-    }
-
-    private static void assertNoFileNamed(String rootPath, String name) throws IOException {
-        assertNoFileNamed(new File(rootPath).toPath(), name);
     }
 
     private static String fromURL(URL url) throws IOException {

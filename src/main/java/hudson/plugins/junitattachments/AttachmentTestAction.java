@@ -1,5 +1,6 @@
 package hudson.plugins.junitattachments;
 
+import hudson.FilePath;
 import hudson.model.DirectoryBrowserSupport;
 import hudson.tasks.junit.TestAction;
 import hudson.tasks.test.TestObject;
@@ -13,6 +14,14 @@ public abstract class AttachmentTestAction extends TestAction {
 	public AttachmentTestAction(TestObject testObject, VirtualFile storage) {
 		this.storage = storage;
 		this.testObject = testObject;
+	}
+
+	/**
+	 * @deprecated use {@link #AttachmentTestAction(TestObject, VirtualFile)}
+	 */
+	@Deprecated
+	public AttachmentTestAction(TestObject testObject, FilePath storage) {
+		this(testObject, storage.toVirtualFile());
 	}
 
 	public String getDisplayName() {

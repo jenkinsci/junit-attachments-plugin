@@ -1,5 +1,6 @@
 package hudson.plugins.junitattachments;
 
+import hudson.FilePath;
 import hudson.Util;
 import hudson.tasks.junit.CaseResult;
 import jenkins.model.Jenkins;
@@ -21,6 +22,15 @@ public class TestCaseAttachmentTestAction extends AttachmentTestAction {
 
         this.attachments = attachments;
         this.showAttachmentsInStdOut = showAttachmentsInStdOut;
+    }
+
+    /**
+     * @deprecated use {@link #TestCaseAttachmentTestAction(CaseResult, VirtualFile, List, boolean)}
+     */
+    @Deprecated
+    public TestCaseAttachmentTestAction(
+            CaseResult caseResult, FilePath storage, List<String> attachments, boolean showAttachmentsInStdOut) {
+        this(caseResult, storage.toVirtualFile(), attachments, showAttachmentsInStdOut);
     }
 
     public List<String> getAttachments() {

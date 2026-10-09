@@ -57,19 +57,22 @@ Attachments are archived through Jenkins' pluggable
 [`ArtifactManager`](https://javadoc.jenkins.io/hudson/model/Run.html#pickArtifactManager--) abstraction,
 the same mechanism used for ordinary build artifacts. This means:
 
-* By default (no artifact manager plugin configured), attachments are stored as regular files under
-  `$JENKINS_HOME/jobs/.../builds/<#>/junit-attachments/` on the controller, exactly as before.
+* By default (no artifact manager plugin configured), attachments are stored as regular files on the
+  controller alongside the build's other archived artifacts, under
+  `$JENKINS_HOME/jobs/.../builds/<#>/archive/junit-attachments/`.
 * If a cloud artifact manager is configured globally (e.g.
   [Azure Artifact Manager](https://plugins.jenkins.io/azure-artifact-manager/),
   [S3](https://plugins.jenkins.io/artifact-manager-s3/), or similar), attachments are uploaded to that
   backend instead, alongside the build's other artifacts. **No attachment payload is written to the
   controller's filesystem** in this case.
-* Attachments uploaded to a cloud backend are listed and retained the same way as other build artifacts
-  (subject to that backend's/plugin's own retention and cleanup rules), rather than following the
-  job/build's local log rotation settings.
-* Builds recorded by older versions of this plugin (filesystem-only storage) remain readable: the
-  attachment viewer transparently falls back to the legacy on-disk layout when a build predates this
-  change.
+* Attachments are listed and retained the same way as other build artifacts. Jenkins removes them
+  whenever it removes a build's artifacts: when the build is deleted, or when a build discarder's
+  artifact limits (e.g. "Max # of builds to keep with artifacts") apply. For a cloud backend, Jenkins
+  asks the artifact manager to delete them; whether the stored objects are actually removed then depends
+  on that plugin's configuration, and the backend may apply its own retention rules as well.
+* Builds recorded by older versions of this plugin remain readable: the attachment viewer falls back to
+  the legacy location, `$JENKINS_HOME/jobs/.../builds/<#>/junit-attachments/`, when a build predates
+  this change.
 
 ### Testing against Azure Blob Storage (Azurite emulator)
 
