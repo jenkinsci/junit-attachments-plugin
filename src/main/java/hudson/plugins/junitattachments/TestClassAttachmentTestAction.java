@@ -1,8 +1,8 @@
 package hudson.plugins.junitattachments;
 
-import hudson.FilePath;
 import hudson.Util;
 import hudson.tasks.junit.ClassResult;
+import jenkins.util.VirtualFile;
 
 import java.util.List;
 import java.util.Map;
@@ -15,7 +15,7 @@ public class TestClassAttachmentTestAction extends AttachmentTestAction {
 
     public TestClassAttachmentTestAction(
             ClassResult classResult,
-            FilePath storage,
+            VirtualFile storage,
             Map<String, List<String>> attachments,
             boolean attachmentsStoredAtClassLevel,
             List<String> blocks) {

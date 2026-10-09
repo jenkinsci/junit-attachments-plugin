@@ -51,6 +51,39 @@ The above mechanism has a problem that your test needs to know about where your 
 Each `ATTACHMENT` should be on its own line, without any text before or after.
 See [Kohsuke's post](https://kohsuke.org/2012/03/13/attaching-files-to-junit-tests/) for more details.
 
+## Attachment storage
+
+Attachments are archived through Jenkins' pluggable
+[`ArtifactManager`](https://javadoc.jenkins.io/hudson/model/Run.html#pickArtifactManager--) abstraction,
+the same mechanism used for ordinary build artifacts. This means:
+
+* By default (no artifact manager plugin configured), attachments are stored as regular files under
+  `$JENKINS_HOME/jobs/.../builds/<#>/junit-attachments/` on the controller, exactly as before.
+* If a cloud artifact manager is configured globally (e.g.
+  [Azure Artifact Manager](https://plugins.jenkins.io/azure-artifact-manager/),
+  [S3](https://plugins.jenkins.io/artifact-manager-s3/), or similar), attachments are uploaded to that
+  backend instead, alongside the build's other artifacts. **No attachment payload is written to the
+  controller's filesystem** in this case.
+* Attachments uploaded to a cloud backend are listed and retained the same way as other build artifacts
+  (subject to that backend's/plugin's own retention and cleanup rules), rather than following the
+  job/build's local log rotation settings.
+* Builds recorded by older versions of this plugin (filesystem-only storage) remain readable: the
+  attachment viewer transparently falls back to the legacy on-disk layout when a build predates this
+  change.
+
+### Testing against Azure Blob Storage (Azurite emulator)
+
+`AzureArtifactManagerAzuriteTest` exercises this plugin against the real
+[Azure Artifact Manager plugin](https://github.com/jenkinsci/azure-artifact-manager-plugin) backed by the
+[Azurite](https://github.com/Azure/Azurite) storage emulator, so cloud storage support can be validated
+without a real Azure account. It runs automatically as part of the normal test suite (`mvn test`/`mvn
+verify`, no profile needed) using [Testcontainers](https://www.testcontainers.org/) to start and stop a
+disposable Azurite container per run; the only prerequisite is a running Docker daemon.
+
+It independently verifies, via the Azure SDK, that the exact expected blob bytes were uploaded; confirms
+attachments remain downloadable through the normal JUnit attachment URLs; and asserts no attachment payload
+exists on the controller's filesystem.
+
 ## License
 
 Licensed under MIT, see [LICENSE](LICENSE.md)
