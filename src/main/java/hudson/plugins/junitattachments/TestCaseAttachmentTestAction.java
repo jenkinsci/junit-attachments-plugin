@@ -4,6 +4,7 @@ import hudson.FilePath;
 import hudson.Util;
 import hudson.tasks.junit.CaseResult;
 import jenkins.model.Jenkins;
+import jenkins.util.VirtualFile;
 
 import java.util.List;
 import java.util.regex.Pattern;
@@ -16,11 +17,20 @@ public class TestCaseAttachmentTestAction extends AttachmentTestAction {
     private final boolean showAttachmentsInStdOut;
 
     public TestCaseAttachmentTestAction(
-            CaseResult caseResult, FilePath storage, List<String> attachments, boolean showAttachmentsInStdOut) {
+            CaseResult caseResult, VirtualFile storage, List<String> attachments, boolean showAttachmentsInStdOut) {
         super(caseResult, storage);
 
         this.attachments = attachments;
         this.showAttachmentsInStdOut = showAttachmentsInStdOut;
+    }
+
+    /**
+     * @deprecated use {@link #TestCaseAttachmentTestAction(CaseResult, VirtualFile, List, boolean)}
+     */
+    @Deprecated
+    public TestCaseAttachmentTestAction(
+            CaseResult caseResult, FilePath storage, List<String> attachments, boolean showAttachmentsInStdOut) {
+        this(caseResult, storage.toVirtualFile(), attachments, showAttachmentsInStdOut);
     }
 
     public List<String> getAttachments() {
