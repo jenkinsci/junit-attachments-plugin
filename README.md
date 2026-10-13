@@ -51,6 +51,42 @@ The above mechanism has a problem that your test needs to know about where your 
 Each `ATTACHMENT` should be on its own line, without any text before or after.
 See [Kohsuke's post](https://kohsuke.org/2012/03/13/attaching-files-to-junit-tests/) for more details.
 
+## Attachment storage
+
+Attachments are archived through Jenkins' pluggable
+[`ArtifactManager`](https://javadoc.jenkins.io/hudson/model/Run.html#pickArtifactManager--) abstraction,
+the same mechanism used for ordinary build artifacts. This means:
+
+* By default (no artifact manager plugin configured), attachments are stored as regular files on the
+  controller alongside the build's other archived artifacts, under
+  `$JENKINS_HOME/jobs/.../builds/<#>/archive/junit-attachments/`.
+* If a cloud artifact manager is configured globally (e.g.
+  [Azure Artifact Manager](https://plugins.jenkins.io/azure-artifact-manager/),
+  [S3](https://plugins.jenkins.io/artifact-manager-s3/), or similar), attachments are uploaded to that
+  backend instead, alongside the build's other artifacts. **No attachment payload is written to the
+  controller's filesystem** in this case.
+* Attachments are listed and retained the same way as other build artifacts. Jenkins removes them
+  whenever it removes a build's artifacts: when the build is deleted, or when a build discarder's
+  artifact limits (e.g. "Max # of builds to keep with artifacts") apply. For a cloud backend, Jenkins
+  asks the artifact manager to delete them; whether the stored objects are actually removed then depends
+  on that plugin's configuration, and the backend may apply its own retention rules as well.
+* Builds recorded by older versions of this plugin remain readable: the attachment viewer falls back to
+  the legacy location, `$JENKINS_HOME/jobs/.../builds/<#>/junit-attachments/`, when a build predates
+  this change.
+
+### Testing against Azure Blob Storage (Azurite emulator)
+
+`AzureArtifactManagerAzuriteTest` exercises this plugin against the real
+[Azure Artifact Manager plugin](https://github.com/jenkinsci/azure-artifact-manager-plugin) backed by the
+[Azurite](https://github.com/Azure/Azurite) storage emulator, so cloud storage support can be validated
+without a real Azure account. It runs automatically as part of the normal test suite (`mvn test`/`mvn
+verify`, no profile needed) using [Testcontainers](https://www.testcontainers.org/) to start and stop a
+disposable Azurite container per run; the only prerequisite is a running Docker daemon.
+
+It independently verifies, via the Azure SDK, that the exact expected blob bytes were uploaded; confirms
+attachments remain downloadable through the normal JUnit attachment URLs; and asserts no attachment payload
+exists on the controller's filesystem.
+
 ## License
 
 Licensed under MIT, see [LICENSE](LICENSE.md)

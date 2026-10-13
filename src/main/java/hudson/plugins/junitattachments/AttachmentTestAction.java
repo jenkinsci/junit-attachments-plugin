@@ -4,15 +4,24 @@ import hudson.FilePath;
 import hudson.model.DirectoryBrowserSupport;
 import hudson.tasks.junit.TestAction;
 import hudson.tasks.test.TestObject;
+import jenkins.util.VirtualFile;
 
 public abstract class AttachmentTestAction extends TestAction {
 
-	final FilePath storage;
+	final VirtualFile storage;
 	final TestObject testObject;
 
-	public AttachmentTestAction(TestObject testObject, FilePath storage) {
+	public AttachmentTestAction(TestObject testObject, VirtualFile storage) {
 		this.storage = storage;
 		this.testObject = testObject;
+	}
+
+	/**
+	 * @deprecated use {@link #AttachmentTestAction(TestObject, VirtualFile)}
+	 */
+	@Deprecated
+	public AttachmentTestAction(TestObject testObject, FilePath storage) {
+		this(testObject, storage.toVirtualFile());
 	}
 
 	public String getDisplayName() {
