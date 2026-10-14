@@ -188,20 +188,8 @@ class AttachmentPublisherPipelineTest {
                 junit stdioRetention: 'ALL', testDataPublishers: [attachments()], testResults: 'test.xml'
             }
             """, true));
-
         WorkflowRun run = jenkinsRule.buildAndAssertSuccess(project);
-        TestResultAction tra = run.getAction(TestResultAction.class);
-        assertNotNull(tra);
-
-        List<CaseResult> passedTests = tra.getPassedTests();
-        assertThat(passedTests, hasSize(1));
-
-        CaseResult caseResult = passedTests.get(0);
-        List<TestCaseAttachmentTestAction> attachmentActions = caseResult.getTestActions().stream()
-                .filter(TestCaseAttachmentTestAction.class::isInstance)
-                .map(TestCaseAttachmentTestAction.class::cast)
-                .collect(Collectors.toList());
-        assertThat(attachmentActions, hasSize(1));
+        List<TestCaseAttachmentTestAction> attachmentActions = getAttachmentActions(run);
         assertThat(attachmentActions.get(0).getAttachments(), contains("screenshot.png"));
     }
 
@@ -274,8 +262,99 @@ class AttachmentPublisherPipelineTest {
                 },
                 failFast: false
             }
-                """, true));
+            """, true));
         return jenkinsRule.buildAndAssertSuccess(project);
+    }
+
+    @Test
+    void testRelativePath(JenkinsRule jenkinsRule) throws Exception {
+        WorkflowJob project = jenkinsRule.jenkins.createProject(WorkflowJob.class, "invalid-path-test");
+        project.setDefinition(new CpsFlowDefinition("""
+        node {
+            writeFile file: 'project/module/build/junit-jupiter/screenshot.png', text: 'fake png'
+            writeFile file: 'project/module/build/test-reports/test/result.xml', text: '''<?xml version="1.0" encoding="UTF-8"?>
+            <testsuite name="suite" time="1" tests="1" errors="0" skipped="0" failures="0">
+              <testcase name="test" classname="Class" time="1">
+                <system-out><![CDATA[[[ATTACHMENT|../../junit-jupiter/screenshot.png]]
+            ]]></system-out>
+              </testcase>
+            </testsuite>
+            '''
+            junit testDataPublishers: [attachments()], testResults: '**/test-reports/test/*.xml'
+        }
+        """, true));
+
+        WorkflowRun run = jenkinsRule.buildAndAssertSuccess(project);
+        List<TestCaseAttachmentTestAction> attachmentActions = getAttachmentActions(run);
+        assertEquals(1, attachmentActions.size());
+        final List<String> attachments = attachmentActions.get(0).getAttachments();
+        assertEquals(List.of("screenshot.png"), attachments);
+    }
+
+    @Test
+    void testAmbiguousPath(JenkinsRule jenkinsRule) throws Exception {
+        WorkflowJob project = jenkinsRule.jenkins.createProject(WorkflowJob.class, "invalid-path-test");
+        project.setDefinition(new CpsFlowDefinition("""
+        node {
+            writeFile file: 'project/module/build/test-reports/test/ambiguous.txt', text: 'from subdirectory'
+            writeFile file: 'ambiguous.txt', text: 'from root'
+            writeFile file: 'project/module/build/test-reports/test/result.xml', text: '''<?xml version="1.0" encoding="UTF-8"?>
+            <testsuite name="suite" time="1" tests="1" errors="0" skipped="0" failures="0">
+              <testcase name="test" classname="Class" time="1">
+                <system-out><![CDATA[[[ATTACHMENT|ambiguous.txt]]
+            ]]></system-out>
+              </testcase>
+            </testsuite>
+            '''
+            junit testDataPublishers: [attachments()], testResults: '**/test-reports/test/*.xml'
+        }
+        """, true));
+
+        WorkflowRun run = jenkinsRule.buildAndAssertSuccess(project);
+        List<TestCaseAttachmentTestAction> attachmentActions = getAttachmentActions(run);
+        assertEquals(1, attachmentActions.size());
+        final List<String> attachments = attachmentActions.get(0).getAttachments();
+        assertEquals(List.of("ambiguous.txt"), attachments);
+        InputStream attachmentStream = attachmentActions.get(0).storage.child("ambiguous.txt").open();
+        assertEquals("from root", new String(attachmentStream.readAllBytes(), StandardCharsets.UTF_8));
+    }
+
+    @Test
+    void testAsteriskInAttachmentPath(JenkinsRule jenkinsRule) throws Exception {
+        WorkflowJob project = jenkinsRule.jenkins.createProject(WorkflowJob.class, "invalid-path-test");
+        // check that path including * does not break the build, as Path.resolve("*") throws on Windows
+        project.setDefinition(new CpsFlowDefinition("""
+        node {
+            writeFile file: 'screenshot.png', text: 'fake png'
+            writeFile file: 'test.xml', text: '''<?xml version="1.0" encoding="UTF-8"?>
+            <testsuite name="suite" time="1" tests="1" errors="0" skipped="0" failures="0">
+              <testcase name="test" classname="Class" time="1">
+                <system-out><![CDATA[[[ATTACHMENT|*.png]]
+            ]]></system-out>
+              </testcase>
+            </testsuite>
+            '''
+            junit stdioRetention: 'ALL', testDataPublishers: [attachments()], testResults: 'test.xml'
+        }
+        """, true));
+        WorkflowRun run = jenkinsRule.buildAndAssertSuccess(project);
+        List<TestCaseAttachmentTestAction> attachmentActions = getAttachmentActions(run);
+        jenkinsRule.assertLogContains("doesn't exist. Skipping.", run);
+        assertEquals(0, attachmentActions.size());
+    }
+
+    private List<TestCaseAttachmentTestAction> getAttachmentActions(WorkflowRun run) {
+        TestResultAction tra = run.getAction(TestResultAction.class);
+        assertNotNull(tra);
+
+        List<CaseResult> passedTests = tra.getPassedTests();
+        assertThat(passedTests, hasSize(1));
+
+        CaseResult caseResult = passedTests.get(0);
+        return caseResult.getTestActions().stream()
+                .filter(TestCaseAttachmentTestAction.class::isInstance)
+                .map(TestCaseAttachmentTestAction.class::cast)
+                .toList();
     }
 
     /**
@@ -330,7 +409,7 @@ class AttachmentPublisherPipelineTest {
         return fileContents;
     }
 
-    private static final String fromURL(URL url) throws IOException {
+    private static String fromURL(URL url) throws IOException {
         try (InputStream is = url.openConnection().getInputStream()) {
             return new String(is.readAllBytes(), StandardCharsets.UTF_8);
         }
