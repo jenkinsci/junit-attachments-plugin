@@ -18,7 +18,6 @@ import jenkins.MasterToSlaveFileCallable;
 import jenkins.util.BuildListenerAdapter;
 import org.apache.tools.ant.DirectoryScanner;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import java.io.File;
 import java.io.IOException;
@@ -56,7 +55,7 @@ public class GetTestDataMethodObject {
      * Map from class names to a list of attachment path names.
      * The path names are relative to the {@linkplain #getAttachmentsStorage() class-specific attachment storage}
      */
-    private final Map<String, Map<String, List<String>>> attachments = new HashMap<String, Map<String, List<String>>>();
+    private final Map<String, Map<String, List<String>>> attachments = new HashMap<>();
     private final TaskListener listener;
     private final List<String> enclosingBlocks;
 
@@ -133,7 +132,7 @@ public class GetTestDataMethodObject {
         List<String> blocks = Collections.emptyList();
         for (SuiteResult suite : testResult.getSuites()) {
             List<String> eb = suite.getEnclosingBlocks();
-            if (eb != null && !eb.isEmpty()) {
+            if (!eb.isEmpty()) {
                 blocks = eb;
                 break;
             }
@@ -154,13 +153,11 @@ public class GetTestDataMethodObject {
      * method returns, regardless of success or failure.
      *
      * @return the map
-     * @throws InterruptedException
-     * @throws IOException
-     * @throws IllegalStateException
-     * @throws InterruptedException
+     * @throws InterruptedException when the thread is interrupted
+     * @throws IOException when an I/O operation fails (e.g. when copying attachments)
      *
      */
-    public Map<String, Map<String, List<String>>> getAttachments() throws IllegalStateException, IOException, InterruptedException {
+    public Map<String, Map<String, List<String>>> getAttachments() throws IOException, InterruptedException {
         IOException ioFailure = null;
         InterruptedException interruptedFailure = null;
         try {
@@ -170,8 +167,11 @@ public class GetTestDataMethodObject {
             for (Map.Entry<String, String> report : reports.entrySet()) {
                 final String className = report.getKey();
                 final FilePath reportFile = workspace.child(report.getValue());
-                attachFilesForReport(className, reportFile);
-                attachStdInAndOut(className, reportFile);
+                FilePath reportDir = reportFile.getParent();
+                if (reportDir != null) {
+                    attachFilesForReport(className, reportDir);
+                    attachStdInAndOut(className, reportDir);
+                }
             }
             archiveStagedAttachments();
         } catch (IOException e) {
@@ -241,7 +241,7 @@ public class GetTestDataMethodObject {
         if (relativePaths.isEmpty()) {
             return;
         }
-        Map<String, String> artifactsToArchive = new LinkedHashMap<String, String>();
+        Map<String, String> artifactsToArchive = new LinkedHashMap<>();
         for (String relativePath : relativePaths) {
             String normalized = relativePath.replace('\\', '/');
             artifactsToArchive.put(normalized, normalized);
@@ -266,14 +266,13 @@ public class GetTestDataMethodObject {
             DirectoryScanner d = new DirectoryScanner();
             d.setBasedir(f);
             d.scan();
-            return new ArrayList<String>(Arrays.asList(d.getIncludedFiles()));
+            return new ArrayList<>(Arrays.asList(d.getIncludedFiles()));
         }
     }
 
-    @SuppressFBWarnings(value = "NP_NULL_ON_SOME_PATH_FROM_RETURN_VALUE", justification = "TODO needs triage")
-    private void attachFilesForReport(final String className, final FilePath reportFile)
+    private void attachFilesForReport(final String className, final FilePath reportDir)
             throws IOException, InterruptedException {
-        final FilePath testDir = reportFile.getParent().child(className);
+        final FilePath testDir = reportDir.child(className);
         if (testDir.exists()) {
             final FilePath target = AttachmentPublisher.getAttachmentPath(getAttachmentsStorage(), className, null);
             target.mkdirs();
@@ -281,8 +280,8 @@ public class GetTestDataMethodObject {
                 List<String> includedFiles = target.act(new ListRelativeFiles());
 
                 // Associate any included files with the test class, rather than an individual test case
-                Map<String, List<String>> tests = attachments.getOrDefault(className, new HashMap<String, List<String>>());
-                tests.put("", new ArrayList<String>(includedFiles));
+                Map<String, List<String>> tests = attachments.getOrDefault(className, new HashMap<>());
+                tests.put("", new ArrayList<>(includedFiles));
                 attachments.put(className, tests);
             }
         }
@@ -292,7 +291,7 @@ public class GetTestDataMethodObject {
      * Creates a map of the all classNames to their corresponding result file.
      */
     private Map<String,String> getReports() throws IOException, InterruptedException {
-        Map<String,String> reports = new HashMap<String, String>();
+        Map<String,String> reports = new HashMap<>();
         for (SuiteResult suiteResult : testResult.getSuites()) {
             String f = suiteResult.getFile();
             if (f != null) {
@@ -315,12 +314,12 @@ public class GetTestDataMethodObject {
 
                 // Add a newline so that we detect attachments if stdout has no trailing newline
                 // and stderr is null (as otherwise we'd try and parse "[[ATTACHMENT|foo]]null")
-                findAttachmentsInOutput(cr.getClassName(), cr.getName(), caseStdout + "\n" + caseStderr);
+                findAttachmentsInOutput(cr.getClassName(), cr.getName(), caseStdout + "\n" + caseStderr, f);
             }
 
             // Capture stdout and stderr for the testsuite as a whole, if they exist
-            findAttachmentsInOutput(suiteResult.getName(), null, suiteStdout);
-            findAttachmentsInOutput(suiteResult.getName(), null, suiteStderr);
+            findAttachmentsInOutput(suiteResult.getName(), null, suiteStdout, f);
+            findAttachmentsInOutput(suiteResult.getName(), null, suiteStderr, f);
         }
         return reports;
     }
@@ -329,7 +328,7 @@ public class GetTestDataMethodObject {
      * Finds attachments from a test's stdout/stderr, i.e. instances of:
      * <pre>[[ATTACHMENT|/path/to/attached-file.xyz|...reserved...]]</pre>
      */
-    private void findAttachmentsInOutput(String className, String testName, String output) throws IOException, InterruptedException {
+    private void findAttachmentsInOutput(String className, String testName, String output, String reportLocation) throws IOException, InterruptedException {
         if (Util.fixEmpty(output) == null) {
             return;
         }
@@ -345,15 +344,23 @@ public class GetTestDataMethodObject {
             }
 
             String fileName = line;
-            if (fileName != null) {
-                FilePath src = workspace.child(fileName); // even though we use child(), this should be absolute
-                if (src.isDirectory()) {
+            FilePath src = workspace.child(fileName); // even though we use child(), this should be absolute
+            if (src.isDirectory()) {
+                listener.getLogger().println("Attachment " + fileName + " was referenced from the test '" + className + "' but it is a directory, not a file. Skipping.");
+            } else if (src.exists()) {
+                captureAttachment(className, testName, src);
+            } else if (reportLocation != null) {
+                FilePath parent = workspace.child(reportLocation).getParent();
+                FilePath relativized = parent == null ? null : parent.child(fileName);
+                if (relativized != null && relativized.isDirectory()) {
                     listener.getLogger().println("Attachment " + fileName + " was referenced from the test '" + className + "' but it is a directory, not a file. Skipping.");
-                } else if (src.exists()) {
-                    captureAttachment(className, testName, src);
+                } if (relativized != null && relativized.exists()) {
+                    captureAttachment(className, testName, relativized);
                 } else {
-                    listener.getLogger().println("Attachment "+fileName+" was referenced from the test '"+className+"' but it doesn't exist. Skipping.");
+                    listener.getLogger().println("Attachment " + fileName + " was referenced from the test '" + className + "' but it doesn't exist. Skipping.");
                 }
+            } else {
+                listener.getLogger().println("Attachment " + fileName + " was referenced from the test '" + className + "' but it doesn't exist. Report location unknown. Skipping.");
             }
         }
     }
@@ -362,10 +369,9 @@ public class GetTestDataMethodObject {
     private static final String SUFFIX = "]]";
     private static final Pattern ATTACHMENT_PATTERN = Pattern.compile("\\[\\[ATTACHMENT\\|.+\\]\\]");
 
-    @SuppressFBWarnings(value = "NP_NULL_ON_SOME_PATH_FROM_RETURN_VALUE", justification = "TODO needs triage")
-    private void attachStdInAndOut(String className, FilePath reportFile)
+    private void attachStdInAndOut(String className, FilePath reportDir)
             throws IOException, InterruptedException {
-        final FilePath stdInAndOut = reportFile.getParent().child(
+        final FilePath stdInAndOut = reportDir.child(
                 className + "-output.txt");
         LOG.fine("stdInAndOut: " + stdInAndOut.absolutize());
         if (stdInAndOut.exists()) {
@@ -384,16 +390,8 @@ public class GetTestDataMethodObject {
     }
 
     private void captureAttachment(String className, String testName, FilePath src) throws IOException, InterruptedException {
-        Map<String, List<String>> tests = attachments.get(className);
-        if (tests == null) {
-            tests = new HashMap<String, List<String>>();
-            attachments.put(className, tests);
-        }
-        List<String> testFiles = tests.get(Util.fixNull(testName));
-        if (testFiles == null) {
-            testFiles = new ArrayList<String>();
-            tests.put(Util.fixNull(testName), testFiles);
-        }
+        Map<String, List<String>> tests = attachments.computeIfAbsent(className, k -> new HashMap<>());
+        List<String> testFiles = tests.computeIfAbsent(Util.fixNull(testName), k -> new ArrayList<>());
 
         String filename = src.getName();
         if (!testFiles.contains(filename)) {
@@ -404,16 +402,6 @@ public class GetTestDataMethodObject {
             src.copyTo(dst);
             testFiles.add(filename);
         }
-    }
-
-    /** Determines whether the given mapping for a test class contains a certain filename. */
-    private static boolean containsFilename(Map<String, List<String>> map, String filename) {
-        for (List<String> list : map.values()) {
-            if (list.contains(filename)) {
-                return true;
-            }
-        }
-        return false;
     }
 
 }
