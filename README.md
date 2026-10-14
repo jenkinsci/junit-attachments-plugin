@@ -50,11 +50,11 @@ The above mechanism has a problem that your test needs to know about where your 
 
 Each `ATTACHMENT` should be on its own line, without any text before or after.
 The path may be absolute, relative to the workspace, or relative to the folder that contains your JUnit XML report.
-In case the both relative path interpretations point to a file, the path relative to workspace is used.
+In case both relative path interpretations point to a file, the path relative to workspace is used.
 
 See [Kohsuke's post](https://kohsuke.org/2012/03/13/attaching-files-to-junit-tests/) for more details.
 
-### By using test framework's attachment publishing APIs
+### By using a test framework's attachment publishing APIs
 Test frameworks may provide APIs that print the filename in stdout for you so that this plugin can find it.
 A known supported implementation is [TestReporter.publishFile](https://docs.junit.org/6.0.0/api/org.junit.jupiter.api/org/junit/jupiter/api/TestReporter.html#publishFile(java.nio.file.Path,org.junit.jupiter.api.MediaType)) in JUnit Jupiter.
 

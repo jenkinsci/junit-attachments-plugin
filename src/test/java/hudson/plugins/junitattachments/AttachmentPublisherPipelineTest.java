@@ -269,7 +269,6 @@ class AttachmentPublisherPipelineTest {
     @Test
     void testRelativePath(JenkinsRule jenkinsRule) throws Exception {
         WorkflowJob project = jenkinsRule.jenkins.createProject(WorkflowJob.class, "invalid-path-test");
-        // check that path including * does not break the build, as Path.resolve("*") throws on Windows
         project.setDefinition(new CpsFlowDefinition("""
         node {
             writeFile file: 'project/module/build/junit-jupiter/screenshot.png', text: 'fake png'
@@ -295,7 +294,6 @@ class AttachmentPublisherPipelineTest {
     @Test
     void testAmbiguousPath(JenkinsRule jenkinsRule) throws Exception {
         WorkflowJob project = jenkinsRule.jenkins.createProject(WorkflowJob.class, "invalid-path-test");
-        // check that path including * does not break the build, as Path.resolve("*") throws on Windows
         project.setDefinition(new CpsFlowDefinition("""
         node {
             writeFile file: 'project/module/build/test-reports/test/ambiguous.txt', text: 'from subdirectory'

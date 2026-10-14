@@ -344,23 +344,28 @@ public class GetTestDataMethodObject {
             }
 
             String fileName = line;
-            FilePath src = workspace.child(fileName); // even though we use child(), this should be absolute
-            if (src.isDirectory()) {
-                listener.getLogger().println("Attachment " + fileName + " was referenced from the test '" + className + "' but it is a directory, not a file. Skipping.");
-            } else if (src.exists()) {
+            FilePath src = workspace.child(fileName);
+            boolean isWorkspaceDirectory = src.isDirectory();
+            boolean isRelativeDirectory = false;
+            boolean found = false;
+            if (src.exists() && !isWorkspaceDirectory) {
+                // first check the path as relative to the workspace, or absolute
                 captureAttachment(className, testName, src);
+                found = true;
             } else if (reportLocation != null) {
+                // now check the path as relative to the report's parent directory
                 FilePath parent = workspace.child(reportLocation).getParent();
                 FilePath relativized = parent == null ? null : parent.child(fileName);
-                if (relativized != null && relativized.isDirectory()) {
-                    listener.getLogger().println("Attachment " + fileName + " was referenced from the test '" + className + "' but it is a directory, not a file. Skipping.");
-                } if (relativized != null && relativized.exists()) {
+                isRelativeDirectory = relativized != null && relativized.isDirectory();
+                if (relativized != null && !isRelativeDirectory && relativized.exists()) {
                     captureAttachment(className, testName, relativized);
-                } else {
-                    listener.getLogger().println("Attachment " + fileName + " was referenced from the test '" + className + "' but it doesn't exist. Skipping.");
+                    found = true;
                 }
-            } else {
-                listener.getLogger().println("Attachment " + fileName + " was referenced from the test '" + className + "' but it doesn't exist. Report location unknown. Skipping.");
+            }
+            if (!found) {
+                listener.getLogger().println(isRelativeDirectory || isWorkspaceDirectory
+                        ? "Attachment " + fileName + " was referenced from the test '" + className + "' but it is a directory, not a file. Skipping."
+                        : "Attachment " + fileName + " was referenced from the test '" + className + "' but it doesn't exist. Skipping.");
             }
         }
     }
