@@ -24,32 +24,17 @@
  */
 package hudson.plugins.junitattachments;
 
-import hudson.FilePath;
-import hudson.model.Result;
-import hudson.tasks.junit.CaseResult;
-import hudson.tasks.junit.ClassResult;
-import hudson.tasks.junit.TestResultAction;
-import hudson.tasks.test.TestResult;
-import org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition;
-import org.jenkinsci.plugins.workflow.job.WorkflowJob;
-import org.jenkinsci.plugins.workflow.job.WorkflowRun;
-import org.junit.jupiter.api.Test;
-import org.jvnet.hudson.test.Issue;
-import org.jvnet.hudson.test.JenkinsRule;
-import org.jvnet.hudson.test.junit.jupiter.WithJenkins;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.nio.file.Paths;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static hudson.plugins.junitattachments.AttachmentPublisherTest.getClassResult;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.aMapWithSize;
 import static org.hamcrest.Matchers.allOf;
@@ -57,9 +42,24 @@ import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.hasEntry;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+import org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition;
+import org.jenkinsci.plugins.workflow.job.WorkflowJob;
+import org.jenkinsci.plugins.workflow.job.WorkflowRun;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.Test;
+import org.jvnet.hudson.test.Issue;
+import org.jvnet.hudson.test.JenkinsRule;
+import org.jvnet.hudson.test.junit.jupiter.WithJenkins;
+
+import hudson.FilePath;
+import hudson.model.Result;
+import static hudson.plugins.junitattachments.AttachmentPublisherTest.getClassResult;
+import hudson.tasks.junit.CaseResult;
+import hudson.tasks.junit.ClassResult;
+import hudson.tasks.junit.TestResultAction;
+import hudson.tasks.test.TestResult;
 
 @WithJenkins
 class AttachmentPublisherPipelineTest {
@@ -79,11 +79,19 @@ class AttachmentPublisherPipelineTest {
         assertNotNull(attachmentsByTestCase);
         assertEquals(1, attachmentsByTestCase.size());
 
-        List<String> testCaseAttachments = attachmentsByTestCase.get("");
+        // test case is empty, as this attachment is not for a test case.
+        String testCase = "";
+
+        List<String> testCaseAttachments = attachmentsByTestCase.get(testCase);
         assertEquals(2, testCaseAttachments.size());
         Collections.sort(testCaseAttachments);
-        assertEquals("file", testCaseAttachments.get(0));
+        String firstAttachment = testCaseAttachments.get(0);
+        assertEquals("file", firstAttachment);
         assertEquals("test.foo.bar.DefaultIntegrationTest-output.txt", testCaseAttachments.get(1));
+
+        String url = ata.getUrl(testCase, firstAttachment);
+        // empty testCase is not rendered
+        assertEquals("attachments/" + firstAttachment, url);
     }
 
     @Issue("JENKINS-36504")
