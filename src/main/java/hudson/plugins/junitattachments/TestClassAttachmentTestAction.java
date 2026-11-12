@@ -58,9 +58,14 @@ public class TestClassAttachmentTestAction extends AttachmentTestAction {
             return getUrlName() + "/" + Util.rawEncode(filename);
         }
 
-        // The attachments of a test case live in a directory named after the sanitised test case
-        // name, so the URL has to be built from that same name and not from the raw one.
-        return getUrlName() + "/" + Util.rawEncode(AttachmentPublisher.getStorageName(testCase)) + "/"
-                + Util.rawEncode(filename);
+        String url = getUrlName();
+        // Do not add to the URL if the test case is empty, as the storage will not add an additional
+        // directory in this case.
+        if(testCase != null && !testCase.isEmpty()) {
+            // The attachments of a test case live in a directory named after the sanitised test case
+            // name, so the URL has to be built from that same name and not from the raw one.
+            url += "/" + Util.rawEncode(AttachmentPublisher.getStorageName(testCase));
+        }
+        return url + "/" + Util.rawEncode(filename);
     }
 }
